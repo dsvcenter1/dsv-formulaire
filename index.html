@@ -13,10 +13,10 @@
     <title>DSV SERVICE – Réception de fonds</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== STYLES ===== */
+        /* ===== DESIGN MODERNE ET PROFESSIONNEL ===== */
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            background: #f0f4f9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,106 +25,125 @@
             padding: 20px;
         }
         .container {
-            max-width: 750px;
+            max-width: 780px;
             width: 100%;
             background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
-            padding: 40px 44px;
-            border: 1px solid #eef2f6;
+            border-radius: 20px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.15);
+            padding: 50px 50px;
+            border: none;
             position: relative;
+            animation: slideUp 0.6s ease-out;
         }
+        @keyframes slideUp {
+            from { opacity:0; transform:translateY(30px); }
+            to { opacity:1; transform:translateY(0); }
+        }
+
         .lang-toggle {
             position: absolute;
-            top: 16px;
-            right: 24px;
+            top: 20px;
+            right: 30px;
             display: flex;
-            gap: 4px;
-            background: #f1f5f9;
-            border-radius: 40px;
-            padding: 4px;
-            border: 1px solid #e2e8f0;
+            gap: 6px;
+            background: #f5f7fa;
+            border-radius: 50px;
+            padding: 6px;
+            border: none;
         }
         .lang-toggle button {
             border: none;
             background: transparent;
-            padding: 5px 14px;
-            border-radius: 30px;
+            padding: 8px 16px;
+            border-radius: 40px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            color: #64748b;
-            transition: 0.2s;
+            color: #667eea;
+            transition: all 0.3s ease;
             font-family: inherit;
         }
         .lang-toggle button.active {
-            background: #0a2647;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            box-shadow: 0 2px 8px rgba(10,38,71,0.15);
+            box-shadow: 0 4px 12px rgba(102,126,234,0.3);
         }
-        .lang-toggle button:hover:not(.active) { background: #e2e8f0; }
+        .lang-toggle button:hover:not(.active) {
+            background: #e8ebf5;
+            color: #667eea;
+        }
 
-        .header { text-align:center; margin-bottom:8px; padding-top:8px; }
+        .header { text-align:center; margin-bottom:32px; padding-top:0; }
         .header h1 {
-            font-size:28px; font-weight:700; color:#0a2647; letter-spacing:-0.5px; margin-bottom:4px;
+            font-size:32px; font-weight:800; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing:-1px; margin-bottom:8px;
         }
-        .header h1 span { font-weight:300; color:#6b8a9f; font-size:16px; margin-left:6px; }
-        .header .subtitle { font-size:16px; color:#1e293b; font-weight:500; margin-top:4px; }
-        .header .subtitle-light { font-size:14px; color:#64748b; margin-top:2px; font-weight:400; }
+        .header h1 span { font-weight:400; color:#667eea; font-size:16px; margin-left:8px; }
+        .header .subtitle { font-size:16px; color:#2d3748; font-weight:600; margin-top:8px; }
+        .header .subtitle-light { font-size:14px; color:#718096; margin-top:6px; font-weight:400; }
 
         .section-title {
-            font-size:18px; font-weight:700; color:#0a2647; margin:24px 0 12px 0;
-            border-bottom:2px solid #e9edf2; padding-bottom:8px;
+            font-size:16px; font-weight:700; color:#2d3748; margin:28px 0 16px 0;
+            border-bottom:3px solid #667eea; padding-bottom:10px; display:inline-block;
         }
         .info-box-free {
-            background:#ecfdf5; border-left:5px solid #059669; padding:16px 20px;
-            border-radius:10px; margin:16px 0 20px 0;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-left:5px solid #667eea;
+            padding:18px 22px;
+            border-radius:12px;
+            margin:20px 0 24px 0;
         }
-        .info-box-free p { font-size:15px; line-height:1.6; color:#065f46; font-weight:500; }
-        .info-box-free strong { color:#047857; }
+        .info-box-free p { font-size:15px; line-height:1.6; color:#1e40af; font-weight:500; }
+        .info-box-free strong { color:#667eea; }
 
-        .form-group { margin-bottom:16px; position:relative; }
-        .form-group label { display:block; font-size:14px; font-weight:600; color:#1e293b; margin-bottom:4px; }
-        .form-group label .required { color:#b91c1c; margin-left:2px; }
-        .form-group label .optional { font-weight:400; color:#94a3b8; font-size:12px; }
+        .form-group { margin-bottom:20px; position:relative; }
+        .form-group label { display:block; font-size:14px; font-weight:600; color:#2d3748; margin-bottom:8px; }
+        .form-group label .required { color:#e53e3e; margin-left:2px; }
+        .form-group label .optional { font-weight:400; color:#a0aec0; font-size:12px; }
         .form-group input {
-            width:100%; padding:12px 14px; border:1.5px solid #e2e8f0; border-radius:10px;
-            font-size:15px; transition:0.2s; background:#ffffff; color:#0f172a; font-family:inherit;
+            width:100%; padding:14px 16px; border:2px solid #e2e8f0; border-radius:12px;
+            font-size:15px; transition:all 0.3s ease; background:#ffffff; color:#1a202c; font-family:inherit;
         }
-        .form-group input:focus { outline:none; border-color:#0a2647; box-shadow:0 0 0 4px rgba(10,38,71,0.06); }
-        .form-group input::placeholder { color:#94a3b8; }
+        .form-group input:focus {
+            outline:none;
+            border-color:#667eea;
+            box-shadow:0 0 0 4px rgba(102,126,234,0.1);
+        }
+        .form-group input::placeholder { color:#cbd5e0; font-weight:500; }
 
-        .form-group input.valid { border-color:#059669; background:#f0fdf4; }
-        .form-group input.invalid { border-color:#b91c1c; background:#fef2f2; }
+        .form-group input.valid { border-color:#38a169; background:#f0fdf4; }
+        .form-group input.invalid { border-color:#e53e3e; background:#fef2f2; }
 
         .form-group .error-msg {
-            display:none; font-size:12px; color:#b91c1c; margin-top:4px; font-weight:500;
+            display:none; font-size:12px; color:#e53e3e; margin-top:6px; font-weight:500;
         }
         .form-group input.invalid ~ .error-msg { display:block; }
 
-        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
 
         .btn-submit {
-            width:100%; background:#0a2647; color:white; padding:16px; border:none; border-radius:50px;
-            font-size:17px; font-weight:600; cursor:pointer; transition:all 0.2s;
-            box-shadow:0 4px 16px rgba(10,38,71,0.15); letter-spacing:0.3px; font-family:inherit; margin-top:8px;
+            width:100%; background: linear-gradient(135deg, #667eea, #764ba2); color:white; padding:16px; border:none; border-radius:12px;
+            font-size:16px; font-weight:700; cursor:pointer; transition:all 0.3s ease;
+            box-shadow:0 8px 24px rgba(102,126,234,0.3); letter-spacing:0.3px; font-family:inherit; margin-top:12px;
         }
-        .btn-submit:hover { background:#14375f; transform:translateY(-2px); box-shadow:0 8px 28px rgba(10,38,71,0.2); }
+        .btn-submit:hover {
+            transform:translateY(-2px);
+            box-shadow:0 12px 32px rgba(102,126,234,0.4);
+        }
         .btn-submit:active { transform:translateY(0); }
         .btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; box-shadow:none; }
 
         .footer {
-            margin-top:28px; padding-top:18px; border-top:1px solid #e9edf2;
-            text-align:center; font-size:12px; color:#94a3b8; line-height:1.8;
+            margin-top:32px; padding-top:20px; border-top:1px solid #e2e8f0;
+            text-align:center; font-size:12px; color:#a0aec0; line-height:1.8;
         }
-        .footer a { color:#0a2647; text-decoration:none; font-weight:500; }
-        .footer a:hover { text-decoration:underline; }
+        .footer a { color:#667eea; text-decoration:none; font-weight:600; transition:0.2s; }
+        .footer a:hover { color:#764ba2; }
 
         @media (max-width:640px) {
-            .container { padding:20px 18px; }
-            .form-row { grid-template-columns:1fr; gap:0; }
-            .header h1 { font-size:24px; }
-            .lang-toggle { position:relative; top:0; right:0; margin-bottom:12px; align-self:flex-end; }
+            .container { padding:30px 24px; }
+            .form-row { grid-template-columns:1fr; }
+            .header h1 { font-size:26px; }
+            .lang-toggle { position:relative; top:0; right:0; margin-bottom:16px; }
         }
 
         /* ===== GESTION DES LANGUES ===== */
@@ -138,8 +157,9 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.45);
-            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -151,42 +171,57 @@
             max-width: 520px;
             width: 100%;
             background: #ffffff;
-            border-radius: 24px;
-            padding: 40px 36px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 48px 40px;
+            box-shadow: 0 50px 120px rgba(0,0,0,0.25);
             text-align: center;
-            animation: fadeSlide 0.3s ease-out;
+            animation: modalSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .modal .icon { font-size: 56px; margin-bottom: 12px; }
+        .modal .icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            animation: iconBounce 0.6s ease-out;
+        }
+        @keyframes iconBounce {
+            0% { transform: scale(0) rotate(0deg); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
         .modal h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #0a2647;
-            margin-bottom: 8px;
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
         }
         .modal p {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #334155;
-            margin: 8px 0 12px 0;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #4a5568;
+            margin: 12px 0 16px 0;
         }
         .modal .btn-close {
-            background: #0a2647;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 12px 36px;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 14px 40px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s ease;
             font-family: inherit;
-            margin-top: 8px;
+            margin-top: 16px;
         }
-        .modal .btn-close:hover { background: #14375f; }
+        .modal .btn-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102,126,234,0.3);
+        }
 
-        @keyframes fadeSlide {
-            0% { opacity:0; transform:translateY(-20px) scale(0.96); }
+        @keyframes modalSlide {
+            0% { opacity:0; transform:translateY(-30px) scale(0.95); }
             100% { opacity:1; transform:translateY(0) scale(1); }
         }
 
@@ -230,7 +265,7 @@
     </div>
 
     <!-- ===== FORMULAIRE ===== -->
-    <form action="https://formsubmit.co/service@dsv.center" method="POST" id="mainForm" target="hiddenIframe">
+    <form id="mainForm">
         <input type="hidden" name="_subject" value="DSV SERVICE – Nouvelle demande de réception">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
@@ -419,22 +454,25 @@
     const modal = document.getElementById('confirmationModal');
     const submitBtn = document.getElementById('submitBtn');
 
-    const iframe = document.getElementById('hiddenIframe');
-    iframe.addEventListener('load', function() {
-        if (form.dataset.submitted === 'true') {
-            modal.classList.add('active');
-            submitBtn.disabled = false;
-            form.dataset.submitted = 'false';
-        }
-    });
+    // Configurer FormSubmit.co
+    form.action = 'https://formsubmit.co/dienst@dsv.center';
+    form.method = 'POST';
+    form.target = '_self';
 
     form.addEventListener('submit', function(e) {
         if (!form.checkValidity()) {
             e.preventDefault();
             return;
         }
-        form.dataset.submitted = 'true';
+
         submitBtn.disabled = true;
+
+        // Afficher le modal après 2 secondes (temps de traitement)
+        setTimeout(function() {
+            modal.classList.add('active');
+            submitBtn.disabled = false;
+            form.reset();
+        }, 2000);
     });
 
     function closeModal() {
