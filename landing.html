@@ -1,0 +1,546 @@
+<title>DSV SERVICE – Réception de Fonds</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+
+<style>
+:root {
+  --primary: #002664;
+  --secondary: #00448f;
+  --bg: #ffffff;
+  --fg: #1e293b;
+  --muted: #64748b;
+  --light: #f8f9fa;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a1428;
+    --fg: #f1f5f9;
+    --muted: #94a3b8;
+    --light: #1a2535;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a1428;
+  --fg: #f1f5f9;
+  --muted: #94a3b8;
+  --light: #1a2535;
+  color-scheme: dark;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+header {
+  padding: 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+}
+
+.logo img {
+  height: 32px;
+}
+
+.lang-toggle {
+  display: flex;
+  gap: 12px;
+}
+
+.lang-toggle button {
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.lang-toggle button.active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.lang-toggle button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Hero */
+.hero {
+  background: linear-gradient(rgba(0, 38, 100, 0.35), rgba(0, 38, 100, 0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect fill="%23e0e7ff" width="1920" height="1080"/><circle cx="1600" cy="200" r="400" fill="%23c7d2e8" opacity="0.5"/><circle cx="300" cy="900" r="300" fill="%23dbe4f0" opacity="0.3"/></svg>');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 80px 40px;
+  position: relative;
+}
+
+.hero-content {
+  max-width: 600px;
+  z-index: 2;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero h1 {
+  font-size: clamp(42px, 8vw, 64px);
+  font-weight: 800;
+  margin-bottom: 24px;
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+
+.hero p {
+  font-size: 18px;
+  opacity: 0.95;
+  margin-bottom: 40px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.cta-primary {
+  background: var(--primary);
+  color: white;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 38, 100, 0.3);
+  letter-spacing: 0.3px;
+}
+
+.cta-primary:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 38, 100, 0.4);
+}
+
+/* Section */
+section {
+  padding: 80px 40px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.section-title {
+  font-size: clamp(36px, 6vw, 52px);
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.section-desc {
+  font-size: 18px;
+  color: var(--muted);
+  margin-bottom: 60px;
+  max-width: 700px;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* Cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+}
+
+.card {
+  padding: 40px;
+  background: var(--light);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 38, 100, 0.05);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 38, 100, 0.1);
+  border-color: rgba(0, 38, 100, 0.15);
+}
+
+.card-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.card p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* Stats */
+.stats {
+  background: var(--light);
+  padding: 80px 40px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* Images */
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.image-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.image-card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.image-card:hover img {
+  transform: scale(1.02);
+}
+
+/* Testimonials */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonial {
+  background: var(--light);
+  border-radius: 12px;
+  border-left: 3px solid var(--primary);
+  padding: 32px;
+}
+
+.testimonial p {
+  font-size: 16px;
+  color: var(--fg);
+  margin-bottom: 20px;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.testimonial-author {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 14px;
+}
+
+/* CTA Final */
+.cta-final {
+  background: linear-gradient(rgba(0, 38, 100, 0.35), rgba(0, 38, 100, 0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 600"><rect fill="%23e0e7ff" width="1920" height="600"/></svg>');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  padding: 100px 40px;
+  text-align: center;
+  position: relative;
+}
+
+.cta-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cta-final h2 {
+  font-size: clamp(36px, 6vw, 52px);
+  font-weight: 800;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.cta-final p {
+  font-size: 18px;
+  opacity: 0.95;
+  margin-bottom: 40px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  section { padding: 60px 20px; }
+  header { padding: 16px 20px; }
+  .hero { padding: 100px 20px 60px 20px; }
+  .cta-final { padding: 80px 20px; }
+  .card { padding: 24px; }
+}
+
+.fr { display: block; }
+.nl { display: none; }
+.lang-nl .fr { display: none; }
+.lang-nl .nl { display: block; }
+</style>
+
+<!-- Header -->
+<header>
+  <div class="logo">
+    <img src="dsv-logo.svg" alt="DSV">
+  </div>
+  <div class="lang-toggle">
+    <button class="active" data-lang="fr" onclick="setLang('fr')">FR</button>
+    <button data-lang="nl" onclick="setLang('nl')">NL</button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero lang-nl" id="pageContainer">
+  <div class="hero-content">
+    <h1>
+      <span class="fr">Recevez votre virement en minutes</span>
+      <span class="nl">Ontvang uw geld in minuten</span>
+    </h1>
+    <p>
+      <span class="fr">Transfert direct, sécurisé et transparent. Aucune attente, aucune complication.</span>
+      <span class="nl">Directe, veilige en transparante overschrijving. Geen wachttijd, geen gedoe.</span>
+    </p>
+    <a href="#formulaire" class="cta-primary">
+      <span class="fr">Commencer</span>
+      <span class="nl">Beginnen</span>
+    </a>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-number">2000+</div>
+        <div class="stat-label"><span class="fr">Clients actifs</span><span class="nl">Actieve klanten</span></div>
+      </div>
+      <div>
+        <div class="stat-number">€50M+</div>
+        <div class="stat-label"><span class="fr">Traités</span><span class="nl">Verwerkt</span></div>
+      </div>
+      <div>
+        <div class="stat-number">98%</div>
+        <div class="stat-label"><span class="fr">Satisfaction</span><span class="nl">Tevredenheid</span></div>
+      </div>
+      <div>
+        <div class="stat-number">24/7</div>
+        <div class="stat-label"><span class="fr">Support</span><span class="nl">Ondersteuning</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section>
+  <div class="container">
+    <span class="section-eyebrow"><span class="fr">Avantages</span><span class="nl">Voordelen</span></span>
+    <h2 class="section-title">
+      <span class="fr">Pourquoi DSV SERVICE?</span>
+      <span class="nl">Waarom DSV SERVICE?</span>
+    </h2>
+    <p class="section-desc">
+      <span class="fr">Une solution fiable et rapide, conçue pour les professionnels en Europe</span>
+      <span class="nl">Een betrouwbare en snelle oplossing, ontworpen voor professionals in Europa</span>
+    </p>
+    <div class="grid">
+      <div class="card">
+        <span class="card-icon">⚡</span>
+        <h3><span class="fr">Ultra-rapide</span><span class="nl">Ultrasnelheid</span></h3>
+        <p><span class="fr">Vos fonds arrivent en minutes, pas en jours</span><span class="nl">Uw geld arriveert in minuten, niet in dagen</span></p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔒</span>
+        <h3><span class="fr">Sécurisé</span><span class="nl">Veilig</span></h3>
+        <p><span class="fr">Protocoles bancaires de classe mondiale</span><span class="nl">Beveiligingsprotocollen van wereldklasse</span></p>
+      </div>
+      <div class="card">
+        <span class="card-icon">✅</span>
+        <h3><span class="fr">Transparent</span><span class="nl">Transparant</span></h3>
+        <p><span class="fr">Aucun frais caché. Zéro surprise.</span><span class="nl">Geen verborgen kosten. Nul verrassingen.</span></p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌍</span>
+        <h3><span class="fr">Global</span><span class="nl">Mondiaal</span></h3>
+        <p><span class="fr">Tous les types de virements acceptés</span><span class="nl">Alle soorten overschrijvingen geaccepteerd</span></p>
+      </div>
+      <div class="card">
+        <span class="card-icon">👥</span>
+        <h3><span class="fr">Professionnel</span><span class="nl">Professioneel</span></h3>
+        <p><span class="fr">Équipe d'experts 24/7 à votre service</span><span class="nl">Expertenteam 24/7 ter uw dienste</span></p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📱</span>
+        <h3><span class="fr">Facile</span><span class="nl">Gemakkelijk</span></h3>
+        <p><span class="fr">Formulaire en 3 minutes. C'est tout!</span><span class="nl">Formulier in 3 minuten. Dat is alles!</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Images -->
+<section class="stats">
+  <div class="container">
+    <span class="section-eyebrow"><span class="fr">Expertise</span><span class="nl">Expertise</span></span>
+    <h2 class="section-title">
+      <span class="fr">Leader logistique en Europe</span>
+      <span class="nl">Logistiek leider in Europa</span>
+    </h2>
+    <div class="images-grid" style="margin-top: 60px;">
+      <div class="image-card">
+        <img src="dsv-image1.jpg" alt="DSV">
+      </div>
+      <div class="image-card">
+        <img src="dsv-image2.png" alt="DSV Global">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section>
+  <div class="container">
+    <span class="section-eyebrow"><span class="fr">Témoignages</span><span class="nl">Getuigenissen</span></span>
+    <h2 class="section-title">
+      <span class="fr">Nos clients nous font confiance</span>
+      <span class="nl">Onze klanten vertrouwen ons</span>
+    </h2>
+    <div class="testimonials-grid" style="margin-top: 60px;">
+      <div class="testimonial">
+        <p><span class="fr">"Rapide, sécurisé et transparent. Exactement ce dont j'avais besoin!"</span><span class="nl">"Snel, veilig en transparant. Precies wat ik nodig had!"</span></p>
+        <div class="testimonial-author">Jean M. — CEO</div>
+      </div>
+      <div class="testimonial">
+        <p><span class="fr">"Meilleur service. Support réactif 24/7. Je recommande vivement!"</span><span class="nl">"Beste service. Reactieve 24/7 support. Sterk aanbevolen!"</span></p>
+        <div class="testimonial-author">Marie L. — Freelancer</div>
+      </div>
+      <div class="testimonial">
+        <p><span class="fr">"Pas d'attente. Pas de complication. Juste mon argent en minutes."</span><span class="nl">"Geen wachttijd. Geen gedoe. Gewoon mijn geld in minuten."</span></p>
+        <div class="testimonial-author">Thomas B. — PME</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Final -->
+<section class="cta-final" id="formulaire">
+  <div class="cta-content">
+    <h2>
+      <span class="fr">Prêt à recevoir votre argent?</span>
+      <span class="nl">Klaar om uw geld te ontvangen?</span>
+    </h2>
+    <p>
+      <span class="fr">Remplissez le formulaire maintenant. C'est gratuit et 100% sécurisé.</span>
+      <span class="nl">Vul het formulier nu in. Het is gratis en 100% veilig.</span>
+    </p>
+    <a href="./index.html" class="cta-primary">
+      <span class="fr">Accéder au formulaire</span>
+      <span class="nl">Naar formulier</span>
+    </a>
+  </div>
+</section>
+
+<script>
+function setLang(lang) {
+  const container = document.getElementById('pageContainer');
+  const buttons = document.querySelectorAll('.lang-toggle button');
+
+  buttons.forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+
+  if (lang === 'nl') {
+    container.classList.add('lang-nl');
+  } else {
+    container.classList.remove('lang-nl');
+  }
+}
+</script>
