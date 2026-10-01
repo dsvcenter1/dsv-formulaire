@@ -1,4 +1,11 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DSV SERVICE – Réception de Fonds</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
@@ -71,12 +78,10 @@ header.scrolled {
 .logo img {
   height: 30px;
   display: block;
-  /* logo is dark navy -> make white on the transparent hero header */
   filter: brightness(0) invert(1);
   transition: filter 0.35s ease;
 }
 
-/* on scrolled (solid) header, restore brand color in light, keep white in dark */
 header.scrolled .logo img { filter: none; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) header.scrolled .logo img { filter: brightness(0) invert(1); }
@@ -115,9 +120,10 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 100px 40px 80px;
+  padding: 120px 40px 90px;
   color: #fff;
   overflow: hidden;
+  background: var(--primary);
 }
 .hero-video {
   position: absolute;
@@ -126,8 +132,6 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  transform: scale(1.05);
-  animation: heroZoom 20s ease-out forwards;
 }
 .hero::before {
   content: "";
@@ -136,7 +140,6 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
   background: linear-gradient(115deg, rgba(0, 26, 71, 0.90) 0%, rgba(0, 38, 100, 0.72) 45%, rgba(0, 38, 100, 0.45) 100%);
   z-index: 1;
 }
-@keyframes heroZoom { to { transform: scale(1); } }
 
 .hero-content {
   position: relative;
@@ -155,8 +158,6 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
   font-weight: 600;
   margin-bottom: 28px;
   backdrop-filter: blur(8px);
-  opacity: 0;
-  animation: fadeInUp 0.7s ease-out 0.1s forwards;
 }
 .hero-badge .dot {
   width: 8px; height: 8px; border-radius: 50%;
@@ -176,26 +177,30 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
   letter-spacing: -1.5px;
   margin-bottom: 24px;
   text-wrap: balance;
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out 0.25s forwards;
 }
 .hero p {
   font-size: clamp(16px, 2.2vw, 20px);
   font-weight: 300;
   line-height: 1.6;
-  opacity: 0;
   margin-bottom: 40px;
   max-width: 540px;
-  animation: fadeInUp 0.8s ease-out 0.4s forwards;
 }
 .hero-cta-row {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
   align-items: center;
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out 0.55s forwards;
 }
+
+/* Entrance animations only when JS confirmed + motion allowed */
+.js .hero-badge,
+.js .hero h1,
+.js .hero p,
+.js .hero-cta-row { opacity: 0; animation: fadeInUp 0.8s ease-out forwards; }
+.js .hero-badge { animation-delay: 0.1s; }
+.js .hero h1 { animation-delay: 0.25s; }
+.js .hero p { animation-delay: 0.4s; }
+.js .hero-cta-row { animation-delay: 0.55s; }
 
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(28px); }
@@ -212,7 +217,7 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
   text-decoration: none;
   cursor: pointer;
   border: none;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 .btn-primary {
   background: #fff;
@@ -226,10 +231,6 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
   border: 1.5px solid rgba(255, 255, 255, 0.5);
 }
 .btn-ghost:hover { background: rgba(255, 255, 255, 0.12); border-color: #fff; }
-
-/* On-page primary button (dark on light bg) */
-.btn-brand { background: var(--primary); color: #fff; box-shadow: 0 8px 28px rgba(0, 38, 100, 0.3); }
-.btn-brand:hover { background: var(--secondary); transform: translateY(-3px); box-shadow: 0 14px 36px rgba(0, 38, 100, 0.4); }
 
 /* Scroll indicator */
 .scroll-hint {
@@ -336,7 +337,7 @@ section { padding: 96px 40px; }
   justify-content: center;
   margin-bottom: 22px;
 }
-.card-icon svg { width: 28px; height: 28px; stroke: #fff; }
+.card-icon svg { width: 28px; height: 28px; stroke: #fff; fill: none; }
 .card h3 { font-size: 20px; font-weight: 700; color: var(--fg); margin-bottom: 10px; }
 .card p { font-size: 15px; color: var(--muted); line-height: 1.7; }
 
@@ -400,6 +401,7 @@ section { padding: 96px 40px; }
   text-align: center;
   color: #fff;
   overflow: hidden;
+  background: var(--primary);
 }
 .cta-final::before {
   content: "";
@@ -422,14 +424,24 @@ footer {
 }
 footer img { height: 24px; filter: brightness(0) invert(1); opacity: 0.85; margin-bottom: 16px; }
 
-/* ===== Scroll reveal ===== */
-.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+/* ===== Scroll reveal (only hides when JS is active) ===== */
+.js .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.js .reveal.visible { opacity: 1; transform: translateY(0); }
+/* Failsafe: if something goes wrong, show everything */
+.reveal-all .reveal,
+.reveal-all .hero-badge,
+.reveal-all .hero h1,
+.reveal-all .hero p,
+.reveal-all .hero-cta-row { opacity: 1 !important; transform: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before { animation: none !important; transition: none !important; }
-  .reveal { opacity: 1; transform: none; }
   html { scroll-behavior: auto; }
+  .js .reveal,
+  .js .hero-badge,
+  .js .hero h1,
+  .js .hero p,
+  .js .hero-cta-row { opacity: 1 !important; transform: none !important; }
 }
 
 /* ===== Responsive ===== */
@@ -437,7 +449,7 @@ footer img { height: 24px; filter: brightness(0) invert(1); opacity: 0.85; margi
   header, header.scrolled { padding: 14px 20px; }
   section { padding: 64px 20px; }
   .stats { padding: 56px 20px; }
-  .hero { padding: 90px 20px 70px; }
+  .hero { padding: 100px 20px 80px; }
   .cta-final { padding: 80px 20px; }
   .hero-cta-row .btn { flex: 1; text-align: center; }
 }
@@ -448,6 +460,18 @@ footer img { height: 24px; filter: brightness(0) invert(1); opacity: 0.85; margi
 body.lang-nl .fr { display: none; }
 body.lang-nl .nl { display: inline; }
 </style>
+</head>
+<body>
+
+<script>
+/* Mark JS active ASAP and arm a failsafe so content is never stuck hidden */
+(function () {
+  document.documentElement.className += ' js';
+  setTimeout(function () {
+    document.documentElement.classList.add('reveal-all');
+  }, 2600);
+})();
+</script>
 
 <!-- Header -->
 <header id="siteHeader">
@@ -532,32 +556,32 @@ body.lang-nl .nl { display: inline; }
     </div>
     <div class="grid">
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
         <h3><span class="fr">Ultra-rapide</span><span class="nl">Ultrasnel</span></h3>
         <p><span class="fr">Vos fonds arrivent en quelques minutes, pas en plusieurs jours.</span><span class="nl">Uw geld arriveert binnen enkele minuten, niet in dagen.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <h3><span class="fr">Sécurisé</span><span class="nl">Veilig</span></h3>
         <p><span class="fr">Protocoles bancaires de classe mondiale pour protéger chaque transaction.</span><span class="nl">Bankprotocollen van wereldklasse beschermen elke transactie.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
         <h3><span class="fr">Transparent</span><span class="nl">Transparant</span></h3>
         <p><span class="fr">Aucun frais caché, aucune surprise. Vous savez exactement ce que vous recevez.</span><span class="nl">Geen verborgen kosten, geen verrassingen. U weet precies wat u ontvangt.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></div>
         <h3><span class="fr">Couverture globale</span><span class="nl">Wereldwijde dekking</span></h3>
         <p><span class="fr">Tous les types de virements acceptés, partout en Europe.</span><span class="nl">Alle soorten overschrijvingen geaccepteerd, overal in Europa.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
         <h3><span class="fr">Accompagnement expert</span><span class="nl">Deskundige begeleiding</span></h3>
         <p><span class="fr">Une équipe d'experts disponible 24h/24 et 7j/7 à votre service.</span><span class="nl">Een team van experts, 24/7 tot uw dienst.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
         <h3><span class="fr">Simple et rapide</span><span class="nl">Eenvoudig en snel</span></h3>
         <p><span class="fr">Un formulaire clair, complété en 3 minutes. C'est tout.</span><span class="nl">Een duidelijk formulier, in 3 minuten ingevuld. Dat is alles.</span></p>
       </div>
@@ -647,56 +671,69 @@ body.lang-nl .nl { display: inline; }
 
 <script>
 function setLang(lang) {
-  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
-  document.querySelector('[data-lang="' + lang + '"]').classList.add('active');
+  document.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.remove('active'); });
+  var btn = document.querySelector('[data-lang="' + lang + '"]');
+  if (btn) btn.classList.add('active');
   document.body.classList.toggle('lang-nl', lang === 'nl');
   try { localStorage.setItem('dsv-lang', lang); } catch (e) {}
 }
 
-// restore saved language
 try {
-  var saved = localStorage.getItem('dsv-lang');
-  if (saved === 'nl') setLang('nl');
+  if (localStorage.getItem('dsv-lang') === 'nl') setLang('nl');
 } catch (e) {}
 
-// sticky header state
-var header = document.getElementById('siteHeader');
-function onScroll() {
-  if (window.scrollY > 40) header.classList.add('scrolled');
-  else header.classList.remove('scrolled');
-}
-window.addEventListener('scroll', onScroll, { passive: true });
-onScroll();
-
-// scroll reveal + stat counters
-var io = new IntersectionObserver(function (entries) {
-  entries.forEach(function (entry) {
-    if (!entry.isIntersecting) return;
-    entry.target.classList.add('visible');
-    entry.target.querySelectorAll ? null : null;
-    // count-up for any stat numbers inside
-    var nums = entry.target.matches('[data-count]') ? [entry.target] : entry.target.querySelectorAll('[data-count]');
-    nums.forEach(animateCount);
-    io.unobserve(entry.target);
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
-
-function animateCount(el) {
-  if (el.dataset.done) return;
-  el.dataset.done = '1';
-  var target = parseInt(el.dataset.count, 10);
-  var prefix = el.dataset.prefix || '';
-  var suffix = el.dataset.suffix || '';
-  var dur = 1400, start = null;
-  function step(ts) {
-    if (!start) start = ts;
-    var p = Math.min((ts - start) / dur, 1);
-    var eased = 1 - Math.pow(1 - p, 3);
-    el.textContent = prefix + Math.round(target * eased).toLocaleString('fr-FR') + suffix;
-    if (p < 1) requestAnimationFrame(step);
+// Sticky header state
+(function () {
+  var header = document.getElementById('siteHeader');
+  function onScroll() {
+    if (window.scrollY > 40) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
   }
-  requestAnimationFrame(step);
-}
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+// Scroll reveal + stat counters (with graceful fallback)
+(function () {
+  var items = document.querySelectorAll('.reveal');
+
+  function animateCount(el) {
+    if (el.dataset.done) return;
+    el.dataset.done = '1';
+    var target = parseInt(el.dataset.count, 10);
+    var prefix = el.dataset.prefix || '';
+    var suffix = el.dataset.suffix || '';
+    var dur = 1400, start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + Math.round(target * eased).toLocaleString('fr-FR') + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function reveal(el) {
+    el.classList.add('visible');
+    el.querySelectorAll('[data-count]').forEach(animateCount);
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(reveal);
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      reveal(entry.target);
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+
+  items.forEach(function (el) { io.observe(el); });
+})();
 </script>
+</body>
+</html>
