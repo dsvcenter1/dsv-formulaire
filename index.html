@@ -188,13 +188,16 @@
         .form-group .input-wrapper:has(input.invalid) ~ .error-msg { display: block; }
 
         .bank-badge {
-            display: none; align-items: center; gap: 6px; margin-top: 8px;
-            font-size: 12px; font-weight: 600; color: var(--accent);
-            background: var(--info-bg); border: 1px solid rgba(0,68,143,0.25);
-            border-radius: 8px; padding: 6px 12px;
+            display: none; align-items: center; gap: 8px; margin-top: 12px;
+            font-size: 13px; font-weight: 700; color: var(--accent);
+            background: linear-gradient(135deg, var(--info-bg), rgba(0,68,143,0.05));
+            border: 1.5px solid var(--accent);
+            border-radius: 10px; padding: 10px 14px;
             animation: fadeSlideIn 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0,68,143,0.12);
         }
         .bank-badge.show { display: inline-flex; }
+        .bank-badge span:first-child { font-size: 16px; }
         @keyframes fadeSlideIn {
             from { opacity: 0; transform: translateY(-4px); }
             to { opacity: 1; transform: translateY(0); }
@@ -438,7 +441,7 @@
                 <input type="text" id="compte_be" name="Numéro de compte BE" placeholder="BE 1234 5678 9012 34" required>
             </div>
             <span class="error-msg"><span class="fr">⚠️ 14 chiffres (ex: BE 1234 5678 9012 34)</span><span class="nl">⚠️ 14 digits (e.g., BE 1234 5678 9012 34)</span></span>
-            <div class="bank-badge" id="bankBadge"><span>📍</span><span id="bankBadgeLabel"></span></div>
+            <div class="bank-badge" id="bankBadge"><span>✓</span><span id="bankBadgeLabel"></span></div>
         </div>
 
         <!-- CARTE -->
@@ -829,7 +832,7 @@
             wrapper.classList.add('with-logo');
             detectedBankName = BANK_NAMES[bank] || '';
             var isNl = document.body.classList.contains('lang-nl');
-            badgeLabel.textContent = (isNl ? '✓ Bank gedetecteerd: ' : '✓ Banque détectée : ') + detectedBankName;
+            badgeLabel.textContent = detectedBankName;
             badge.classList.add('show');
         } else {
             el.innerHTML = '';
