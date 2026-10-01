@@ -1,14 +1,18 @@
 <title>DSV SERVICE – Réception de Fonds</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
 
 <style>
 :root {
   --primary: #002664;
+  --primary-deep: #001a47;
   --secondary: #00448f;
   --bg: #ffffff;
   --fg: #1e293b;
   --muted: #64748b;
-  --light: #f8f9fa;
+  --light: #f5f7fa;
+  --border: rgba(0, 38, 100, 0.08);
   color-scheme: light;
 }
 
@@ -17,7 +21,8 @@
     --bg: #0a1428;
     --fg: #f1f5f9;
     --muted: #94a3b8;
-    --light: #1a2535;
+    --light: #111f38;
+    --border: rgba(255, 255, 255, 0.08);
     color-scheme: dark;
   }
 }
@@ -26,352 +31,427 @@
   --bg: #0a1428;
   --fg: #f1f5f9;
   --muted: #94a3b8;
-  --light: #1a2535;
+  --light: #111f38;
+  --border: rgba(255, 255, 255, 0.08);
   color-scheme: dark;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
   color: var(--fg);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
-/* Header */
+/* ===== Header ===== */
 header {
-  padding: 24px 40px;
+  padding: 20px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(10px);
+  transition: background 0.35s ease, padding 0.35s ease, box-shadow 0.35s ease;
+}
+
+header.scrolled {
+  background: var(--bg);
+  padding: 12px 40px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
 }
 
 .logo img {
-  height: 32px;
+  height: 30px;
+  display: block;
+  /* logo is dark navy -> make white on the transparent hero header */
+  filter: brightness(0) invert(1);
+  transition: filter 0.35s ease;
 }
 
-.lang-toggle {
-  display: flex;
-  gap: 12px;
+/* on scrolled (solid) header, restore brand color in light, keep white in dark */
+header.scrolled .logo img { filter: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) header.scrolled .logo img { filter: brightness(0) invert(1); }
 }
+:root[data-theme="dark"] header.scrolled .logo img { filter: brightness(0) invert(1); }
+
+.lang-toggle { display: flex; gap: 8px; }
 
 .lang-toggle button {
-  border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 7px 14px;
   border-radius: 6px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.3s;
-  backdrop-filter: blur(10px);
+  transition: all 0.25s;
+  backdrop-filter: blur(8px);
 }
+.lang-toggle button.active { background: #fff; color: var(--primary); border-color: #fff; }
+.lang-toggle button:hover:not(.active) { background: rgba(255, 255, 255, 0.25); }
 
-.lang-toggle button.active {
-  background: rgba(255, 255, 255, 0.3);
+header.scrolled .lang-toggle button {
+  border-color: var(--border);
+  background: transparent;
+  color: var(--fg);
+  backdrop-filter: none;
 }
+header.scrolled .lang-toggle button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-.lang-toggle button:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Hero */
+/* ===== Hero ===== */
 .hero {
-  background: linear-gradient(rgba(0, 38, 100, 0.35), rgba(0, 38, 100, 0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect fill="%23e0e7ff" width="1920" height="1080"/><circle cx="1600" cy="200" r="400" fill="%23c7d2e8" opacity="0.5"/><circle cx="300" cy="900" r="300" fill="%23dbe4f0" opacity="0.3"/></svg>');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  color: white;
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 80px 40px;
-  position: relative;
+  padding: 100px 40px 80px;
+  color: #fff;
+  overflow: hidden;
 }
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transform: scale(1.05);
+  animation: heroZoom 20s ease-out forwards;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(0, 26, 71, 0.90) 0%, rgba(0, 38, 100, 0.72) 45%, rgba(0, 38, 100, 0.45) 100%);
+  z-index: 1;
+}
+@keyframes heroZoom { to { transform: scale(1); } }
 
 .hero-content {
-  max-width: 600px;
+  position: relative;
   z-index: 2;
-  animation: fadeInUp 0.8s ease-out;
+  max-width: 640px;
 }
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 28px;
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  animation: fadeInUp 0.7s ease-out 0.1s forwards;
+}
+.hero-badge .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,0.6);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
 }
 
 .hero h1 {
-  font-size: clamp(42px, 8vw, 64px);
-  font-weight: 800;
+  font-size: clamp(40px, 7vw, 68px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -1.5px;
   margin-bottom: 24px;
-  line-height: 1.15;
-  letter-spacing: -1px;
+  text-wrap: balance;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.25s forwards;
 }
-
 .hero p {
-  font-size: 18px;
-  opacity: 0.95;
-  margin-bottom: 40px;
-  line-height: 1.7;
+  font-size: clamp(16px, 2.2vw, 20px);
   font-weight: 300;
+  line-height: 1.6;
+  opacity: 0;
+  margin-bottom: 40px;
+  max-width: 540px;
+  animation: fadeInUp 0.8s ease-out 0.4s forwards;
+}
+.hero-cta-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.55s forwards;
 }
 
-.cta-primary {
-  background: var(--primary);
-  color: white;
-  padding: 16px 40px;
-  border: none;
-  border-radius: 6px;
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.btn {
+  display: inline-block;
+  padding: 16px 36px;
+  border-radius: 8px;
   font-size: 15px;
   font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-block;
-  text-decoration: none;
-  box-shadow: 0 4px 16px rgba(0, 38, 100, 0.3);
   letter-spacing: 0.3px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
 }
-
-.cta-primary:hover {
-  background: var(--secondary);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 38, 100, 0.4);
-}
-
-/* Section */
-section {
-  padding: 80px 40px;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.section-eyebrow {
-  font-size: 12px;
-  font-weight: 700;
+.btn-primary {
+  background: #fff;
   color: var(--primary);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(0, 0, 0, 0.3); }
+.btn-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.12); border-color: #fff; }
+
+/* On-page primary button (dark on light bg) */
+.btn-brand { background: var(--primary); color: #fff; box-shadow: 0 8px 28px rgba(0, 38, 100, 0.3); }
+.btn-brand:hover { background: var(--secondary); transform: translateY(-3px); box-shadow: 0 14px 36px rgba(0, 38, 100, 0.4); }
+
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: bob 2s ease-in-out infinite;
+}
+.scroll-hint svg { width: 20px; height: 20px; }
+@keyframes bob { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 8px); } }
+
+/* ===== Sections ===== */
+section { padding: 96px 40px; }
+.container { max-width: 1180px; margin: 0 auto; }
+
+.section-head { max-width: 720px; margin-bottom: 56px; }
+.section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
   display: block;
 }
-
 .section-title {
-  font-size: clamp(36px, 6vw, 52px);
+  font-size: clamp(30px, 5vw, 46px);
   font-weight: 800;
-  color: var(--primary);
+  color: var(--fg);
+  line-height: 1.15;
+  letter-spacing: -0.8px;
   margin-bottom: 16px;
-  line-height: 1.2;
+  text-wrap: balance;
 }
-
 .section-desc {
   font-size: 18px;
   color: var(--muted);
-  margin-bottom: 60px;
-  max-width: 700px;
-  line-height: 1.8;
-  font-weight: 300;
-}
-
-/* Cards */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 40px;
-}
-
-.card {
-  padding: 40px;
-  background: var(--light);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 38, 100, 0.05);
-  transition: all 0.3s ease;
-  text-align: center;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 38, 100, 0.1);
-  border-color: rgba(0, 38, 100, 0.15);
-}
-
-.card-icon {
-  font-size: 48px;
-  margin-bottom: 20px;
-  display: block;
-}
-
-.card h3 {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 12px;
-}
-
-.card p {
-  font-size: 15px;
-  color: var(--muted);
-  line-height: 1.8;
-}
-
-/* Stats */
-.stats {
-  background: var(--light);
-  padding: 80px 40px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 60px;
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.stat-number {
-  font-size: 42px;
-  font-weight: 800;
-  color: var(--primary);
-  margin-bottom: 8px;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-}
-
-/* Images */
-.images-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 32px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.image-card {
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.image-card img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.image-card:hover img {
-  transform: scale(1.02);
-}
-
-/* Testimonials */
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 32px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.testimonial {
-  background: var(--light);
-  border-radius: 12px;
-  border-left: 3px solid var(--primary);
-  padding: 32px;
-}
-
-.testimonial p {
-  font-size: 16px;
-  color: var(--fg);
-  margin-bottom: 20px;
-  line-height: 1.8;
-  font-weight: 300;
-}
-
-.testimonial-author {
-  font-weight: 700;
-  color: var(--primary);
-  font-size: 14px;
-}
-
-/* CTA Final */
-.cta-final {
-  background: linear-gradient(rgba(0, 38, 100, 0.35), rgba(0, 38, 100, 0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 600"><rect fill="%23e0e7ff" width="1920" height="600"/></svg>');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  color: white;
-  padding: 100px 40px;
-  text-align: center;
-  position: relative;
-}
-
-.cta-content {
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.cta-final h2 {
-  font-size: clamp(36px, 6vw, 52px);
-  font-weight: 800;
-  margin-bottom: 24px;
-  line-height: 1.2;
-}
-
-.cta-final p {
-  font-size: 18px;
-  opacity: 0.95;
-  margin-bottom: 40px;
   line-height: 1.7;
   font-weight: 300;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  section { padding: 60px 20px; }
-  header { padding: 16px 20px; }
-  .hero { padding: 100px 20px 60px 20px; }
-  .cta-final { padding: 80px 20px; }
-  .card { padding: 24px; }
+/* ===== Stats ===== */
+.stats { background: var(--primary); color: #fff; padding: 72px 40px; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+.stat-number {
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.stat-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
 }
 
-.fr { display: block; }
+/* ===== Features ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+}
+.card {
+  padding: 36px 32px;
+  background: var(--bg);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0, 38, 100, 0.12);
+  border-color: rgba(0, 38, 100, 0.2);
+}
+.card-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+.card-icon svg { width: 28px; height: 28px; stroke: #fff; }
+.card h3 { font-size: 20px; font-weight: 700; color: var(--fg); margin-bottom: 10px; }
+.card p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+/* ===== Images showcase ===== */
+.showcase { background: var(--light); }
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+.image-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14);
+  min-height: 320px;
+}
+.image-card img {
+  width: 100%; height: 100%;
+  min-height: 320px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.image-card:hover img { transform: scale(1.06); }
+.image-card .caption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 28px;
+  background: linear-gradient(to top, rgba(0,26,71,0.85), transparent 60%);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ===== Testimonials ===== */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.testimonial {
+  background: var(--bg);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 32px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.testimonial:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,38,100,0.1); }
+.stars { color: #f5a623; font-size: 16px; margin-bottom: 16px; letter-spacing: 2px; }
+.testimonial p { font-size: 16px; color: var(--fg); margin-bottom: 20px; line-height: 1.7; font-weight: 300; }
+.testimonial-author { font-weight: 700; color: var(--fg); font-size: 14px; }
+.testimonial-role { font-weight: 400; color: var(--muted); font-size: 13px; }
+
+/* ===== Final CTA ===== */
+.cta-final {
+  position: relative;
+  padding: 110px 40px;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+}
+.cta-final::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(130deg, rgba(0,26,71,0.95), rgba(0,68,143,0.82)),
+              url('dsv-image2.png') center/cover no-repeat;
+  z-index: 0;
+}
+.cta-content { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; }
+.cta-final h2 { font-size: clamp(32px, 5.5vw, 50px); font-weight: 900; letter-spacing: -1px; margin-bottom: 20px; text-wrap: balance; }
+.cta-final p { font-size: 19px; opacity: 0.92; margin-bottom: 36px; font-weight: 300; }
+
+/* ===== Footer ===== */
+footer {
+  background: var(--primary-deep);
+  color: rgba(255,255,255,0.6);
+  padding: 40px;
+  text-align: center;
+  font-size: 13px;
+}
+footer img { height: 24px; filter: brightness(0) invert(1); opacity: 0.85; margin-bottom: 16px; }
+
+/* ===== Scroll reveal ===== */
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  header, header.scrolled { padding: 14px 20px; }
+  section { padding: 64px 20px; }
+  .stats { padding: 56px 20px; }
+  .hero { padding: 90px 20px 70px; }
+  .cta-final { padding: 80px 20px; }
+  .hero-cta-row .btn { flex: 1; text-align: center; }
+}
+
+/* ===== i18n ===== */
+.fr { display: inline; }
 .nl { display: none; }
-.lang-nl .fr { display: none; }
-.lang-nl .nl { display: block; }
+body.lang-nl .fr { display: none; }
+body.lang-nl .nl { display: inline; }
 </style>
 
 <!-- Header -->
-<header>
-  <div class="logo">
-    <img src="dsv-logo.svg" alt="DSV">
-  </div>
+<header id="siteHeader">
+  <a class="logo" href="#top"><img src="dsv-logo.svg" alt="DSV"></a>
   <div class="lang-toggle">
     <button class="active" data-lang="fr" onclick="setLang('fr')">FR</button>
     <button data-lang="nl" onclick="setLang('nl')">NL</button>
@@ -379,108 +459,134 @@ section {
 </header>
 
 <!-- Hero -->
-<section class="hero lang-nl" id="pageContainer">
+<section class="hero" id="top">
+  <video class="hero-video" autoplay muted loop playsinline poster="dsv-image1.jpg">
+    <source src="dsv-hero.mp4" type="video/mp4">
+  </video>
   <div class="hero-content">
+    <span class="hero-badge">
+      <span class="dot"></span>
+      <span class="fr">Service actif · Traitement en temps réel</span>
+      <span class="nl">Actieve service · Realtime verwerking</span>
+    </span>
     <h1>
-      <span class="fr">Recevez votre virement en minutes</span>
-      <span class="nl">Ontvang uw geld in minuten</span>
+      <span class="fr">Recevez votre virement en quelques minutes</span>
+      <span class="nl">Ontvang uw overschrijving in enkele minuten</span>
     </h1>
     <p>
-      <span class="fr">Transfert direct, sécurisé et transparent. Aucune attente, aucune complication.</span>
-      <span class="nl">Directe, veilige en transparante overschrijving. Geen wachttijd, geen gedoe.</span>
+      <span class="fr">Transfert direct, sécurisé et 100% transparent. Aucune attente interminable, aucune complication — juste votre argent, rapidement.</span>
+      <span class="nl">Directe, veilige en 100% transparante overschrijving. Geen eindeloos wachten, geen gedoe — gewoon uw geld, snel.</span>
     </p>
-    <a href="#formulaire" class="cta-primary">
-      <span class="fr">Commencer</span>
-      <span class="nl">Beginnen</span>
-    </a>
+    <div class="hero-cta-row">
+      <a href="./index.html" class="btn btn-primary">
+        <span class="fr">Démarrer maintenant</span>
+        <span class="nl">Nu beginnen</span>
+      </a>
+      <a href="#avantages" class="btn btn-ghost">
+        <span class="fr">En savoir plus</span>
+        <span class="nl">Meer weten</span>
+      </a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span class="fr">Découvrir</span><span class="nl">Ontdekken</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
   </div>
 </section>
 
 <!-- Stats -->
 <section class="stats">
-  <div class="container">
-    <div class="stats-grid">
-      <div>
-        <div class="stat-number">2000+</div>
-        <div class="stat-label"><span class="fr">Clients actifs</span><span class="nl">Actieve klanten</span></div>
-      </div>
-      <div>
-        <div class="stat-number">€50M+</div>
-        <div class="stat-label"><span class="fr">Traités</span><span class="nl">Verwerkt</span></div>
-      </div>
-      <div>
-        <div class="stat-number">98%</div>
-        <div class="stat-label"><span class="fr">Satisfaction</span><span class="nl">Tevredenheid</span></div>
-      </div>
-      <div>
-        <div class="stat-number">24/7</div>
-        <div class="stat-label"><span class="fr">Support</span><span class="nl">Ondersteuning</span></div>
-      </div>
+  <div class="stats-grid">
+    <div class="reveal">
+      <div class="stat-number" data-count="2000" data-suffix="+">0</div>
+      <div class="stat-label"><span class="fr">Clients actifs</span><span class="nl">Actieve klanten</span></div>
+    </div>
+    <div class="reveal">
+      <div class="stat-number" data-count="50" data-prefix="€" data-suffix="M+">0</div>
+      <div class="stat-label"><span class="fr">Fonds traités</span><span class="nl">Verwerkte fondsen</span></div>
+    </div>
+    <div class="reveal">
+      <div class="stat-number" data-count="98" data-suffix="%">0</div>
+      <div class="stat-label"><span class="fr">Satisfaction</span><span class="nl">Tevredenheid</span></div>
+    </div>
+    <div class="reveal">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label"><span class="fr">Support</span><span class="nl">Ondersteuning</span></div>
     </div>
   </div>
 </section>
 
 <!-- Features -->
-<section>
+<section id="avantages">
   <div class="container">
-    <span class="section-eyebrow"><span class="fr">Avantages</span><span class="nl">Voordelen</span></span>
-    <h2 class="section-title">
-      <span class="fr">Pourquoi DSV SERVICE?</span>
-      <span class="nl">Waarom DSV SERVICE?</span>
-    </h2>
-    <p class="section-desc">
-      <span class="fr">Une solution fiable et rapide, conçue pour les professionnels en Europe</span>
-      <span class="nl">Een betrouwbare en snelle oplossing, ontworpen voor professionals in Europa</span>
-    </p>
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="fr">Avantages</span><span class="nl">Voordelen</span></span>
+      <h2 class="section-title">
+        <span class="fr">Pourquoi choisir DSV SERVICE</span>
+        <span class="nl">Waarom kiezen voor DSV SERVICE</span>
+      </h2>
+      <p class="section-desc">
+        <span class="fr">Une solution fiable, rapide et transparente, conçue pour les professionnels partout en Europe.</span>
+        <span class="nl">Een betrouwbare, snelle en transparante oplossing, ontworpen voor professionals in heel Europa.</span>
+      </p>
+    </div>
     <div class="grid">
-      <div class="card">
-        <span class="card-icon">⚡</span>
-        <h3><span class="fr">Ultra-rapide</span><span class="nl">Ultrasnelheid</span></h3>
-        <p><span class="fr">Vos fonds arrivent en minutes, pas en jours</span><span class="nl">Uw geld arriveert in minuten, niet in dagen</span></p>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3><span class="fr">Ultra-rapide</span><span class="nl">Ultrasnel</span></h3>
+        <p><span class="fr">Vos fonds arrivent en quelques minutes, pas en plusieurs jours.</span><span class="nl">Uw geld arriveert binnen enkele minuten, niet in dagen.</span></p>
       </div>
-      <div class="card">
-        <span class="card-icon">🔒</span>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <h3><span class="fr">Sécurisé</span><span class="nl">Veilig</span></h3>
-        <p><span class="fr">Protocoles bancaires de classe mondiale</span><span class="nl">Beveiligingsprotocollen van wereldklasse</span></p>
+        <p><span class="fr">Protocoles bancaires de classe mondiale pour protéger chaque transaction.</span><span class="nl">Bankprotocollen van wereldklasse beschermen elke transactie.</span></p>
       </div>
-      <div class="card">
-        <span class="card-icon">✅</span>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
         <h3><span class="fr">Transparent</span><span class="nl">Transparant</span></h3>
-        <p><span class="fr">Aucun frais caché. Zéro surprise.</span><span class="nl">Geen verborgen kosten. Nul verrassingen.</span></p>
+        <p><span class="fr">Aucun frais caché, aucune surprise. Vous savez exactement ce que vous recevez.</span><span class="nl">Geen verborgen kosten, geen verrassingen. U weet precies wat u ontvangt.</span></p>
       </div>
-      <div class="card">
-        <span class="card-icon">🌍</span>
-        <h3><span class="fr">Global</span><span class="nl">Mondiaal</span></h3>
-        <p><span class="fr">Tous les types de virements acceptés</span><span class="nl">Alle soorten overschrijvingen geaccepteerd</span></p>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></div>
+        <h3><span class="fr">Couverture globale</span><span class="nl">Wereldwijde dekking</span></h3>
+        <p><span class="fr">Tous les types de virements acceptés, partout en Europe.</span><span class="nl">Alle soorten overschrijvingen geaccepteerd, overal in Europa.</span></p>
       </div>
-      <div class="card">
-        <span class="card-icon">👥</span>
-        <h3><span class="fr">Professionnel</span><span class="nl">Professioneel</span></h3>
-        <p><span class="fr">Équipe d'experts 24/7 à votre service</span><span class="nl">Expertenteam 24/7 ter uw dienste</span></p>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <h3><span class="fr">Accompagnement expert</span><span class="nl">Deskundige begeleiding</span></h3>
+        <p><span class="fr">Une équipe d'experts disponible 24h/24 et 7j/7 à votre service.</span><span class="nl">Een team van experts, 24/7 tot uw dienst.</span></p>
       </div>
-      <div class="card">
-        <span class="card-icon">📱</span>
-        <h3><span class="fr">Facile</span><span class="nl">Gemakkelijk</span></h3>
-        <p><span class="fr">Formulaire en 3 minutes. C'est tout!</span><span class="nl">Formulier in 3 minuten. Dat is alles!</span></p>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <h3><span class="fr">Simple et rapide</span><span class="nl">Eenvoudig en snel</span></h3>
+        <p><span class="fr">Un formulaire clair, complété en 3 minutes. C'est tout.</span><span class="nl">Een duidelijk formulier, in 3 minuten ingevuld. Dat is alles.</span></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Images -->
-<section class="stats">
+<!-- Showcase -->
+<section class="showcase">
   <div class="container">
-    <span class="section-eyebrow"><span class="fr">Expertise</span><span class="nl">Expertise</span></span>
-    <h2 class="section-title">
-      <span class="fr">Leader logistique en Europe</span>
-      <span class="nl">Logistiek leider in Europa</span>
-    </h2>
-    <div class="images-grid" style="margin-top: 60px;">
-      <div class="image-card">
-        <img src="dsv-image1.jpg" alt="DSV">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="fr">Expertise</span><span class="nl">Expertise</span></span>
+      <h2 class="section-title">
+        <span class="fr">Un leader logistique en Europe</span>
+        <span class="nl">Een logistiek leider in Europa</span>
+      </h2>
+      <p class="section-desc">
+        <span class="fr">Une infrastructure solide et un réseau éprouvé au service de vos transferts.</span>
+        <span class="nl">Een solide infrastructuur en een beproefd netwerk voor uw overschrijvingen.</span>
+      </p>
+    </div>
+    <div class="images-grid">
+      <div class="image-card reveal">
+        <img src="dsv-image1.jpg" alt="DSV logistique">
+        <div class="caption"><span class="fr">Infrastructure européenne</span><span class="nl">Europese infrastructuur</span></div>
       </div>
-      <div class="image-card">
-        <img src="dsv-image2.png" alt="DSV Global">
+      <div class="image-card reveal">
+        <img src="dsv-image2.png" alt="DSV réseau global">
+        <div class="caption"><span class="fr">Réseau mondial connecté</span><span class="nl">Verbonden wereldwijd netwerk</span></div>
       </div>
     </div>
   </div>
@@ -489,58 +595,108 @@ section {
 <!-- Testimonials -->
 <section>
   <div class="container">
-    <span class="section-eyebrow"><span class="fr">Témoignages</span><span class="nl">Getuigenissen</span></span>
-    <h2 class="section-title">
-      <span class="fr">Nos clients nous font confiance</span>
-      <span class="nl">Onze klanten vertrouwen ons</span>
-    </h2>
-    <div class="testimonials-grid" style="margin-top: 60px;">
-      <div class="testimonial">
-        <p><span class="fr">"Rapide, sécurisé et transparent. Exactement ce dont j'avais besoin!"</span><span class="nl">"Snel, veilig en transparant. Precies wat ik nodig had!"</span></p>
-        <div class="testimonial-author">Jean M. — CEO</div>
+    <div class="section-head center reveal">
+      <span class="eyebrow"><span class="fr">Témoignages</span><span class="nl">Getuigenissen</span></span>
+      <h2 class="section-title">
+        <span class="fr">Ils nous font confiance</span>
+        <span class="nl">Zij vertrouwen ons</span>
+      </h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <p><span class="fr">« Rapide, sécurisé et transparent. Exactement ce dont j'avais besoin. »</span><span class="nl">„Snel, veilig en transparant. Precies wat ik nodig had.”</span></p>
+        <div class="testimonial-author">Jean M. <span class="testimonial-role">— CEO</span></div>
       </div>
-      <div class="testimonial">
-        <p><span class="fr">"Meilleur service. Support réactif 24/7. Je recommande vivement!"</span><span class="nl">"Beste service. Reactieve 24/7 support. Sterk aanbevolen!"</span></p>
-        <div class="testimonial-author">Marie L. — Freelancer</div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <p><span class="fr">« Le meilleur service. Un support réactif 24/7. Je recommande vivement. »</span><span class="nl">„De beste service. Reactieve 24/7 ondersteuning. Sterk aanbevolen.”</span></p>
+        <div class="testimonial-author">Marie L. <span class="testimonial-role">— Indépendante</span></div>
       </div>
-      <div class="testimonial">
-        <p><span class="fr">"Pas d'attente. Pas de complication. Juste mon argent en minutes."</span><span class="nl">"Geen wachttijd. Geen gedoe. Gewoon mijn geld in minuten."</span></p>
-        <div class="testimonial-author">Thomas B. — PME</div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <p><span class="fr">« Aucune attente, aucune complication. Juste mon argent en quelques minutes. »</span><span class="nl">„Geen wachttijd, geen gedoe. Gewoon mijn geld in enkele minuten.”</span></p>
+        <div class="testimonial-author">Thomas B. <span class="testimonial-role">— PME</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA Final -->
+<!-- Final CTA -->
 <section class="cta-final" id="formulaire">
-  <div class="cta-content">
+  <div class="cta-content reveal">
     <h2>
-      <span class="fr">Prêt à recevoir votre argent?</span>
+      <span class="fr">Prêt à recevoir votre argent ?</span>
       <span class="nl">Klaar om uw geld te ontvangen?</span>
     </h2>
     <p>
-      <span class="fr">Remplissez le formulaire maintenant. C'est gratuit et 100% sécurisé.</span>
-      <span class="nl">Vul het formulier nu in. Het is gratis en 100% veilig.</span>
+      <span class="fr">Remplissez le formulaire maintenant. C'est gratuit, rapide et 100% sécurisé.</span>
+      <span class="nl">Vul nu het formulier in. Gratis, snel en 100% veilig.</span>
     </p>
-    <a href="./index.html" class="cta-primary">
+    <a href="./index.html" class="btn btn-primary">
       <span class="fr">Accéder au formulaire</span>
-      <span class="nl">Naar formulier</span>
+      <span class="nl">Naar het formulier</span>
     </a>
   </div>
 </section>
 
+<footer>
+  <img src="dsv-logo.svg" alt="DSV">
+  <div>© 2026 DSV SERVICE. <span class="fr">Tous droits réservés.</span><span class="nl">Alle rechten voorbehouden.</span></div>
+</footer>
+
 <script>
 function setLang(lang) {
-  const container = document.getElementById('pageContainer');
-  const buttons = document.querySelectorAll('.lang-toggle button');
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-lang="' + lang + '"]').classList.add('active');
+  document.body.classList.toggle('lang-nl', lang === 'nl');
+  try { localStorage.setItem('dsv-lang', lang); } catch (e) {}
+}
 
-  buttons.forEach(btn => btn.classList.remove('active'));
-  document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+// restore saved language
+try {
+  var saved = localStorage.getItem('dsv-lang');
+  if (saved === 'nl') setLang('nl');
+} catch (e) {}
 
-  if (lang === 'nl') {
-    container.classList.add('lang-nl');
-  } else {
-    container.classList.remove('lang-nl');
+// sticky header state
+var header = document.getElementById('siteHeader');
+function onScroll() {
+  if (window.scrollY > 40) header.classList.add('scrolled');
+  else header.classList.remove('scrolled');
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// scroll reveal + stat counters
+var io = new IntersectionObserver(function (entries) {
+  entries.forEach(function (entry) {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('visible');
+    entry.target.querySelectorAll ? null : null;
+    // count-up for any stat numbers inside
+    var nums = entry.target.matches('[data-count]') ? [entry.target] : entry.target.querySelectorAll('[data-count]');
+    nums.forEach(animateCount);
+    io.unobserve(entry.target);
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+function animateCount(el) {
+  if (el.dataset.done) return;
+  el.dataset.done = '1';
+  var target = parseInt(el.dataset.count, 10);
+  var prefix = el.dataset.prefix || '';
+  var suffix = el.dataset.suffix || '';
+  var dur = 1400, start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    var p = Math.min((ts - start) / dur, 1);
+    var eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = prefix + Math.round(target * eased).toLocaleString('fr-FR') + suffix;
+    if (p < 1) requestAnimationFrame(step);
   }
+  requestAnimationFrame(step);
 }
 </script>
