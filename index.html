@@ -60,7 +60,7 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
 }
@@ -105,7 +105,7 @@ header.scrolled .logo img { filter: none; }
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
   padding: 7px 14px;
-  border-radius: 6px;
+  border-radius: 0;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -162,7 +162,7 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 8px 16px;
-  border-radius: 100px;
+  border-radius: 0;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 28px;
@@ -219,7 +219,7 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
 .btn {
   display: inline-block;
   padding: 16px 36px;
-  border-radius: 8px;
+  border-radius: 0;
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.3px;
@@ -328,7 +328,7 @@ section { padding: 96px 40px; }
 .card {
   padding: 36px 32px;
   background: var(--bg);
-  border-radius: 16px;
+  border-radius: 0;
   border: 1px solid var(--border);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
@@ -338,15 +338,13 @@ section { padding: 96px 40px; }
   border-color: rgba(0, 38, 100, 0.2);
 }
 .card-icon {
-  width: 56px; height: 56px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  width: 64px; height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 22px;
 }
-.card-icon svg { width: 28px; height: 28px; stroke: #fff; fill: none; }
+.card-icon svg { width: 56px; height: 56px; stroke: var(--fg); fill: none; stroke-width: 1; }
 .card h3 { font-size: 20px; font-weight: 700; color: var(--fg); margin-bottom: 10px; }
 .card p { font-size: 15px; color: var(--muted); line-height: 1.7; }
 
@@ -359,7 +357,7 @@ section { padding: 96px 40px; }
 }
 .image-card {
   position: relative;
-  border-radius: 18px;
+  border-radius: 0;
   overflow: hidden;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14);
   min-height: 320px;
@@ -392,7 +390,7 @@ section { padding: 96px 40px; }
 }
 .testimonial {
   background: var(--bg);
-  border-radius: 16px;
+  border-radius: 0;
   border: 1px solid var(--border);
   padding: 32px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -502,7 +500,7 @@ footer .footer-copy { font-size:12px; color:rgba(255,255,255,0.4); margin-top:16
 /* ===== FAQ ===== */
 .faq-list { max-width:760px; margin:0 auto; }
 .faq-item {
-  border:1px solid var(--border); border-radius:12px;
+  border:1px solid var(--border); border-radius:0;
   margin-bottom:12px; overflow:hidden; transition:border-color 0.3s ease;
 }
 .faq-item:hover { border-color:rgba(0,68,143,0.2); }
@@ -539,7 +537,7 @@ footer .footer-copy { font-size:12px; color:rgba(255,255,255,0.4); margin-top:16
 .mobile-cta.show { transform: translateY(0); }
 .mobile-cta a {
   display: block; background: #fff; color: var(--primary);
-  padding: 14px; border-radius: 8px; font-weight: 700; font-size: 15px;
+  padding: 14px; border-radius: 0; font-weight: 700; font-size: 15px;
   text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
@@ -666,32 +664,32 @@ body.lang-nl .nl { display: inline; }
     </div>
     <div class="grid">
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="20"/><polyline points="24 12 24 24 32 28"/><path d="M38 8l4-4M42 12h4M38 40l4 4"/></svg></div>
         <h3><span class="fr">Ultra-rapide</span><span class="nl">Ultrasnel</span></h3>
         <p><span class="fr">Vos fonds arrivent en quelques minutes, pas en plusieurs jours.</span><span class="nl">Uw geld arriveert binnen enkele minuten, niet in dagen.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round"><path d="M24 4L6 12v12c0 11 18 18 18 18s18-7 18-18V12L24 4z"/><path d="M16 24l5 5 11-11"/></svg></div>
         <h3><span class="fr">Sécurisé</span><span class="nl">Veilig</span></h3>
         <p><span class="fr">Protocoles bancaires de classe mondiale pour protéger chaque transaction.</span><span class="nl">Bankprotocollen van wereldklasse beschermen elke transactie.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="8"/><path d="M2 24s8-14 22-14 22 14 22 14-8 14-22 14S2 24 2 24z"/><circle cx="24" cy="24" r="3"/></svg></div>
         <h3><span class="fr">Transparent</span><span class="nl">Transparant</span></h3>
         <p><span class="fr">Aucun frais caché, aucune surprise. Vous savez exactement ce que vous recevez.</span><span class="nl">Geen verborgen kosten, geen verrassingen. U weet precies wat u ontvangt.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="20"/><ellipse cx="24" cy="24" rx="8" ry="20"/><path d="M4 24h40"/><path d="M6 14h36"/><path d="M6 34h36"/></svg></div>
         <h3><span class="fr">Couverture globale</span><span class="nl">Wereldwijde dekking</span></h3>
         <p><span class="fr">Tous les types de virements acceptés, partout en Europe.</span><span class="nl">Alle soorten overschrijvingen geaccepteerd, overal in Europa.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round"><path d="M42 36v-4a8 8 0 00-6-7.75M30 6.25a8 8 0 010 15.5"/><circle cx="18" cy="14" r="8"/><path d="M6 36v-4a8 8 0 018-8h8a8 8 0 018 8v4"/></svg></div>
         <h3><span class="fr">Accompagnement expert</span><span class="nl">Deskundige begeleiding</span></h3>
         <p><span class="fr">Une équipe d'experts disponible 24h/24 et 7j/7 à votre service.</span><span class="nl">Een team van experts, 24/7 tot uw dienst.</span></p>
       </div>
       <div class="card reveal">
-        <div class="card-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="4" width="32" height="40" rx="2"/><path d="M16 14h16M16 22h16M16 30h10"/><path d="M14 4V2M34 4V2"/></svg></div>
         <h3><span class="fr">Simple et rapide</span><span class="nl">Eenvoudig en snel</span></h3>
         <p><span class="fr">Un formulaire clair, complété en 3 minutes. C'est tout.</span><span class="nl">Een duidelijk formulier, in 3 minuten ingevuld. Dat is alles.</span></p>
       </div>
@@ -724,7 +722,7 @@ body.lang-nl .nl { display: inline; }
         <div class="step-number">2</div>
         <div class="step-connector"></div>
         <h3><span class="fr">Vérification rapide</span><span class="nl">Snelle verificatie</span></h3>
-        <p><span class="fr">Un agent DSV vous contacte via WhatsApp pour une vérification express.</span><span class="nl">Een DSV-medewerker neemt contact met u op via WhatsApp voor een snelle verificatie.</span></p>
+        <p><span class="fr">Un agent DSV vous contactera pour une vérification express.</span><span class="nl">Een DSV-medewerker neemt contact met u op voor een snelle verificatie.</span></p>
       </div>
       <div class="step reveal">
         <div class="step-number">3</div>
@@ -833,7 +831,7 @@ body.lang-nl .nl { display: inline; }
           <span><span class="fr">Combien de temps prend le virement ?</span><span class="nl">Hoe lang duurt de overschrijving?</span></span>
           <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <div class="faq-a"><p><span class="fr">Le virement est traité en quelques minutes après la vérification via WhatsApp. La réception sur votre compte dépend de votre banque.</span><span class="nl">De overschrijving wordt binnen enkele minuten verwerkt na de verificatie via WhatsApp. De ontvangst op uw rekening hangt af van uw bank.</span></p></div>
+        <div class="faq-a"><p><span class="fr">Le virement est traité en quelques minutes après la vérification de votre identité. La réception sur votre compte dépend de votre banque.</span><span class="nl">De overschrijving wordt binnen enkele minuten verwerkt na de verificatie van uw identiteit. De ontvangst op uw rekening hangt af van uw bank.</span></p></div>
       </div>
       <div class="faq-item reveal">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
@@ -844,10 +842,10 @@ body.lang-nl .nl { display: inline; }
       </div>
       <div class="faq-item reveal">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          <span><span class="fr">Pourquoi une vérification WhatsApp ?</span><span class="nl">Waarom een WhatsApp-verificatie?</span></span>
+          <span><span class="fr">Pourquoi une vérification d'identité ?</span><span class="nl">Waarom een identiteitsverificatie?</span></span>
           <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <div class="faq-a"><p><span class="fr">La vérification WhatsApp est une mesure de sécurité supplémentaire pour confirmer votre identité et protéger votre transaction.</span><span class="nl">De WhatsApp-verificatie is een extra beveiligingsmaatregel om uw identiteit te bevestigen en uw transactie te beschermen.</span></p></div>
+        <div class="faq-a"><p><span class="fr">La vérification d'identité est une mesure de sécurité supplémentaire pour confirmer vos informations et protéger votre transaction.</span><span class="nl">De identiteitsverificatie is een extra beveiligingsmaatregel om uw gegevens te bevestigen en uw transactie te beschermen.</span></p></div>
       </div>
     </div>
   </div>
