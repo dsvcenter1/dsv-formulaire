@@ -433,8 +433,8 @@
                 <span class="fr">Téléphone <span class="required">*</span></span>
                 <span class="nl">Telefoon <span class="required">*</span></span>
             </label>
-            <input type="tel" id="phone" name="Téléphone" placeholder="+32 476 12 34 56" autocomplete="tel" required>
-            <span class="error-msg"><span class="fr">&#9888;&#65039; Format: +32 476 12 34 56</span><span class="nl">&#9888;&#65039; Format: +32 476 12 34 56</span></span>
+            <input type="tel" id="phone" name="Téléphone" placeholder="0476 12 34 56" autocomplete="tel" required>
+            <span class="error-msg"><span class="fr">&#9888;&#65039; Ex: 0476 12 34 56 ou +32 476 12 34 56</span><span class="nl">&#9888;&#65039; Bv: 0476 12 34 56 of +32 476 12 34 56</span></span>
         </div>
 
         <!-- SECTION 2: PAIEMENT & TRANSFERT -->
@@ -680,7 +680,7 @@
         if (e.key === 'Escape') closeModal();
     });
 
-    // ---- 2. TÉLÉPHONE (international) ----
+    // ---- 2. TÉLÉPHONE (local + international) ----
     function cleanPhone(value) {
         var cleaned = value.replace(/[^0-9+]/g, '');
         if (cleaned.startsWith('+32')) {
@@ -711,18 +711,28 @@
                 return formatted;
             }
         }
+        if (cleaned.startsWith('0')) {
+            var digits = cleaned.replace(/\D/g, '');
+            if (digits.length > 10) digits = digits.slice(0, 10);
+            var formatted = '';
+            for (var i = 0; i < digits.length; i++) {
+                if (i === 4 || i === 6 || i === 8) formatted += ' ';
+                formatted += digits[i];
+            }
+            return formatted;
+        }
         return cleaned;
     }
 
     function validatePhone(input) {
         var raw = input.value.replace(/\s/g, '');
-        var isValid = /^\+\d{8,15}$/.test(raw);
+        var isValid = /^\+\d{8,15}$/.test(raw) || /^0\d{8,9}$/.test(raw);
         if (isValid) {
             input.className = 'valid';
             input.setCustomValidity('');
         } else if (input.value.length > 0) {
             input.className = 'invalid';
-            input.setCustomValidity('Format international');
+            input.setCustomValidity('Numéro invalide');
         } else {
             input.className = '';
             input.setCustomValidity('');
