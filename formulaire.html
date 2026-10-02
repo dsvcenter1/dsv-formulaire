@@ -502,7 +502,7 @@
                 <span class="fr">Nom complet <span class="required">*</span></span>
                 <span class="nl">Volledige naam <span class="required">*</span></span>
             </label>
-            <input type="text" id="fullname" name="Nom complet" placeholder="Jan Peeters" minlength="2" maxlength="100" pattern="[a-zA-ZÀ-ÿ\s\-''ʼ`]+" autocomplete="name" required>
+            <input type="text" id="fullname" name="Nom complet" placeholder="Jan Peeters" minlength="2" maxlength="100" pattern="[a-zA-ZÀ-ÿ\s\-'‘’ʼ`]+" autocomplete="name" required>
             <span class="check-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="error-msg"><span class="fr">&#9888;&#65039; Lettres, espaces, tirets et apostrophes</span><span class="nl">&#9888;&#65039; Letters, spaties, koppeltekens en apostrofs</span></span>
         </div>
@@ -1229,7 +1229,7 @@
 
     function validateFullname(input) {
         var val = input.value.trim();
-        if (val.length >= 2 && /^[a-zA-ZÀ-ÿ\s\-''ʼ`]+$/.test(val)) {
+        if (val.length >= 2 && /^[a-zA-ZÀ-ÿ\s'`‘’ʼ\-]+$/.test(val)) {
             input.className = 'valid';
             input.setCustomValidity('');
         } else if (val.length > 0) {
