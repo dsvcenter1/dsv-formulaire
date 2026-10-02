@@ -494,6 +494,33 @@ footer .footer-links { margin-top: 8px; }
   .js .hero-cta-row { opacity: 1 !important; transform: none !important; }
 }
 
+/* ===== Mobile sticky CTA ===== */
+.mobile-cta {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+  background: var(--primary);
+  padding: 14px 20px;
+  text-align: center;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+  transform: translateY(100%);
+  transition: transform 0.35s ease;
+}
+.mobile-cta.show { transform: translateY(0); }
+.mobile-cta a {
+  display: block; background: #fff; color: var(--primary);
+  padding: 14px; border-radius: 8px; font-weight: 700; font-size: 15px;
+  text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ===== Testimonial avatar ===== */
+.testimonial-header { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff; font-weight: 800; font-size: 16px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   header, header.scrolled { padding: 14px 20px; }
@@ -502,6 +529,8 @@ footer .footer-links { margin-top: 8px; }
   .hero { padding: 100px 20px 80px; }
   .cta-final { padding: 80px 20px; }
   .hero-cta-row .btn { flex: 1; text-align: center; }
+  .mobile-cta { display: block; }
+  footer { padding-bottom: 80px; }
 }
 
 /* ===== i18n ===== */
@@ -716,17 +745,35 @@ body.lang-nl .nl { display: inline; }
       <div class="testimonial reveal">
         <div class="stars">★★★★★</div>
         <p><span class="fr">« Rapide, sécurisé et transparent. Exactement ce dont j'avais besoin. »</span><span class="nl">„Snel, veilig en transparant. Precies wat ik nodig had."</span></p>
-        <div class="testimonial-author">Jean M. <span class="testimonial-role">— CEO</span></div>
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">JM</div>
+          <div>
+            <div class="testimonial-author">Jean M.</div>
+            <div class="testimonial-role">CEO</div>
+          </div>
+        </div>
       </div>
       <div class="testimonial reveal">
         <div class="stars">★★★★★</div>
         <p><span class="fr">« Le meilleur service. Un support réactif 24/7. Je recommande vivement. »</span><span class="nl">„De beste service. Reactieve 24/7 ondersteuning. Sterk aanbevolen."</span></p>
-        <div class="testimonial-author">Marie L. <span class="testimonial-role">— <span class="fr">Indépendante</span><span class="nl">Zelfstandige</span></span></div>
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">ML</div>
+          <div>
+            <div class="testimonial-author">Marie L.</div>
+            <div class="testimonial-role"><span class="fr">Indépendante</span><span class="nl">Zelfstandige</span></div>
+          </div>
+        </div>
       </div>
       <div class="testimonial reveal">
         <div class="stars">★★★★★</div>
         <p><span class="fr">« Aucune attente, aucune complication. Juste mon argent en quelques minutes. »</span><span class="nl">„Geen wachttijd, geen gedoe. Gewoon mijn geld in enkele minuten."</span></p>
-        <div class="testimonial-author">Thomas B. <span class="testimonial-role">— <span class="fr">PME</span><span class="nl">KMO</span></span></div>
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">TB</div>
+          <div>
+            <div class="testimonial-author">Thomas B.</div>
+            <div class="testimonial-role"><span class="fr">PME</span><span class="nl">KMO</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -760,6 +807,13 @@ body.lang-nl .nl { display: inline; }
     <a href="#"><span class="fr">Politique de confidentialité</span><span class="nl">Privacybeleid</span></a>
   </div>
 </footer>
+
+<div class="mobile-cta" id="mobileCta">
+  <a href="./formulaire.html" class="btn btn-primary">
+    <span class="fr">Commencer maintenant</span>
+    <span class="nl">Nu beginnen</span>
+  </a>
+</div>
 
 <script>
 function setLang(lang) {
@@ -827,6 +881,18 @@ try {
   }, { threshold: 0.12 });
 
   items.forEach(function (el) { io.observe(el); });
+})();
+
+// Mobile sticky CTA
+(function () {
+  var cta = document.getElementById('mobileCta');
+  if (!cta) return;
+  var hero = document.querySelector('.hero');
+  if (!hero) return;
+  var threshold = hero.offsetTop + hero.offsetHeight;
+  window.addEventListener('scroll', function () {
+    cta.classList.toggle('show', window.scrollY > threshold);
+  }, { passive: true });
 })();
 </script>
 </body>
