@@ -830,10 +830,10 @@
             modal.classList.add('active');
             submitBtn.disabled = false;
             restoreSubmitText();
-            form.reset();
-            updateProgress();
+            try { form.reset(); updateProgress(); } catch (e) {}
         })
         .catch(function(err) {
+            if (modal.classList.contains('active')) return;
             console.error('Erreur Discord:', err);
             submitBtn.disabled = false;
             restoreSubmitText();
