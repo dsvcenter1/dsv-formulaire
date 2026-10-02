@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="DSV SERVICE – Ontvang uw overschrijving in enkele minuten. Directe, veilige en 100% transparante service voor heel Europa.">
+<meta property="og:title" content="DSV SERVICE – Ontvangst van Gelden">
+<meta property="og:description" content="Ontvang uw overschrijving in enkele minuten. Directe, veilige en 100% transparante service voor heel Europa.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="dsv-image1.jpg">
 <title>DSV SERVICE – Ontvangst van Gelden</title>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -166,13 +170,13 @@ header.scrolled .lang-toggle button.active { background: var(--primary); color: 
 }
 .hero-badge .dot {
   width: 8px; height: 8px; border-radius: 50%;
-  background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,0.6);
+  background: #5ba3e6; box-shadow: 0 0 0 0 rgba(91,163,230,0.6);
   animation: pulse 2s infinite;
 }
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
-  70% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
-  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+  0% { box-shadow: 0 0 0 0 rgba(91,163,230,0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(91,163,230,0); }
+  100% { box-shadow: 0 0 0 0 rgba(91,163,230,0); }
 }
 
 .hero h1 {
@@ -396,8 +400,8 @@ section { padding: 96px 40px; }
 .testimonial:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,38,100,0.1); }
 .stars { color: #f5a623; font-size: 16px; margin-bottom: 16px; letter-spacing: 2px; }
 .testimonial p { font-size: 16px; color: var(--fg); margin-bottom: 20px; line-height: 1.7; font-weight: 300; }
-.testimonial-author { font-weight: 700; color: var(--fg); font-size: 14px; }
-.testimonial-role { font-weight: 400; color: var(--muted); font-size: 13px; }
+.testimonial-author { font-weight: 700; color: var(--fg); font-size: 14px; line-height:1.3; }
+.testimonial-role { font-weight: 500; color: var(--muted); font-size: 12px; text-transform:uppercase; letter-spacing:0.5px; }
 
 /* ===== Final CTA ===== */
 .cta-final {
@@ -423,15 +427,16 @@ section { padding: 96px 40px; }
 footer {
   background: var(--primary-deep);
   color: rgba(255,255,255,0.6);
-  padding: 40px 20px;
+  padding: 48px 20px 40px;
   text-align: center;
   font-size: 13px;
   line-height: 1.8;
 }
-footer img { height: 24px; filter: brightness(0) invert(1); opacity: 0.85; margin-bottom: 16px; display: inline-block; }
-footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
+footer img { height: 28px; filter: brightness(0) invert(1); opacity: 0.85; margin-bottom: 20px; display: inline-block; }
+footer a { color: rgba(255,255,255,0.8); text-decoration: none; transition:color 0.2s; }
 footer a:hover { color: #fff; text-decoration: underline; }
-footer .footer-links { margin-top: 8px; }
+footer .footer-links { margin-top: 12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1); }
+footer .footer-copy { font-size:12px; color:rgba(255,255,255,0.4); margin-top:16px; }
 
 /* ===== Steps ===== */
 .steps-grid {
@@ -493,6 +498,32 @@ footer .footer-links { margin-top: 8px; }
   .js .hero p,
   .js .hero-cta-row { opacity: 1 !important; transform: none !important; }
 }
+
+/* ===== FAQ ===== */
+.faq-list { max-width:760px; margin:0 auto; }
+.faq-item {
+  border:1px solid var(--border); border-radius:12px;
+  margin-bottom:12px; overflow:hidden; transition:border-color 0.3s ease;
+}
+.faq-item:hover { border-color:rgba(0,68,143,0.2); }
+.faq-q {
+  display:flex; justify-content:space-between; align-items:center; gap:16px;
+  padding:20px 24px; cursor:pointer; font-weight:600; font-size:15px; color:var(--fg);
+  background:var(--bg); transition:background 0.2s ease;
+  -webkit-user-select:none; user-select:none;
+}
+.faq-q:hover { background:var(--light); }
+.faq-q svg {
+  width:20px; height:20px; stroke:var(--muted); fill:none; stroke-width:2;
+  flex-shrink:0; transition:transform 0.3s ease;
+}
+.faq-item.open .faq-q svg { transform:rotate(180deg); }
+.faq-a {
+  max-height:0; overflow:hidden; transition:max-height 0.35s ease, padding 0.35s ease;
+  padding:0 24px;
+}
+.faq-item.open .faq-a { max-height:200px; padding:0 24px 20px; }
+.faq-a p { font-size:15px; color:var(--muted); line-height:1.7; font-weight:300; }
 
 /* ===== Mobile sticky CTA ===== */
 .mobile-cta {
@@ -779,6 +810,49 @@ body.lang-nl .nl { display: inline; }
   </div>
 </section>
 
+<!-- FAQ -->
+<section style="background:var(--light);">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2 class="section-title">
+        <span class="fr">Questions fréquentes</span>
+        <span class="nl">Veelgestelde vragen</span>
+      </h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span><span class="fr">Le service est-il vraiment gratuit ?</span><span class="nl">Is de service echt gratis?</span></span>
+          <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="faq-a"><p><span class="fr">Oui, 100% gratuit. L'acheteur a déjà réglé tous les frais. Vous n'avez absolument rien à payer.</span><span class="nl">Ja, 100% gratis. De koper heeft alle kosten al betaald. U hoeft helemaal niets te betalen.</span></p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span><span class="fr">Combien de temps prend le virement ?</span><span class="nl">Hoe lang duurt de overschrijving?</span></span>
+          <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="faq-a"><p><span class="fr">Le virement est traité en quelques minutes après la vérification via WhatsApp. La réception sur votre compte dépend de votre banque.</span><span class="nl">De overschrijving wordt binnen enkele minuten verwerkt na de verificatie via WhatsApp. De ontvangst op uw rekening hangt af van uw bank.</span></p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span><span class="fr">Mes données sont-elles sécurisées ?</span><span class="nl">Zijn mijn gegevens veilig?</span></span>
+          <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="faq-a"><p><span class="fr">Absolument. Nous utilisons un chiffrement SSL de bout en bout et des protocoles bancaires de niveau institutionnel pour protéger vos informations.</span><span class="nl">Absoluut. We gebruiken end-to-end SSL-encryptie en institutionele bankprotocollen om uw gegevens te beschermen.</span></p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <span><span class="fr">Pourquoi une vérification WhatsApp ?</span><span class="nl">Waarom een WhatsApp-verificatie?</span></span>
+          <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="faq-a"><p><span class="fr">La vérification WhatsApp est une mesure de sécurité supplémentaire pour confirmer votre identité et protéger votre transaction.</span><span class="nl">De WhatsApp-verificatie is een extra beveiligingsmaatregel om uw identiteit te bevestigen en uw transactie te beschermen.</span></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Final CTA -->
 <section class="cta-final" id="formulaire">
   <div class="cta-content reveal">
@@ -799,13 +873,14 @@ body.lang-nl .nl { display: inline; }
 
 <footer>
   <img src="dsv-logo.svg" alt="DSV"><br>
-  <div>© 2026 DSV SERVICE. <span class="fr">Tous droits réservés.</span><span class="nl">Alle rechten voorbehouden.</span></div>
   <div>Bedrijvenzone Machelen Cargo 829/A, 1830 Machelen (<span class="fr">Belgique</span><span class="nl">België</span>)</div>
   <div>TVA / BTW: BE 1234.567.890 – RPR / KBO: 1234.567.890</div>
   <div class="footer-links">
     <a href="#"><span class="fr">Mentions légales</span><span class="nl">Wettelijke kennisgeving</span></a> –
-    <a href="#"><span class="fr">Politique de confidentialité</span><span class="nl">Privacybeleid</span></a>
+    <a href="#"><span class="fr">Politique de confidentialité</span><span class="nl">Privacybeleid</span></a> –
+    <a href="#"><span class="fr">Conditions générales</span><span class="nl">Algemene voorwaarden</span></a>
   </div>
+  <div class="footer-copy">© 2026 DSV SERVICE. <span class="fr">Tous droits réservés.</span><span class="nl">Alle rechten voorbehouden.</span></div>
 </footer>
 
 <div class="mobile-cta" id="mobileCta">
