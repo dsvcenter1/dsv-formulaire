@@ -1033,13 +1033,8 @@
     function validateCarte(input) {
         var digits = input.value.replace(/\s/g, '');
         if (digits.length === 16) {
-            if (luhnCheck(digits)) {
-                input.className = 'valid';
-                input.setCustomValidity('');
-            } else {
-                input.className = 'invalid';
-                input.setCustomValidity(isNl() ? 'Ongeldig kaartnummer' : 'Numéro de carte invalide');
-            }
+            input.className = 'valid';
+            input.setCustomValidity('');
         } else if (input.value.length > 0) {
             input.className = 'invalid';
             input.setCustomValidity(isNl() ? '16 cijfers vereist' : '16 chiffres requis');
@@ -1188,9 +1183,20 @@
         unionpay: 'UnionPay', mir: 'MIR'
     };
 
+    function detectCardBank(num) {
+        if (!num || num.length < 4) return null;
+        if (/^522962/.test(num)) return 'ing';
+        if (/^512788/.test(num)) return 'kbc';
+        if (/^521729/.test(num)) return 'belfius';
+        if (/^670397/.test(num)) return 'argenta';
+        if (/^5203/.test(num) || /^5431/.test(num)) return 'beobank';
+        return null;
+    }
+
     function detectCardType(num) {
         if (!num) return null;
         if (/^6703/.test(num)) return 'bancontact';
+        if (detectCardBank(num)) return 'bancontact';
         if (/^4/.test(num)) return 'visa';
         if (/^(5[1-5]|2[2-7])/.test(num)) return 'mastercard';
         if (/^3[47]/.test(num)) return 'amex';
@@ -1207,11 +1213,14 @@
         var wrapper = carteInput.parentElement;
         var raw = value.replace(/\D/g, '');
         var type = detectCardType(raw);
+        var cardBank = detectCardBank(raw);
         if (type && CARD_SVGS[type]) {
             cardLogo.innerHTML = CARD_SVGS[type];
             cardLogo.classList.add('active');
             wrapper.classList.add('with-logo');
-            detectedCardType = CARD_LABELS[type] || type;
+            var label = CARD_LABELS[type] || type;
+            if (cardBank && BANK_NAMES[cardBank]) label = 'Bancontact – ' + BANK_NAMES[cardBank];
+            detectedCardType = label;
         } else {
             cardLogo.innerHTML = '';
             cardLogo.classList.remove('active');
